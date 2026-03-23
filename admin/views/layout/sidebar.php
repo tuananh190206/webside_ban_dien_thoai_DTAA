@@ -95,6 +95,43 @@
       </a>
     </li>
 
+     <!-- SẢN PHẨM -->
+    <li class="text-xs text-gray-300 uppercase px-4 mt-4">Sản phẩm</li>
+
+    <li class="sidebar-item">
+      <a href="<?= BASE_URL_ADMIN . '?act=category' ?>"
+        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
+        <i class="fa-solid fa-tags"></i>
+        Danh mục
+      </a>
+    </li>
+
+    <li class="sidebar-item">
+      <a href="<?= BASE_URL_ADMIN . '?act=san-pham' ?>"
+        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
+        <i class="fa-solid fa-mobile-screen"></i>
+        Sản phẩm
+      </a>
+    </li>
+
+    <li class="sidebar-item">
+      <a href="<?= BASE_URL_ADMIN . '?act=hinh-anh' ?>"
+        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
+        <i class="fa-solid fa-image"></i>
+        Hình ảnh SP
+      </a>
+    </li>
+
+    
+
+    <li class="sidebar-item">
+      <a href="<?= BASE_URL_ADMIN . '?act=danh-gia' ?>"
+        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
+        <i class="fa-solid fa-star"></i>
+        Đánh giá
+      </a>
+    </li>
+
     <!-- BÁN HÀNG -->
     <li class="text-xs text-gray-300 uppercase px-4 mt-4">Bán hàng</li>
 
@@ -127,41 +164,6 @@
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-list"></i>
         Sản phẩm trong giỏ
-      </a>
-    </li>
-
-    <!-- SẢN PHẨM -->
-    <li class="text-xs text-gray-300 uppercase px-4 mt-4">Sản phẩm</li>
-
-    <li class="sidebar-item">
-      <a href="<?= BASE_URL_ADMIN . '?act=san-pham' ?>"
-        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
-        <i class="fa-solid fa-mobile-screen"></i>
-        Sản phẩm
-      </a>
-    </li>
-
-    <li class="sidebar-item">
-      <a href="<?= BASE_URL_ADMIN . '?act=hinh-anh' ?>"
-        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
-        <i class="fa-solid fa-image"></i>
-        Hình ảnh SP
-      </a>
-    </li>
-
-    <li class="sidebar-item">
-      <a href="<?= BASE_URL_ADMIN . '?act=danh-muc' ?>"
-        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
-        <i class="fa-solid fa-tags"></i>
-        Danh mục
-      </a>
-    </li>
-
-    <li class="sidebar-item">
-      <a href="<?= BASE_URL_ADMIN . '?act=danh-gia' ?>"
-        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
-        <i class="fa-solid fa-star"></i>
-        Đánh giá
       </a>
     </li>
 
