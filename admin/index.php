@@ -97,8 +97,8 @@ match ($act) {
     // // // route Sản phẩm
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
 
-    // 'form-them-product' => (new AdminSanPhamController())->formAddProduct(),
-    // 'them-product' => (new AdminSanPhamController())->postAddProduct(),
+    'form-them-product' => (new AdminSanPhamController())->formAddSanPham(),
+    'them-product' => (new AdminSanPhamController())->postAddSanPham(),
     // 'form-sua-product' => (new AdminSanPhamController())->formEditProduct(),
     // 'sua-product' => (new AdminSanPhamController())->postEditProduct(),
     // 'xoa-product' => (new AdminSanPhamController())->deleteProduct(),
