@@ -6,6 +6,7 @@ require_once '../commons/function.php'; // Hàm hỗ trợ
 
 // Require toàn bộ file Controllers
 require_once './controllers/AdminCategoryController.php';
+require_once './controllers/AdminSanPhamController.php';
 // require_once './controllers/AdminTaiKhoanController.php';
 require_once './controllers/AdminBaoCaoThongKeController.php';
 // require_once './controllers/AdminTourController.php';
@@ -36,7 +37,7 @@ require_once './controllers/AdminBaoCaoThongKeController.php';
 // Require toàn bộ file Models
 
 require_once './models/AdminCategory.php';
-// require_once './models/AdminSanPham.php';
+ require_once './models/AdminSanPham.php';
 // require_once './models/AdminTour.php';
 // require_once './models/AdminTaiKhoan.php';
 // require_once './models/AdminNCC.php';
@@ -94,13 +95,13 @@ match ($act) {
     'xoa-category' => (new AdminCategoryController())->deleteCategory(),
 
     // // // route Sản phẩm
-    // 'ncc' => (new AdminNCCController())->danhSachNCC(),
+    'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
 
-    // 'form-them-ncc' => (new AdminNCCController())->formAddNCC(),
-    // 'them-ncc' => (new AdminNCCController())->postAddNCC(),
-    // 'form-sua-ncc' => (new AdminNCCController())->formEditNCC(),
-    // 'sua-ncc' => (new AdminNCCController())->postEditNCC(),
-    // 'xoa-ncc' => (new AdminNCCController())->deleteNCC(),
+    // 'form-them-product' => (new AdminSanPhamController())->formAddProduct(),
+    // 'them-product' => (new AdminSanPhamController())->postAddProduct(),
+    // 'form-sua-product' => (new AdminSanPhamController())->formEditProduct(),
+    // 'sua-product' => (new AdminSanPhamController())->postEditProduct(),
+    // 'xoa-product' => (new AdminSanPhamController())->deleteProduct(),
 
     // 'xemkhachhang' => (new AdminXemKhachHangController())->danhsachXemKhachHang(),
 
