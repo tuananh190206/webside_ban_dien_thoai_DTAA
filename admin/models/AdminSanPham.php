@@ -23,22 +23,20 @@ class AdminSanPham {
     }
 
     // Thêm sản phẩm mới
-    public function insertSanPham($ten_san_pham, $gia_san_pham, $gia_khuyen_mai, $so_luong, $ngay_nhap, $danh_muc_id, $trang_thai, $mo_ta, $hinh_anh){
+    public function insertSanPham($name, $price, $quantity, $category_name, $status, $description){//, $hinh_anh){
         try {
-            $sql = "INSERT INTO san_phams (ten_san_pham, gia_san_pham, gia_khuyen_mai, so_luong, ngay_nhap, danh_muc_id, trang_thai, mo_ta, hinh_anh)
-                    VALUES (:ten_san_pham, :gia_san_pham, :gia_khuyen_mai, :so_luong, :ngay_nhap, :danh_muc_id, :trang_thai, :mo_ta, :hinh_anh)";
+            $sql = "INSERT INTO products (name, price, quantity, category_name, status, description, hinh_anh)
+                    VALUES (:name, :price, :quantity, :category_name, :status, :description, :hinh_anh)";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
-                ':ten_san_pham' => $ten_san_pham,
-                ':gia_san_pham' => $gia_san_pham,
-                ':gia_khuyen_mai' => $gia_khuyen_mai,
-                ':so_luong' => $so_luong,
-                ':ngay_nhap' => $ngay_nhap,
-                ':danh_muc_id' => $danh_muc_id,
-                ':trang_thai' => $trang_thai,
-                ':mo_ta' => $mo_ta,
-                ':hinh_anh' => $hinh_anh
+                ':name' => $name,
+                ':price' => $price,
+                ':quantity' => $quantity,
+                ':category_name' => $category_name,
+                ':status' => $status,
+                ':description' => $description,
+                // ':hinh_anh' => $hinh_anh
             ]);
             // lay id san pham vua them
             return $this->conn->lastInsertID();
