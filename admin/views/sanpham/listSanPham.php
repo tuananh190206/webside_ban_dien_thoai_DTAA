@@ -174,7 +174,7 @@
 
               <td>
                 <div class="actions">
-                  <a href="<?= BASE_URL_ADMIN . '?act=form-sua-product&id=' . $sanpham['id'] ?>">
+                  <a href="<?= BASE_URL_ADMIN . '?act=form-sua-san-pham&id=' . $sanpham['id'] ?>">
                     <button class="btn-edit">Sửa</button>
                   </a>
 

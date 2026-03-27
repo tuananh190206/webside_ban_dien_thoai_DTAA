@@ -98,10 +98,10 @@ match ($act) {
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
 
     'form-them-product' => (new AdminSanPhamController())->formAddSanPham(),
-    'them-product' => (new AdminSanPhamController())->postAddSanPham(),
-    // 'form-sua-product' => (new AdminSanPhamController())->formEditProduct(),
-    // 'sua-product' => (new AdminSanPhamController())->postEditProduct(),
-    // 'xoa-product' => (new AdminSanPhamController())->deleteProduct(),
+    'them-san-pham' => (new AdminSanPhamController())->postAddSanPham(),
+    'form-sua-san-pham' => (new AdminSanPhamController())->formEditSanPham(),
+    'sua-san-pham' => (new AdminSanPhamController())->postEditSanPham(),
+    'xoa-product' => (new AdminSanPhamController())->deleteSanPham(),
 
     // 'xemkhachhang' => (new AdminXemKhachHangController())->danhsachXemKhachHang(),
 

@@ -54,18 +54,18 @@
                         <p class="text-danger"><?= $_SESSION['error']['price'] ?></p>
                    <?php }?>
                   </div>
-                  <div class="form-group col-6">
+                  <!-- <div class="form-group col-6">
                     <label >Hình ảnh</label>
                     <input type="file" class="form-control" name="hinh_anh"  >
                     <?php if(isset($_SESSION['error']['hinh_anh'])) { ?>
                         <p class="text-danger"><?= $_SESSION['error']['hinh_anh'] ?></p>
                    <?php }?>
-                  </div>
-                  <div class="form-group col-6">
+                  </div> -->
+                  <!-- <div class="form-group col-6">
                     <label >Album ảnh</label>
                     <input type="file" class="form-control" name="img_array[]"  multiple  >
                    
-                  </div>
+                  </div> -->
                   <div class="form-group col-6">
                     <label >Số lượng</label>
                     <input type="number" class="form-control" name="quantity"  placeholder="Nhập số lượng">
@@ -77,8 +77,8 @@
                   <label>Danh mục</label>
                   <select class="form-control" name="category_id" id="exampleFormControlSelect1">
                   <option selected disabled>Chọn danh mục sản phẩm</option>
-                  <?php foreach($listCategory as $Category): ?>
-                    <option value="<?= $Category['id'] ?>"><?= $Category['category_name'] ?></option>
+                  <?php foreach($listDanhMuc as $Category): ?>
+                    <option value="<?= $Category['id'] ?>"><?= $Category['name'] ?></option>
                   <?php endforeach; ?>
                  </select>
                   <?php if (isset($_SESSION['error']['category_id'])) { ?>
