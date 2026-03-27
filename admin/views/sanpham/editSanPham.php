@@ -20,7 +20,7 @@ include './views/layout/sidebar.php';
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-11">
-          <h1>Sửa thông tin sản phẩm: <?= $sanPham['ten_san_pham'] ?></h1>
+          <h1>Sửa thông tin sản phẩm: <?= $sanPham['name'] ?></h1>
         </div>
         <div class="col-sm-1">
           <a href="<?= BASE_URL_ADMIN . '?act=san-pham' ?>" class="btn btn-secondary">Quay lại</a>
@@ -45,60 +45,50 @@ include './views/layout/sidebar.php';
         <form action="<?= BASE_URL_ADMIN . '?act=sua-san-pham' ?>" method="post" enctype="multipart/form-data">
           <div class="card-body">
             <div class="form-group">
-              <input type="hidden" name="san_pham_id" value="<?= $sanPham['id'] ?>">
-              <label for="ten_san_pham">Tên sản phẩm</label>
-              <input type="text" id="ten_san_pham" name="ten_san_pham" class="form-control"
-                value="<?= $sanPham['ten_san_pham'] ?>">
-              <?php if (isset($_SESSION['error']['ten_san_pham'])) { ?>
-                <p class="text-danger"><?= $_SESSION['error']['ten_san_pham'] ?></p>
+              <input type="hidden" name="id" value="<?= $sanPham['id'] ?>">
+              <label for="name">Tên sản phẩm</label>
+              <input type="text" id="name" name="name" class="form-control"
+                value="<?= $sanPham['name'] ?>">
+              <?php if (isset($_SESSION['error']['name'])) { ?>
+                <p class="text-danger"><?= $_SESSION['error']['name'] ?></p>
               <?php } ?>
             </div>
             <div class="form-group">
-              <label for="gia_san_pham">Giá sản phẩm</label>
-              <input type="text" id="gia_san_pham" name="gia_san_pham" class="form-control"
-                value="<?= $sanPham['gia_san_pham'] ?>">
+              <label for="price">Giá sản phẩm</label>
+              <input type="text" id="price" name="price" class="form-control"
+                value="<?= $sanPham['price'] ?>">
             </div>
-            <div class="form-group">
-              <label for="gia_khuyen_mai">Giá khuyến mãi</label>
-              <input type="text" id="gia_khuyen_mai" name="gia_khuyen_mai" class="form-control"
-                value="<?= $sanPham['gia_khuyen_mai'] ?>">
-            </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="hinh_anh">Hình ảnh</label>
               <input type="file" id="hinh_anh" name="hinh_anh" class="form-control">
+            </div> -->
+            <div class="form-group">
+              <label for="quantity">Số lượng</label>
+              <input type="number" id="quantity" name="quantity" class="form-control"
+                value="<?= $sanPham['quantity'] ?>">
             </div>
             <div class="form-group">
-              <label for="so_luong">Số lượng</label>
-              <input type="number" id="so_luong" name="so_luong" class="form-control"
-                value="<?= $sanPham['so_luong'] ?>">
-            </div>
-            <div class="form-group">
-              <label for="ngay_nhap">Ngày nhập</label>
-              <input type="date" id="ngay_nhap" name="ngay_nhap" class="form-control"
-                value="<?= $sanPham['ngay_nhap'] ?>">
-            </div>
-            <div class="form-group">
-              <label for="danh_muc_id">Danh mục sản phẩm</label>
-              <select id="danh_muc_id" name="danh_muc_id" class="form-control custom-select">
-                <?php foreach ($listDanhMuc as $danhMuc): ?>
-                  <option <?= $danhMuc['id'] == $sanPham['danh_muc_id'] ? 'selected' : '' ?> value="<?= $danhMuc['id'] ?>">
-                    <?= $danhMuc['ten_danh_muc'] ?>
+              <label for="category_id">Danh mục sản phẩm</label>
+              <select id="category_id" name="category_id" class="form-control custom-select">
+                <?php foreach ($listDanhMuc as $Category): ?>
+                  <option <?= $Category['id'] == $sanPham['category_id'] ? 'selected' : '' ?> value="<?= $Category['id'] ?>">
+                    <?= $Category['name'] ?>
                   </option>
                 <?php endforeach; ?>
               </select>
             </div>
             <div class="form-group">
-              <label for="trang_thai">Trạng thái sản phẩm</label>
-              <select id="trang_thai" name="trang_thai" class="form-control custom-select">
+              <label for="status">Trạng thái sản phẩm</label>
+              <select id="status" name="status" class="form-control custom-select">
 
-                <option <?= $sanPham['trang_thai'] == 1 ? 'selected' : '' ?> value="1">Còn bán</option>
-                <option <?= $sanPham['trang_thai'] == 2 ? 'selected' : '' ?> value="2">Dừng bán</option>
+                <option <?= $sanPham['status'] == 1 ? 'selected' : '' ?> value="1">Còn bán</option>
+                <option <?= $sanPham['status'] == 2 ? 'selected' : '' ?> value="2">Dừng bán</option>
 
               </select>
             </div>
             <div class="form-group">
-              <label for="mo_ta">Mô tả</label>
-              <textarea id="mo_ta" name="mo_ta" class="form-control" rows="4"><?= $sanPham['mo_ta'] ?></textarea>
+              <label for="description">Mô tả</label>
+              <textarea id="description" name="description" class="form-control" rows="4"><?= $sanPham['description'] ?></textarea>
             </div>
           </div>
           <!-- /.card-body -->
@@ -110,8 +100,8 @@ include './views/layout/sidebar.php';
       </form>
       <!-- /.card -->
     </div>
-    <div class="col-md-4">
-      <div class="card card-secondary">
+    <!-- <div class="col-md-4">
+       <div class="card card-secondary">
         <div class="card-header">
           <h3 class="card-title">Album ảnh</h3>
 
@@ -120,8 +110,8 @@ include './views/layout/sidebar.php';
               <i class="fas fa-minus"></i>
             </button>
           </div>
-        </div>
-        <div class="card-body p-0">
+        </div> -->
+        <!-- <div class="card-body p-0">
           <form action="<?= BASE_URL_ADMIN . '?act=sua-album-anh-san-pham' ?>" method="post"
             enctype="multipart/form-data">
             <div class="table-responsive">
@@ -138,7 +128,7 @@ include './views/layout/sidebar.php';
                   </tr>
                 </thead>
                 <tbody>
-                  <input type="hidden" name="san_pham_id" value="<?= $sanPham['id'] ?>">
+                  <input type="hidden" name="id" value="<?= $sanPham['id'] ?>">
                   <input type="hidden" id="img_delete" name="img_delete">
                   <?php foreach ($listAnhSanPham as $key => $value): ?>
                     <tr id="faqs-row-<?= $key ?>">
@@ -153,11 +143,11 @@ include './views/layout/sidebar.php';
               </table>
             </div>
 
-        </div>
+        </div> -->
         <!-- /.card-body -->
-        <div class="card-footer text-center">
+        <!-- <div class="card-footer text-center">
           <button type="submit" class="btn btn-primary ">Sửa thông tin</button>
-        </div>
+        </div> -->
         </form>
       </div>
       <!-- /.card -->
@@ -176,7 +166,7 @@ include './views/layout/footer.php';
 <!-- Code injected by live-server -->
 
 </body>
-<script>
+<!-- <script>
   var faqs_row = <?=count($listAnhSanPham);?>;
   function addfaqs() {
     html = '<tr id="faqs-row-' + faqs_row + '">';
@@ -201,6 +191,6 @@ include './views/layout/footer.php';
       imgDeleteInput.value = currentValue ? currentValue + ',' + imgId : imgId;
     }
   }
-</script>
+</script> -->
 
 </html>
