@@ -101,7 +101,13 @@
 
                   <div class="form-group col-12">
                   <label>Mô tả</label>
-                  <textarea name="discription" id="" class="form-control" placeholder="Nhập mô tả"></textarea>
+                  <!-- <textarea name="discription" id="" class="form-control" placeholder="Nhập mô tả"></textarea> -->
+                  <!-- <textarea id="description" name="description" class="form-control" rows="4"><?= $sanPham['description'] ?></textarea> -->
+                  <textarea id="description" name="description" class="form-control" rows="4" placeholder="Nhập mô tả"></textarea>
+                  <?php if (isset($_SESSION['error']['description'])) { ?>
+                    <p class="text-danger"><?= $_SESSION['error']['description'] ?></p>
+                  <?php } ?>
+
                   </div>
 
                 </div>
