@@ -23,10 +23,10 @@ class AdminSanPham {
     }
 
     // Thêm sản phẩm mới
-    public function insertSanPham($name, $price, $quantity, $category_id, $status, $description){//, $hinh_anh){
+    public function insertSanPham($name, $price, $quantity, $category_id, $status, $description, $image){
         try {
-            $sql = "INSERT INTO products (name, price, quantity, category_id, status, description)
-                    VALUES (:name, :price, :quantity, :category_id, :status, :description)";
+            $sql = "INSERT INTO products (name, price, quantity, category_id, status, description, image)
+                    VALUES (:name, :price, :quantity, :category_id, :status, :description, :image)";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
@@ -36,7 +36,7 @@ class AdminSanPham {
                 ':category_id' => $category_id,
                 ':status' => $status,
                 ':description' => $description,
-                // ':hinh_anh' => $hinh_anh
+                ':image' => $image
             ]);
             // lay id san pham vua them
             return $this->conn->lastInsertID();
@@ -89,7 +89,7 @@ public function getListAnhSanPham($id){
         echo "Lỗi: " . $e->getMessage();
     }
 }
-public function updateSanPham($id,$name, $price, $quantity, $category_id, $status, $description){
+public function updateSanPham($id,$name, $price, $quantity, $category_id, $status, $description, $image){
         try {
                $sql = "UPDATE products SET 
                     name = :name,
@@ -97,8 +97,8 @@ public function updateSanPham($id,$name, $price, $quantity, $category_id, $statu
                     quantity = :quantity,
                     category_id = :category_id,
                     status = :status,
-                    description = :description
-                    -- hinh_anh = :hinh_anh
+                    description = :description,
+                    image = :image
                     WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
@@ -109,6 +109,8 @@ public function updateSanPham($id,$name, $price, $quantity, $category_id, $statu
                 ':category_id' => $category_id,
                 ':status' => $status,
                 ':description' => $description,
+                ':image' => $image,
+
                 ':id' => $id
             ]);
 

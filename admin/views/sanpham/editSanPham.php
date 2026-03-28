@@ -58,10 +58,10 @@ include './views/layout/sidebar.php';
               <input type="text" id="price" name="price" class="form-control"
                 value="<?= $sanPham['price'] ?>">
             </div>
-            <!-- <div class="form-group">
-              <label for="hinh_anh">Hình ảnh</label>
-              <input type="file" id="hinh_anh" name="hinh_anh" class="form-control">
-            </div> -->
+            <div class="form-group">
+              <label for="image">Hình ảnh</label>
+              <input type="file" id="image" name="image" class="form-control">
+            </div>
             <div class="form-group">
               <label for="quantity">Số lượng</label>
               <input type="number" id="quantity" name="quantity" class="form-control"

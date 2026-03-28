@@ -54,13 +54,13 @@
                         <p class="text-danger"><?= $_SESSION['error']['price'] ?></p>
                    <?php }?>
                   </div>
-                  <!-- <div class="form-group col-6">
+                  <div class="form-group col-6">
                     <label >Hình ảnh</label>
-                    <input type="file" class="form-control" name="hinh_anh"  >
-                    <?php if(isset($_SESSION['error']['hinh_anh'])) { ?>
-                        <p class="text-danger"><?= $_SESSION['error']['hinh_anh'] ?></p>
+                    <input type="file" class="form-control" name="image"  >
+                    <?php if(isset($_SESSION['error']['image'])) { ?>
+                        <p class="text-danger"><?= $_SESSION['error']['image'] ?></p>
                    <?php }?>
-                  </div> -->
+                  </div>
                   <!-- <div class="form-group col-6">
                     <label >Album ảnh</label>
                     <input type="file" class="form-control" name="img_array[]"  multiple  >

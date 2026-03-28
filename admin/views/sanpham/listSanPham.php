@@ -140,6 +140,7 @@
       <thead>
         <tr>
           <th>STT</th>
+          <th>Ảnh</th>
           <th>Tên</th>
           <th>Danh mục</th>
           <th>Giá</th>
@@ -155,6 +156,10 @@
           <?php foreach ($listSanPham as $key => $sanpham): ?>
             <tr>
               <td><?= $key + 1 ?></td>
+
+              <td>
+                <img src="<?= BASE_URL . $sanpham['image'] ?>" alt="<?= $sanpham['name'] ?>" width="80">
+              </td>
 
               <td><?= $sanpham['name'] ?></td>
 
