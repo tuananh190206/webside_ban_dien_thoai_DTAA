@@ -9,27 +9,8 @@ require_once './controllers/AdminCategoryController.php';
 require_once './controllers/AdminSanPhamController.php';
 // require_once './controllers/AdminTaiKhoanController.php';
 require_once './controllers/AdminBaoCaoThongKeController.php';
-// require_once './controllers/AdminTourController.php';
-// require_once './controllers/AdminNCCController.php';
-// require_once './controllers/AdminKhachHangController.php';
-// require_once './controllers/AdminBookingController.php';
-// require_once './controllers/AdminYeuCauController.php';
-// require_once './controllers/AdminLichTrinhTheoTourController.php';
-
-// require_once './controllers/AdminKhachLeController.php';
-// require_once './controllers/AdminXemKhachHangController.php';
-// require_once './controllers/AdminStatusController.php';
-// require_once './controllers/AdminNCCPTController.php';
-// require_once './controllers/AdminNCCKSController.php';
-// require_once './controllers/AdminNCCDVController.php';
-
-
-
-// require_once './controllers/AdminHuongDanVienController.php';
-// require_once './controllers/AdminYeuCauController.php';
-// require_once './controllers/AdminTrangThaiController.php';
-// require_once './controllers/AdminXemKhachHangController.php';
-// require_once './controllers/AdminTourRunController.php';
+require_once './controllers/AdminDonHangController.php'; 
+require_once './models/AdminDonHang.php';
 
 
 
@@ -106,6 +87,13 @@ match ($act) {
 
 // Quản lý album ảnh (Khớp với action trong file editSanPham.php)
 'sua-anh-san-pham'       => (new AdminSanPhamController())->postEditAnhSanPham(),
+
+// route đơn hàng
+'don-hang'              => (new AdminDonHangController())->danhSachDonHang(),
+    'chi-tiet-don-hang'     => (new AdminDonHangController())->detailDonHang(),
+    'form-sua-don-hang'     => (new AdminDonHangController())->formEditDonHang(),
+    'sua-don-hang'          => (new AdminDonHangController())->postEditDonHang(),
+    
     // 'xemkhachhang' => (new AdminXemKhachHangController())->danhsachXemKhachHang(),
 
     // 'form-them-xemkhachhang' => (new AdminXemKhachHangController())->formAddXemKhachHang(),
