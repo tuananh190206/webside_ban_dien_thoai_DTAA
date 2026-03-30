@@ -95,14 +95,17 @@ match ($act) {
     'xoa-category' => (new AdminCategoryController())->deleteCategory(),
 
     // // // route Sản phẩm
-    'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
+// Quản lý sản phẩm
+'san-pham'               => (new AdminSanPhamController())->danhSachSanPham(),
+'form-them-san-pham'     => (new AdminSanPhamController())->formAddSanPham(),
+'them-san-pham'          => (new AdminSanPhamController())->postAddSanPham(),
+'form-sua-san-pham'      => (new AdminSanPhamController())->formEditSanPham(),
+'sua-san-pham'           => (new AdminSanPhamController())->postEditSanPham(),
+'xoa-san-pham'           => (new AdminSanPhamController())->deleteSanPham(),
+'chi-tiet-san-pham'      => (new AdminSanPhamController())->chiTietSanPham(), // Đổi detail -> chiTiet
 
-    'form-them-product' => (new AdminSanPhamController())->formAddSanPham(),
-    'them-san-pham' => (new AdminSanPhamController())->postAddSanPham(),
-    'form-sua-san-pham' => (new AdminSanPhamController())->formEditSanPham(),
-    'sua-san-pham' => (new AdminSanPhamController())->postEditSanPham(),
-    'xoa-product' => (new AdminSanPhamController())->deleteSanPham(),
-
+// Quản lý album ảnh (Khớp với action trong file editSanPham.php)
+'sua-anh-san-pham'       => (new AdminSanPhamController())->postEditAnhSanPham(),
     // 'xemkhachhang' => (new AdminXemKhachHangController())->danhsachXemKhachHang(),
 
     // 'form-them-xemkhachhang' => (new AdminXemKhachHangController())->formAddXemKhachHang(),
@@ -230,4 +233,3 @@ match ($act) {
 
 //     'list-status' => (new AdminStatusController())->danhSachStatus(),
 };
-

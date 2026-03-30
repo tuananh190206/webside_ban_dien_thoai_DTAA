@@ -86,7 +86,7 @@
   <ul class="space-y-1">
 
     <!-- TỔNG QUAN -->
-    <li class="text-xs text-gray-300 uppercase px-4 mt-2">Tổng quan</li>
+    <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-2">Tổng quan</li> -->
     <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN ?>"
         class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-600">
@@ -96,7 +96,7 @@
     </li>
 
      <!-- SẢN PHẨM -->
-    <li class="text-xs text-gray-300 uppercase px-4 mt-4">Sản phẩm</li>
+    <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Sản phẩm</li> -->
 
     <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=category' ?>"
@@ -114,26 +114,26 @@
       </a>
     </li>
 
-    <li class="sidebar-item">
+    <!-- <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=hinh-anh' ?>"
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-image"></i>
         Hình ảnh SP
       </a>
-    </li>
+    </li> -->
 
     
 
-    <li class="sidebar-item">
+    <!-- <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=danh-gia' ?>"
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-star"></i>
         Đánh giá
       </a>
-    </li>
+    </li> -->
 
     <!-- BÁN HÀNG -->
-    <li class="text-xs text-gray-300 uppercase px-4 mt-4">Bán hàng</li>
+    <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Bán hàng</li> -->
 
     <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=don-hang' ?>"
@@ -143,32 +143,32 @@
       </a>
     </li>
 
-    <li class="sidebar-item">
+    <!-- <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=chi-tiet-don-hang' ?>"
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-cube"></i>
         Chi tiết đơn hàng
       </a>
-    </li>
+    </li> -->
 
-    <li class="sidebar-item">
+    <!-- <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=gio-hang' ?>"
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-cart-shopping"></i>
         Giỏ hàng
       </a>
-    </li>
+    </li> -->
 
-    <li class="sidebar-item">
+    <!-- <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=san-pham-gio' ?>"
         class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
         <i class="fa-solid fa-list"></i>
         Sản phẩm trong giỏ
       </a>
-    </li>
+    </li> -->
 
-    <!-- NGƯỜI DÙNG -->
-    <li class="text-xs text-gray-300 uppercase px-4 mt-4">Người dùng</li>
+  
+    <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Người dùng</li> -->
 
     <li class="sidebar-item">
       <a href="<?= BASE_URL_ADMIN . '?act=nguoi-dung' ?>"
@@ -185,6 +185,13 @@
         Vai trò
       </a>
     </li>
+   <li class="sidebar-item">
+  <a href="<?= BASE_URL_ADMIN . '?act=vai-tro' ?>"
+    class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
+    <i class="fa-solid fa-chart-column"></i>
+    Thống kê báo cáo
+  </a>
+</li>
 
   </ul>
 </nav>

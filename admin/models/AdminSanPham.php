@@ -1,15 +1,19 @@
 <?php
-class AdminSanPham {
+class AdminSanPham
+{
     public $conn;
 
-    public function __construct(){
+    public function __construct()
+    {
+        // Giả định hàm connectDB() đã được định nghĩa trong hệ thống của bạn
         $this->conn = connectDB();
     }
 
-    // Lấy danh sách tất cả sản phẩm kèm tên danh mục
-    public function getAllSanPham(){
+    // Lấy danh sách sản phẩm kèm tên danh mục
+    public function getAllSanPham()
+    {
         try {
-            $sql = "SELECT products.*, categories.name AS category_name
+            $sql = "SELECT products.*, categories.name as ten_danh_muc
                     FROM products
                     INNER JOIN categories ON products.category_id = categories.id";
 
@@ -17,228 +21,162 @@ class AdminSanPham {
             $stmt->execute();
 
             return $stmt->fetchAll();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
 
     // Thêm sản phẩm mới
-    public function insertSanPham($name, $price, $quantity, $category_id, $status, $description){//, $hinh_anh){
+    public function insertSanPham($name, $price, $discount_price, $quantity, $import_date, $category_id, $status, $description, $image)
+    {
         try {
-            $sql = "INSERT INTO products (name, price, quantity, category_id, status, description)
-                    VALUES (:name, :price, :quantity, :category_id, :status, :description)";
+            $sql = "INSERT INTO products (name, price, discount_price, quantity, import_date, category_id, status, description, image)
+                    VALUES (:name, :price, :discount_price, :quantity, :import_date, :category_id, :status, :description, :image)";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
                 ':name' => $name,
                 ':price' => $price,
+                ':discount_price' => $discount_price,
                 ':quantity' => $quantity,
+                ':import_date' => $import_date,
                 ':category_id' => $category_id,
                 ':status' => $status,
                 ':description' => $description,
-                // ':hinh_anh' => $hinh_anh
+                ':image' => $image
             ]);
-            // lay id san pham vua them
-            return $this->conn->lastInsertID();
-        } catch(Exception $e) {
+            // Lấy id sản phẩm vừa thêm
+            return $this->conn->lastInsertId();
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function insertAlbumAnhSanPham($san_pham_id,$link_hinh_anh){
+
+    // Thêm ảnh vào album ảnh sản phẩm
+    public function insertAlbumAnhSanPham($product_id, $image_url)
+    {
         try {
-            $sql = "INSERT INTO hinh_anh_san_phams(san_pham_id,link_hinh_anh)
-            VALUES(:san_pham_id,:link_hinh_anh) ";
+            $sql = "INSERT INTO product_images (product_id, image_url)
+                    VALUES (:product_id, :image_url)";
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([
-                ':san_pham_id' => $san_pham_id,
-                ':link_hinh_anh' => $link_hinh_anh,
-                
+            return $stmt->execute([
+                ':product_id' => $product_id,
+                ':image_url' => $image_url,
             ]);
-            // lay id san pham vua them
-            return true;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
 
-   public function getDetailSanPham($id){
-    try {
-        $sql = "SELECT products.*, categories.name AS category_name
+    public function getDetailSanPham($id)
+    {
+        try {
+            $sql = "SELECT products.*, categories.name as ten_danh_muc
                     FROM products
-                    INNER JOIN categories ON products.category_id = categories.id WHERE products.id = :id";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':id' => $id]);
-
-        return $stmt->fetch();
-    } catch (Exception $e) {
-        echo "Lỗi: " . $e->getMessage();
-    }
-}
-
-public function getListAnhSanPham($id){
-    try {
-        $sql = "SELECT * FROM hinh_anh_san_phams WHERE san_pham_id = :id";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':id' => $id]);
-
-        return $stmt->fetchAll(); // lấy danh sách ảnh nên dùng fetchAll()
-    } catch (Exception $e) {
-        echo "Lỗi: " . $e->getMessage();
-    }
-}
-public function updateSanPham($id,$name, $price, $quantity, $category_id, $status, $description){
-        try {
-               $sql = "UPDATE products SET 
-                    name = :name,
-                    price = :price,
-                    quantity = :quantity,
-                    category_id = :category_id,
-                    status = :status,
-                    description = :description
-                    -- hinh_anh = :hinh_anh
-                    WHERE id = :id";
+                    INNER JOIN categories ON products.category_id = categories.id 
+                    WHERE products.id = :id";
 
             $stmt = $this->conn->prepare($sql);
-           $stmt->execute([
-                ':name' => $name,
-                ':price' => $price,
-                ':quantity' => $quantity,
-                ':category_id' => $category_id,
-                ':status' => $status,
-                ':description' => $description,
-                ':id' => $id
-            ]);
+            $stmt->execute([':id' => $id]);
 
-            
-            // lay id san pham vua them
-            return true;
-        } catch(Exception $e) {
+            return $stmt->fetch();
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
 
-
-//        public function getDetailAnhSanPham($id){
-//     try {
-//         $sql = "SELECT * FROM hinh_anh_san_phams WHERE id = :id";
-
-//         $stmt = $this->conn->prepare($sql);
-//         $stmt->execute([':id' => $id]);
-
-//         return $stmt->fetch();
-//     } catch (Exception $e) {
-//         echo "Lỗi: " . $e->getMessage();
-//     }
-// }
-
-// public function updateAnhSanPham($id,$new_file){
-//         try {
-//                $sql = "UPDATE san_phams SET 
-//                     link_hinh_anh = :new_file,
-                    
-//                     WHERE id = :id";
-
-//             $stmt = $this->conn->prepare($sql);
-//            $stmt->execute([
-//                 ':new_file' => $new_file,
-//                 ':id' => $id,
-//             ]);
-
-            
-//             // lay id san pham vua them
-//             return true;
-//         } catch(Exception $e) {
-//             echo "Lỗi: " . $e->getMessage();
-//         }
-//     }
-
-    //   public function destroyAnhSanPham($id){
-    //         try{
-    //             $sql="DELETE FROM hinh_anh_san_phams WHERE id= :id";
-
-    //             $stmt=$this->conn->prepare($sql);
-
-    //             $stmt->execute([
-    //                 ':id'=>$id,
-                    
-
-    //             ]);
-
-    //             return true;
-    //         }catch(Exception $e){
-    //             echo"Lỗi" .$e->getMessage();
-    //         }
-    //     }
-
-        public function destroySanPham($id){
-            try{
-                $sql="DELETE FROM products WHERE id= :id";
-
-                $stmt=$this->conn->prepare($sql);
-
-                $stmt->execute([
-                    ':id'=>$id,
-                    
-
-                ]);
-
-                return true;
-            }catch(Exception $e){
-                echo"Lỗi" .$e->getMessage();
-            }
-        }
-
-
-         public function getBinhLuanFromKhachHang($id){
+    public function getListAnhSanPham($product_id)
+    {
         try {
-            $sql = "SELECT binh_luans.*, san_phams.ten_san_pham
-                    FROM binh_luans
-                    INNER JOIN san_phams ON binh_luans.san_pham_id = san_phams.id
-                    WHERE binh_luans.tai_khoan_id = :id
-                    ";
+            $sql = "SELECT * FROM product_images WHERE product_id = :product_id";
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':id'=>$id]);   
+            $stmt->execute([':product_id' => $product_id]);
 
             return $stmt->fetchAll();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
 
-       public function getDetailBinhLuan($id){
-    try {
-        $sql = "SELECT * FROM binh_luans WHERE id = :id";
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':id' => $id]);
-
-        return $stmt->fetch();
-    } catch (Exception $e) {
-        echo "Lỗi: " . $e->getMessage();
-    }
-}
-
-public function updateTrangThaiBinhLuan($id,$trang_thai){
+    public function updateSanPham($id, $name, $price, $discount_price, $quantity, $import_date, $category_id, $status, $description, $image)
+    {
         try {
-               $sql = "UPDATE binh_luans SET 
-                    trang_thai = :trang_thai
-                    
+            $sql = "UPDATE products SET 
+                        name = :name,
+                        price = :price,
+                        discount_price = :discount_price,
+                        quantity = :quantity,
+                        import_date = :import_date,
+                        category_id = :category_id,
+                        status = :status,
+                        description = :description,
+                        image = :image
                     WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
-           $stmt->execute([
-                ':trang_thai' => $trang_thai,
+            return $stmt->execute([
+                ':name' => $name,
+                ':price' => $price,
+                ':discount_price' => $discount_price,
+                ':quantity' => $quantity,
+                ':import_date' => $import_date,
+                ':category_id' => $category_id,
+                ':status' => $status,
+                ':description' => $description,
+                ':image' => $image,
                 ':id' => $id
             ]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
 
-            
-            // lay id san pham vua them
-            return true;
-        } catch(Exception $e) {
+    public function getDetailAnhSanPham($id)
+    {
+        try {
+            $sql = "SELECT * FROM product_images WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function updateAnhSanPham($id, $new_file)
+    {
+        try {
+            $sql = "UPDATE product_images SET image_url = :new_file WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':new_file' => $new_file,
+                ':id' => $id,
+            ]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function destroyAnhSanPham($id)
+    {
+        try {
+            $sql = "DELETE FROM product_images WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([':id' => $id]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function destroySanPham($id)
+    {
+        try {
+            $sql = "DELETE FROM products WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([':id' => $id]);
+        } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
