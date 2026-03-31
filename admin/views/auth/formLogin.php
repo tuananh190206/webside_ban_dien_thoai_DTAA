@@ -1,117 +1,82 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$loginUrl = BASE_URL_ADMIN . '?act=login-admin';
+$registerUrl = BASE_URL_ADMIN . '?act=dang-ky-admin';
+$registeredOk = isset($_GET['registered']) && $_GET['registered'] === '1';
+$errMsg = $_SESSION['error'] ?? null;
+?><!DOCTYPE html>
+<html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
+  <title>Đăng nhập quản trị — Phone Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="./assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="./assets/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="./assets/css/auth-split.css">
 </head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="./assets/index2.html" class="h1">Shop thứ cưng</a>
-    </div>
-    <div class="card-body">
-      <?php if (isset($_SESSION['error'])) { ?>
-          <p class="text-danger"><?= $_SESSION['error'] ?></p>
-        <?php }else{?><p class="login-box-msg">Vui lòng đăng nhập</p>
-      <?php  } ?>
+<body class="auth-split-body">
+<div class="auth-split-wrap">
+  <div class="auth-split-inner">
+    <aside class="auth-aside">
+      <div class="auth-brand">
+        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+        <span>Phone Store</span>
+      </div>
+      <h1>Đăng nhập khu vực quản trị</h1>
+      <p class="auth-lead">Truy cập an toàn để quản lý sản phẩm, đơn hàng và hỗ trợ khách hàng.</p>
+      <ul class="auth-features">
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Bảo mật phiên đăng nhập</span></li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Quản lý đơn &amp; kho nhanh chóng</span></li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Hỗ trợ vận hành 24/7</span></li>
+      </ul>
+    </aside>
 
-      <form action="<?=BASE_URL_ADMIN . '?act=check-login-admin'?>" method="post">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
+    <div class="auth-main">
+      <div class="auth-tabs">
+        <a href="<?= htmlspecialchars($loginUrl) ?>" class="auth-tab is-active">Đăng nhập</a>
+        <a href="<?= htmlspecialchars($registerUrl) ?>" class="auth-tab">Đăng ký</a>
+      </div>
+
+      <h2 class="auth-title">Đăng nhập tài khoản</h2>
+      <p class="auth-sub">Nhập email hoặc số điện thoại đã đăng ký — chỉ mất vài giây.</p>
+
+      <?php if ($registeredOk) { ?>
+        <div class="auth-alert auth-alert--success">Đăng ký thành công. Vui lòng đăng nhập bằng tài khoản vừa tạo.</div>
+      <?php } elseif ($errMsg) { ?>
+        <div class="auth-alert auth-alert--danger"><?= htmlspecialchars($errMsg) ?></div>
+      <?php } ?>
+
+      <form action="<?= BASE_URL_ADMIN ?>?act=check-login-admin" method="post" autocomplete="off">
+        <div class="auth-field">
+          <label for="login-email">Email hoặc số điện thoại</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
+            <input id="login-email" type="text" name="email" autocomplete="username" placeholder="your@email.com hoặc 09xx xxx xxx"
+              value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
+        <div class="auth-field">
+          <label for="login-password">Mật khẩu</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon"><i class="fas fa-lock" aria-hidden="true"></i></span>
+            <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="Mật khẩu">
           </div>
         </div>
-        <div class="row">
-          </div>
-          <!-- /.col -->
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
-          </div>
-          <!-- /.col -->
-        </div>
+        <button type="submit" class="auth-submit">
+          <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+          Đăng nhập
+        </button>
       </form>
 
-      
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="forgot-password.html">Quên mật khẩu</a>
+      <p class="auth-footer-link">
+        Chưa có tài khoản quản trị? <a href="<?= htmlspecialchars($registerUrl) ?>">Đăng ký ngay</a>
       </p>
-
     </div>
-    <!-- /.card-body -->
   </div>
-  <!-- /.card -->
 </div>
-<!-- /.login-box -->
-
-<!-- jQuery -->
-<script src="./assets/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="./assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="./assets/dist/js/adminlte.min.js"></script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>

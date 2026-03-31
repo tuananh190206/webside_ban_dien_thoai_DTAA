@@ -205,54 +205,140 @@ class AdminTaiKhoanController
         $listBinhLuan = $this->modelSanPham->getBinhLuanFromKhachHang($id_khach_hang);
         require_once './views/taikhoan/khachhang/detailKhachHang.php';
     }
-    public function formLogin(){
-      require_once './views/auth/formLogin.php';
-      deleteSessionError();
+    public function formLogin()
+    {
+        require_once './views/auth/formLogin.php';
+        deleteSessionError();
     }
-    public function login(){
-      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $_POST['email']  ;
-            $password = $_POST['password'] ;
 
-            $user=$this->modelTaiKhoan->checkLogin($email, $password);
-           if($user=$email){
-            $_SESSION['user_admin']=$user;
-            header("Location: " . BASE_URL_ADMIN );
-            exit();
-           }else{
-            $_SESSION['error'] = $user;
-            $_SESSION['flash'] = true;
-            header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
-            exit();
-           }
+    public function formRegisterAdmin()
+    {
+        require_once './views/auth/formRegister.php';
+        deleteSessionError();
     }
-   
-}
-   public function logout(){
-        if(isset($_SESSION['user_admin'])){
-            unset($_SESSION['user_admin']);
-            header('Location: '.BASE_URL_ADMIN  . '?act=login-admin');
+
+    public function postLoginAdmin()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
+            exit();
         }
+
+        $login = trim($_POST['email'] ?? $_POST['login'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        $result = $this->modelTaiKhoan->checkLoginQuanTri($login, $password);
+
+        if (!$result['ok']) {
+            $_SESSION['error'] = $result['message'] ?? 'Đăng nhập thất bại';
+            $_SESSION['flash'] = true;
+            header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
+            exit();
+        }
+
+        $_SESSION['user_admin'] = $result['email'];
+        header('Location: ' . BASE_URL_ADMIN);
+        exit();
     }
-    public function formEditCaNhanQuanTri(){
-        $email=$_SESSION['user_admin'];
-        $thongTin=$this->modelTaiKhoan->getTaiKhoanFormEmail($email);
-       
+
+    public function postRegisterAdmin()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
+            exit();
+        }
+
+        $ho_ten = trim($_POST['ho_ten'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = $_POST['so_dien_thoai'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $password2 = $_POST['password_confirm'] ?? '';
+
+        $errors = [];
+
+        if ($ho_ten === '' || mb_strlen($ho_ten) < 2) {
+            $errors[] = 'Họ và tên phải có ít nhất 2 ký tự.';
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Email không hợp lệ.';
+        }
+
+        $phoneNorm = AdminTaiKhoan::normalizePhone($phone);
+        if (strlen($phoneNorm) < 9 || strlen($phoneNorm) > 11) {
+            $errors[] = 'Số điện thoại không hợp lệ (9–11 chữ số).';
+        }
+
+        if (strlen($password) < 6) {
+            $errors[] = 'Mật khẩu tối thiểu 6 ký tự.';
+        }
+        if ($password !== $password2) {
+            $errors[] = 'Xác nhận mật khẩu không khớp.';
+        }
+
+        $emailConflict = $this->modelTaiKhoan->registerEmailConflictMessage($email);
+        if ($emailConflict !== null) {
+            $errors[] = $emailConflict;
+        }
+        $phoneConflict = $this->modelTaiKhoan->registerPhoneConflictMessage($phone);
+        if ($phoneConflict !== null) {
+            $errors[] = $phoneConflict;
+        }
+
+        if ($errors !== []) {
+            $_SESSION['error'] = implode(' ', $errors);
+            $_SESSION['flash'] = true;
+            $_SESSION['old_register_admin'] = [
+                'ho_ten' => $ho_ten,
+                'email' => $email,
+                'so_dien_thoai' => $phone,
+            ];
+            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
+            exit();
+        }
+
+        $ok = $this->modelTaiKhoan->registerQuanTri($ho_ten, $email, $phone, $password);
+        if (!$ok) {
+            $_SESSION['error'] = 'Không thể đăng ký, vui lòng thử lại.';
+            $_SESSION['flash'] = true;
+            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
+            exit();
+        }
+
+        unset($_SESSION['old_register_admin']);
+        header('Location: ' . BASE_URL_ADMIN . '?act=login-admin&registered=1');
+        exit();
+    }
+
+    public function logout()
+    {
+        unset($_SESSION['user_admin']);
+        header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
+        exit();
+    }
+
+    public function formEditCaNhanQuanTri()
+    {
+        $email = $_SESSION['user_admin'];
+        $thongTin = $this->modelTaiKhoan->getTaiKhoanFormEmail($email);
+
         require_once './views/taikhoan/canhan/editCaNhan.php';
         deleteSessionError();
     }
-     public function postEditMatKhauCaNhan(){
-       if($_SERVER['REQUEST_METHOD']=='POST'){
-        $old_pass = $_POST['old_pass'] ;
-        $new_pass= $_POST['new_pass'] ;
-        $confirm_pass = $_POST['confirm_pass'] ;
-        
-        $user=$this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_admin']);
-        
-        if (password_verify($old_pass, $user['mat_khau'])) {
-        var_dump('trùng pass');die;
+
+    public function postEditMatKhauCaNhan()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $old_pass = $_POST['old_pass'];
+            $new_pass = $_POST['new_pass'];
+            $confirm_pass = $_POST['confirm_pass'];
+
+            $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_admin']);
+
+            if (password_verify($old_pass, $user['mat_khau'])) {
+                var_dump('trùng pass');
+                die;
+            }
+        }
+    }
 }
-       }
-     }
-} 
-?>
