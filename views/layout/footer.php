@@ -97,8 +97,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="copyright-text text-center">
-                        <p>&copy; 2025 <b>Shopthucung</b> Made with <i class="fa fa-heart text-danger"></i> by <a
-                                href="https://hasthemes.com/"><b>TuanAnh</b></a></p>
+                        <p>&copy; 2025 <b>ShopDTAA</b> Made with <i class="fa fa-heart text-danger"></i> by <a
+                                href="https://hasthemes.com/"><b>DTAA</b></a></p>
                     </div>
                 </div>
             </div>

@@ -10,21 +10,21 @@ class HomeController
 
     public function __construct()
     {
-        // $this->modelSanPham = new SanPham();
+        $this->modelSanPham = new SanPham();
         // $this->modelTaiKhoan = new TaiKhoan();
         // $this->modelGioHang = new GioHang();
         // $this->modelDonHang = new DonHang();
     }
 
-    // public function home()
-    // {
-    //     $listSanPham = $this->modelSanPham->getAllSanPham();
-        // require_once './views/home.php';
-    // }
-    public function trangchu()
+    public function home()
     {
-        echo "day la trang chu";
+        $listSanPham = $this->modelSanPham->getAllSanPham();
+        require_once './views/home.php';
     }
+    // public function trangchu()
+    // {
+    //     echo "day la trang chu";
+    // }
 
     // public function chiTietSanPham()
     // {
