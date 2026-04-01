@@ -171,7 +171,9 @@
     <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Người dùng</li> -->
 
    <li class="sidebar-item mt-4">
-      
+
+      <div class="text-xs text-gray-300 uppercase px-4 mb-2 opacity-50">Hệ thống tài khoản</div>
+
       
       <button onclick="toggleSubmenu('account')" class="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-indigo-600 transition-colors group">
         <div class="flex items-center gap-3">
