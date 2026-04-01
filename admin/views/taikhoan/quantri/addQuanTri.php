@@ -1,88 +1,41 @@
-<!-- header -->
-<?php
-  require './views/layout/header.php';
-?>
-  <!-- Navbar -->
-<?php
-  include './views/layout/navbar.php';
-?>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
- <?php
-  include './views/layout/sidebar.php';
-?>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Quản lý tài khoản Admin</h1>
-          </div>
+<?php require './views/layout/sidebar.php' ?>
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm quản trị viên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 0; }
+        .form-container { max-width: 800px; margin: auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px; color: white; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="header">
+            <h2 class="text-2xl font-bold">Thêm Quản Trị Viên Mới</h2>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12">
- 
-            <div class="card card-primary">
-              <div class="card-header default_cursor_land">
-                <h3 class="card-title default_cursor_land">Thêm tài khoản admin</h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form action="<?=BASE_URL_ADMIN .'?act=them-quan-tri' ?>" method="POST">
-                <div class="card-body default_cursor_land">
-                  <div class="card-body default_cursor_land row">
-                  <div class="form-group default_cursor_land col-12">
-                    <label >Họ tên</label>
-                    <input type="text" class="form-control" name="ho_ten"  placeholder="Nhập họ tên">
-                    <?php if(isset($_SESSION['error']['ho_ten'])) { ?>
-                        <p class="text-danger"><?= $_SESSION['error']['ho_ten'] ?></p>
-                   <?php }?>
-                  </div>
-                </div>
-                <div class="card-body default_cursor_land">
-                  <div class="card-body default_cursor_land row">
-                  <div class="form-group default_cursor_land col-12">
-                    <label >Email</label>
-                    <input type="email" class="form-control" name="email"  placeholder="Nhập email">
-                    <?php if(isset($_SESSION['error']['email'])) { ?>
-                        <p class="text-danger"><?= $_SESSION['error']['email'] ?></p>
-                   <?php }?>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer default_cursor_land">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-              </form>
+        <form action="<?= BASE_URL_ADMIN . '?act=them-quan-tri' ?>" method="POST" class="p-8 grid grid-cols-2 gap-6">
+            <div class="col-span-2 md:col-span-1">
+                <label class="block font-bold mb-2 text-gray-700">Họ và tên</label>
+                <input type="text" name="full_name" required class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none">
             </div>
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  <!-- footer -->
-    <?php
-    include './views/layout/footer.php';
-    ?>
-  <!-- endfooter -->
-<!-- Page specific script -->
-<!-- Code injected by live-server -->
-
+            <div class="col-span-2 md:col-span-1">
+                <label class="block font-bold mb-2 text-gray-700">Email</label>
+                <input type="email" name="email" required class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none">
+                <?php if(isset($_SESSION['error']['email'])): ?>
+                    <p class="text-red-500 text-sm mt-1"><?= $_SESSION['error']['email'] ?></p>
+                <?php endif; ?>
+            </div>
+            <div class="col-span-2">
+                <label class="block font-bold mb-2 text-gray-700">Mật khẩu mặc định sẽ là: <span class="text-purple-600">123456</span></label>
+            </div>
+            <div class="col-span-2 flex justify-end gap-4 mt-4">
+                <a href="<?= BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri' ?>" class="px-6 py-3 bg-gray-200 rounded-lg font-bold">Hủy</a>
+                <button type="submit" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold shadow-lg hover:bg-purple-700 transition">Tạo tài khoản</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

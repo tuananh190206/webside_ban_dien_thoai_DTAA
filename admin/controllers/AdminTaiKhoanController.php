@@ -1,17 +1,19 @@
 <?php
+
 class AdminTaiKhoanController
 {
     public $modelTaiKhoan;
     public $modelDonHang;
     public $modelSanPham;
+
     public function __construct()
     {
         $this->modelTaiKhoan = new AdminTaiKhoan();
         $this->modelDonHang = new AdminDonHang();
         $this->modelSanPham = new AdminSanPham();
-
     }
 
+    // 1. DANH SÁCH QUẢN TRỊ VIÊN (role_id = 1)
     public function danhSachQuanTri()
     {
         $listQuanTri = $this->modelTaiKhoan->getAllTaiKhoan(1);
@@ -21,122 +23,74 @@ class AdminTaiKhoanController
     public function formAddQuanTri()
     {
         require_once './views/taikhoan/quantri/addQuanTri.php';
-
         deleteSessionError();
     }
 
     public function postAddQuanTri()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Lấy ra dữ liệu
-            $ho_ten = $_POST['ho_ten'];
-            $email = $_POST['email'];
-            $ngay_sinh = $_POST['ngay_sinh'];
+            $full_name = $_POST['full_name'] ?? '';
+            $email = $_POST['email'] ?? '';
 
-            // Tạo 1 mảng trống để chứa dữ liệu
             $errors = [];
-            if (empty($ho_ten)) {
-                $errors['ho_ten'] = 'Tên không được để trống';
-            }
-
-            if (empty($email)) {
-                $errors['email'] = 'Email không được để trống';
-            }
+            if (empty($full_name)) $errors['full_name'] = 'Tên không được để trống';
+            if (empty($email)) $errors['email'] = 'Email không được để trống';
 
             $_SESSION['error'] = $errors;
 
-            // Nếu không có lỗi thì tiến hành thêm tài khoản
             if (empty($errors)) {
-                // Nếu ko có lỗi thì tiến hành thêm tài khoản
-                // var_dump('Oke');
-                // đặt password mặc định - 123@123ab
-                $password = password_hash('123@123ab', PASSWORD_BCRYPT);
+                // Password mặc định: 12345 (khớp với dữ liệu mẫu trong SQL)
+                $password = password_hash('12345', PASSWORD_BCRYPT);
+                $role_id = 1; // Admin
 
-                // Khai báo chức vụ
-                $chuc_vu_id = 1;
-                // var_dump($password); die;
-                $this->modelTaiKhoan->insertTaiKhoan($ho_ten, $email, $password, $chuc_vu_id);
-
+                $this->modelTaiKhoan->insertTaiKhoan($full_name, $email, $password, $role_id);
                 header("Location: " . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
                 exit();
             } else {
-                // Trả về form và lỗi
-                $_SESSION['flash'] = true;  
-
-                header("Location: " . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
+                $_SESSION['flash'] = true;
+                header("Location: " . BASE_URL_ADMIN . '?act=form-them-quan-tri');
                 exit();
             }
         }
     }
 
-    public function formEditQuantri()
+    public function formEditQuanTri()
     {
-        $id_quan_tri = $_GET['id_quan_tri'];
-        $quanTri = $this->modelTaiKhoan->getDetailTaiKhoan($id_quan_tri);
+        $id = $_GET['id_quan_tri'];
+        $quanTri = $this->modelTaiKhoan->getDetailTaiKhoan($id);
         require_once './views/taikhoan/quantri/editQuanTri.php';
-
         deleteSessionError();
     }
 
     public function postEditQuanTri()
     {
-        //ham nay dung de xu ly them du lieu
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $quan_tri_id = $_POST['quan_tri_id'] ?? '';
-            // truy van
-            $ho_ten = $_POST['ho_ten'] ?? '';
+            $id = $_POST['id'] ?? '';
+            $full_name = $_POST['full_name'] ?? '';
             $email = $_POST['email'] ?? '';
-            $so_dien_thoai = $_POST['so_dien_thoai'] ?? '';
-            $trang_thai = $_POST['trang_thai'] ?? '';
+            $phone = $_POST['phone'] ?? '';
+            $status = $_POST['status'] ?? 1;
 
             $errors = [];
-            if (empty($ho_ten)) {
-                $errors['ho_ten'] = 'Tên người dùng không được để trống';
-            }
-            if (empty($email)) {
-                $errors['email'] = 'Email người dùng không được để trống';
-            }
-            if (empty($trang_thai)) {
-                $errors['trang_thai'] = 'Chọn trạng thái';
-            }
-
+            if (empty($full_name)) $errors['full_name'] = 'Tên không được để trống';
+            if (empty($email)) $errors['email'] = 'Email không được để trống';
 
             $_SESSION['error'] = $errors;
 
             if (empty($errors)) {
-                $this->modelTaiKhoan->updateTaiKhoan($quan_tri_id, $ho_ten, $email, $so_dien_thoai, $trang_thai, );
-
-                header("Location:" . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
+                $this->modelTaiKhoan->updateTaiKhoan($id, $full_name, $email, $phone, $status);
+                header("Location: " . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
                 exit();
             } else {
                 $_SESSION['flash'] = true;
-                header("Location:" . BASE_URL_ADMIN . '?act=form-sua-quan-tri&id_quan_tri=' . $quan_tri_id);
+                header("Location: " . BASE_URL_ADMIN . '?act=form-sua-quan-tri&id_quan_tri=' . $id);
                 exit();
             }
         }
     }
 
-    public function resetPassword()
-    {
-        $tai_khoan_id = $_GET['id_quan_tri'];
-        $tai_khoan = $this->modelTaiKhoan->getDetailTaiKhoan($tai_khoan_id);
-        $password = password_hash('123@123', PASSWORD_BCRYPT);
-        $status = $this->modelTaiKhoan->resetPassword($tai_khoan_id, $password);
-        if ($status && $tai_khoan['chuc_vu_id'] == 1) {
-
-            header("Location:" . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
-            exit();
-        } elseif($status && $tai_khoan['chuc_vu_id'] == 2){
-             header("Location:" . BASE_URL_ADMIN . '?act=list-tai-khoan-khach-hang');
-            exit();
-        }
-        else {
-            var_dump('Lỗi khi reset tài khoản');
-            die;
-        }
-    }
-
-       public function danhSachKhachHang()
+    // 2. DANH SÁCH KHÁCH HÀNG (role_id = 2)
+    public function danhSachKhachHang()
     {
         $listKhachHang = $this->modelTaiKhoan->getAllTaiKhoan(2);
         require_once './views/taikhoan/khachhang/listKhachHang.php';
@@ -144,201 +98,95 @@ class AdminTaiKhoanController
 
     public function formEditKhachHang()
     {
-        $id_khach_hang = $_GET['id_khach_hang'];
-        $khachHang = $this->modelTaiKhoan->getDetailTaiKhoan($id_khach_hang);
+        $id = $_GET['id_khach_hang'];
+        $khachHang = $this->modelTaiKhoan->getDetailTaiKhoan($id);
         require_once './views/taikhoan/khachhang/editKhachHang.php';
-
         deleteSessionError();
     }
 
-     public function postEditKhachHang()
+    public function postEditKhachHang()
     {
-        //ham nay dung de xu ly them du lieu
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $khach_hang_id = $_POST['khach_hang_id'] ?? '';
-            // truy van
-            $ho_ten = $_POST['ho_ten'] ?? '';
+            $id = $_POST['id'] ?? '';
+            $full_name = $_POST['full_name'] ?? '';
             $email = $_POST['email'] ?? '';
-            $so_dien_thoai = $_POST['so_dien_thoai'] ?? '';
-            $ngay_sinh = $_POST['ngay_sinh'] ?? '';
-            $gioi_tinh = $_POST['gioi_tinh'] ?? '';
-            $dia_chi = $_POST['dia_chi'] ?? '';
-            $trang_thai = $_POST['trang_thai'] ?? '';
+            $phone = $_POST['phone'] ?? '';
+            $birthday = $_POST['birthday'] ?? '';
+            $gender = $_POST['gender'] ?? 1;
+            $address = $_POST['address'] ?? '';
+            $status = $_POST['status'] ?? 1;
 
             $errors = [];
-            if (empty($ho_ten)) {
-                $errors['ho_ten'] = 'Tên người dùng không được để trống';
-            }
-            if (empty($email)) {
-                $errors['email'] = 'Email người dùng không được để trống';
-            }
-            if (empty($ngay_sinh)) {
-                $errors['ngay_sinh'] = 'Ngày sinh không đc để trống';
-            }
-            if (empty($gioi_tinh)) {
-                $errors['gioi_tinh'] = 'Vui lòng chọn giới tính';
-            }
-            if (empty($trang_thai)) {
-                $errors['trang_thai'] = 'Chọn trạng thái';
-            }
-
+            if (empty($full_name)) $errors['full_name'] = 'Tên không được để trống';
+            if (empty($email)) $errors['email'] = 'Email không được để trống';
 
             $_SESSION['error'] = $errors;
 
             if (empty($errors)) {
-                $this->modelTaiKhoan->updateKhachHang($khach_hang_id, $ho_ten, $email, $so_dien_thoai,$ngay_sinh,$gioi_tinh,$dia_chi, $trang_thai);
-
-                header("Location:" . BASE_URL_ADMIN . '?act=list-tai-khoan-khach-hang');
+                $this->modelTaiKhoan->updateKhachHang($id, $full_name, $email, $phone, $birthday, $gender, $address, $status);
+                header("Location: " . BASE_URL_ADMIN . '?act=list-tai-khoan-khach-hang');
                 exit();
             } else {
                 $_SESSION['flash'] = true;
-                header("Location:" . BASE_URL_ADMIN . '?act=form-sua-khach-hang&id_khach_hang=' . $khach_hang_id);
+                header("Location: " . BASE_URL_ADMIN . '?act=form-sua-khach-hang&id_khach_hang=' . $id);
                 exit();
             }
         }
     }
 
-    public function detailKhachHang(){
-        $id_khach_hang = $_GET['id_khach_hang'];
-        $khachHang = $this->modelTaiKhoan->getDetailTaiKhoan($id_khach_hang);
-        $listDonHang = $this->modelDonHang->getDonHangFromKhachHang($id_khach_hang);
-        $listBinhLuan = $this->modelSanPham->getBinhLuanFromKhachHang($id_khach_hang);
+    public function detailKhachHang()
+    {
+        $id = $_GET['id_khach_hang'];
+        $khachHang = $this->modelTaiKhoan->getDetailTaiKhoan($id);
+        $listDonHang = $this->modelDonHang->getDonHangFromKhachHang($id);
+        $listBinhLuan = $this->modelSanPham->getBinhLuanFromKhachHang($id);
         require_once './views/taikhoan/khachhang/detailKhachHang.php';
     }
-    public function formLogin()
-    {
-        require_once './views/auth/formLogin.php';
-        deleteSessionError();
-    }
 
-    public function formRegisterAdmin()
-    {
-        require_once './views/auth/formRegister.php';
-        deleteSessionError();
-    }
-
+    // 3. AUTHENTICATION (LOGIN/LOGOUT)
     public function postLoginAdmin()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
-            exit();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // Gọi model check login (Lưu ý: trong SQL của bạn pass đang để text thuần '12345')
+            $user = $this->modelTaiKhoan->checkLogin($email, $password);
+
+            if ($user && $user['role_id'] == 1) { // Phải là Admin
+                $_SESSION['user_admin'] = $user['email'];
+                header("Location: " . BASE_URL_ADMIN);
+                exit();
+            } else {
+                $_SESSION['error'] = "Email hoặc mật khẩu không chính xác!";
+                header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
+                exit();
+            }
         }
-
-        $login = trim($_POST['email'] ?? $_POST['login'] ?? '');
-        $password = $_POST['password'] ?? '';
-
-        $result = $this->modelTaiKhoan->checkLoginQuanTri($login, $password);
-
-        if (!$result['ok']) {
-            $_SESSION['error'] = $result['message'] ?? 'Đăng nhập thất bại';
-            $_SESSION['flash'] = true;
-            header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
-            exit();
-        }
-
-        $_SESSION['user_admin'] = $result['email'];
-        header('Location: ' . BASE_URL_ADMIN);
-        exit();
-    }
-
-    public function postRegisterAdmin()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
-            exit();
-        }
-
-        $ho_ten = trim($_POST['ho_ten'] ?? '');
-        $email = trim($_POST['email'] ?? '');
-        $phone = $_POST['so_dien_thoai'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $password2 = $_POST['password_confirm'] ?? '';
-
-        $errors = [];
-
-        if ($ho_ten === '' || mb_strlen($ho_ten) < 2) {
-            $errors[] = 'Họ và tên phải có ít nhất 2 ký tự.';
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'Email không hợp lệ.';
-        }
-
-        $phoneNorm = AdminTaiKhoan::normalizePhone($phone);
-        if (strlen($phoneNorm) < 9 || strlen($phoneNorm) > 11) {
-            $errors[] = 'Số điện thoại không hợp lệ (9–11 chữ số).';
-        }
-
-        if (strlen($password) < 6) {
-            $errors[] = 'Mật khẩu tối thiểu 6 ký tự.';
-        }
-        if ($password !== $password2) {
-            $errors[] = 'Xác nhận mật khẩu không khớp.';
-        }
-
-        $emailConflict = $this->modelTaiKhoan->registerEmailConflictMessage($email);
-        if ($emailConflict !== null) {
-            $errors[] = $emailConflict;
-        }
-        $phoneConflict = $this->modelTaiKhoan->registerPhoneConflictMessage($phone);
-        if ($phoneConflict !== null) {
-            $errors[] = $phoneConflict;
-        }
-
-        if ($errors !== []) {
-            $_SESSION['error'] = implode(' ', $errors);
-            $_SESSION['flash'] = true;
-            $_SESSION['old_register_admin'] = [
-                'ho_ten' => $ho_ten,
-                'email' => $email,
-                'so_dien_thoai' => $phone,
-            ];
-            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
-            exit();
-        }
-
-        $ok = $this->modelTaiKhoan->registerQuanTri($ho_ten, $email, $phone, $password);
-        if (!$ok) {
-            $_SESSION['error'] = 'Không thể đăng ký, vui lòng thử lại.';
-            $_SESSION['flash'] = true;
-            header('Location: ' . BASE_URL_ADMIN . '?act=dang-ky-admin');
-            exit();
-        }
-
-        unset($_SESSION['old_register_admin']);
-        header('Location: ' . BASE_URL_ADMIN . '?act=login-admin&registered=1');
-        exit();
     }
 
     public function logout()
     {
         unset($_SESSION['user_admin']);
-        header('Location: ' . BASE_URL_ADMIN . '?act=login-admin');
+        header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
         exit();
     }
 
-    public function formEditCaNhanQuanTri()
+    // 4. RESET PASSWORD
+    public function resetPassword()
     {
-        $email = $_SESSION['user_admin'];
-        $thongTin = $this->modelTaiKhoan->getTaiKhoanFormEmail($email);
-
-        require_once './views/taikhoan/canhan/editCaNhan.php';
-        deleteSessionError();
-    }
-
-    public function postEditMatKhauCaNhan()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $old_pass = $_POST['old_pass'];
-            $new_pass = $_POST['new_pass'];
-            $confirm_pass = $_POST['confirm_pass'];
-
-            $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_admin']);
-
-            if (password_verify($old_pass, $user['mat_khau'])) {
-                var_dump('trùng pass');
-                die;
-            }
+        $id = $_GET['id_quan_tri'] ?? $_GET['id_khach_hang'];
+        $taiKhoan = $this->modelTaiKhoan->getDetailTaiKhoan($id);
+        $new_password = password_hash('12345', PASSWORD_BCRYPT);
+        
+        $status = $this->modelTaiKhoan->resetPassword($id, $new_password);
+        
+        if ($status) {
+            $redirect = ($taiKhoan['role_id'] == 1) ? 'list-tai-khoan-quan-tri' : 'list-tai-khoan-khach-hang';
+            header("Location: " . BASE_URL_ADMIN . "?act=" . $redirect);
+            exit();
+        } else {
+            die('Lỗi khi reset mật khẩu');
         }
     }
 }

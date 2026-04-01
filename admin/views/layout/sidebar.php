@@ -170,12 +170,37 @@
   
     <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Người dùng</li> -->
 
-    <li class="sidebar-item">
-      <a href="<?= BASE_URL_ADMIN . '?act=nguoi-dung' ?>"
-        class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
-        <i class="fa-solid fa-users"></i>
-        Người dùng
-      </a>
+   <li class="sidebar-item mt-4">
+      
+      
+      <button onclick="toggleSubmenu('account')" class="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-indigo-600 transition-colors group">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Quản lý tài khoản</span>
+        </div>
+        <i id="account-arrow" class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+      </button>
+
+      <ul id="account-submenu" class="submenu space-y-1 mt-1 bg-indigo-800/50 rounded-lg shadow-inner">
+        <li>
+          <a href="<?= BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri' ?>" class="flex items-center gap-3 pl-11 pr-4 py-2.5 hover:text-white hover:bg-indigo-500 rounded-lg transition text-sm text-indigo-100">
+            <i class="fa-solid fa-user-shield text-yellow-400 text-xs"></i>
+            Tài khoản Admin
+          </a>
+        </li>
+        <li>
+          <a href="<?= BASE_URL_ADMIN . '?act=list-tai-khoan-khach-hang' ?>" class="flex items-center gap-3 pl-11 pr-4 py-2.5 hover:text-white hover:bg-indigo-500 rounded-lg transition text-sm text-indigo-100">
+            <i class="fa-solid fa-users text-blue-300 text-xs"></i>
+            Tài khoản Khách hàng
+          </a>
+        </li>
+        <li>
+          <a href="<?= BASE_URL_ADMIN . '?act=form-sua-thong-tin-ca-nhan-quan-tri' ?>" class="flex items-center gap-3 pl-11 pr-4 py-2.5 hover:text-white hover:bg-indigo-500 rounded-lg transition text-sm text-indigo-100">
+            <i class="fa-solid fa-circle-user text-xs"></i>
+            Tài khoản cá nhân
+          </a>
+        </li>
+      </ul>
     </li>
 
     <li class="sidebar-item">
