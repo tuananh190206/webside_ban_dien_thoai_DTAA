@@ -186,7 +186,7 @@
       </a>
     </li>
    <li class="sidebar-item">
-  <a href="<?= BASE_URL_ADMIN . '?act=vai-tro' ?>"
+  <a href="<?= BASE_URL_ADMIN . '?act=thong-ke-bao-cao' ?>"
     class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-600 rounded-lg">
     <i class="fa-solid fa-chart-column"></i>
     Thống kê báo cáo
