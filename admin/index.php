@@ -115,6 +115,7 @@ match ($act) {
     'dang-ky-admin'      => (new AdminTaiKhoanController())->formRegisterAdmin(),
     'check-dang-ky-admin'=> (new AdminTaiKhoanController())->postRegisterAdmin(),
     'logout-admin' => (new AdminTaiKhoanController())->logout(),
+    'logout-admin' => (new AdminTaiKhoanController())->logout(),
  
    
     
