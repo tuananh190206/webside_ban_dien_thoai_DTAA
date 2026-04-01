@@ -9,6 +9,7 @@ require_once './controllers/AdminCategoryController.php';
 require_once './controllers/AdminSanPhamController.php';
 // require_once './controllers/AdminTaiKhoanController.php';
 require_once './controllers/AdminBaoCaoThongKeController.php';
+require_once './controllers/AdminVaiTroController.php';
 require_once './controllers/AdminDonHangController.php'; 
 require_once './models/AdminDonHang.php';
 
@@ -167,7 +168,17 @@ match ($act) {
     // route Trang chủ
     '/' => (new AdminBaoCaoThongKeController())->home(),
 
+    //route Thống kê báo cáo
+    'thong-ke-bao-cao' =>(new AdminBaoCaoThongKeController())->thongKeBaoCao(),
 
+    ////route vai trò
+
+    // 'vai-tro'=>(new AdminVaiTroController())->listVaiTro(),
+    // 'form-them-vai-tro'=>(new AdminVaiTroController())->formAddVaiTro(),
+    // 'them-vai-tro'=>(new AdminVaiTroController())->postAddVaiTro(),
+    // 'form-sua-vai-tro'=>(new AdminVaiTroController())->formEditVaiTro(),
+    // 'sua-vai-tro'=>(new AdminVaiTroController())->postEditVaiTro(),
+    // 'xoa-vai-tro'=>(new AdminVaiTroController())->deleteVaiTro(),
     // route quản lí tài khoản
     // Quản lí tài khoản quản trị
     // 'list-tai-khoan-quan-tri' => (new AdminTaiKhoanController())->listTaiKhoan(),
