@@ -37,6 +37,12 @@
     </div>
 
     <div class="overflow-x-auto">
+      <?php if (isset($_GET['msg']) && $_GET['msg'] == 'error_last_admin'): ?>
+    <div class="bg-red-100 text-red-700 p-3 rounded-md border border-red-200 mb-4">
+        <i class="fa-solid fa-triangle-exclamation mr-2"></i> 
+        <strong>Không thể xóa:</strong> Đây là tài khoản Quản trị duy nhất còn lại. Hệ thống phải có ít nhất 1 Admin.
+    </div>
+<?php endif; ?>
       <table>
         <thead>
           <tr>
@@ -67,22 +73,31 @@
               <?php endif; ?>
             </td>
             <td>
-              <div class="flex gap-2 justify-center">
-                <a href="<?= BASE_URL_ADMIN . '?act=form-sua-quan-tri&id_quan_tri=' . $taiKhoan['id'] ?>" 
-                   class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-sm hover:bg-blue-200 transition">
-                   Sửa
-                </a>
-                <a href="<?= BASE_URL_ADMIN . '?act=reset-password&id_quan_tri=' . $taiKhoan['id'] ?>" 
-                   onclick="return confirm('Bạn có chắc muốn reset mật khẩu tài khoản này về mặc định (123456)?')"
-                   class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-sm hover:bg-yellow-200 transition">
-                   Reset Pass
-                </a>
-              </div>
+             <div class="flex gap-2 justify-center">
+    <a href="<?= BASE_URL_ADMIN . '?act=form-sua-quan-tri&id_quan_tri=' . $taiKhoan['id'] ?>" 
+       class="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-sm hover:bg-blue-200 transition">
+       Sửa
+    </a>
+    <a href="<?= BASE_URL_ADMIN . '?act=reset-password-quan-tri&id_quan_tri=' . $taiKhoan['id'] ?>" 
+       onclick="return confirm('Bạn có chắc muốn reset mật khẩu tài khoản này?')"
+       class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-md text-sm hover:bg-yellow-200 transition">
+       Reset Pass
+    </a>
+    
+    <a href="<?= BASE_URL_ADMIN . '?act=xoa-quan-tri&id_quan_tri=' . $taiKhoan['id'] ?>" 
+       onclick="return confirm('Xác nhận xóa tài khoản quản trị này? Lưu ý: Hành động này không thể hoàn tác!')"
+       class="bg-red-100 text-red-700 px-3 py-1 rounded-md text-sm hover:bg-red-200 transition">
+       Xóa
+    </a>
+</div>
             </td>
           </tr>
+          
           <?php endforeach; ?>
         </tbody>
+        
       </table>
+      
     </div>
   </div>
 </body>

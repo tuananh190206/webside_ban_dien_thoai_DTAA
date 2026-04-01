@@ -1,110 +1,44 @@
 <?php
-class AdminBaoCaoThongKe
-{
+class AdminBaoCaoThongKe {
     public $conn;
-    public function __construct()
-    {
+
+    public function __construct() {
         $this->conn = connectDB();
     }
-    private function scalar($sql,$params= [])
-    {
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchColumn();
-    }
-    public function getSummary()
-    {
-        $data= [
-            'tong_san_pham'=>0,
-            'tong_don_hang'=>0,
-            'tong_khach_hang'=>0,
-            'doanh_thu'=>0,
-        ];
-        try{
-            $data['tong_san_pham'] =(int) $this->scalar("SELECT COUNT(*) FROM products");
-        }catch(Exception $e)
-        {
 
-        }
-        try{
-            $data['tong_don_hang'] =(int) $this->scalar("SELECT COUNT(*) FROM orders");
-        }catch(Exception $e)
-        {
-
-        }
-        
-        try{
-            $data['tong_khach_hang'] =(int) $this->scalar("SELECT COUNT(*) FROM users");
-        }catch(Exception $e)
-        {
-            try{
-                $data['tong_khach_hang'] =(int) $this->scalar("SELECT COUNT(*) FROM tai_khoans WHERE chuc_vu_id = 2");
-            }catch(Exception $e2)
-            {
-            }
-        }
-        
-        try{
-            $data['doanh_thu'] =(float) $this->scalar("SELECT COALESCE(SUM(total_amount), 0) FROM orders");
-        }catch(Exception $e)
-        {
-        }
-
-        return $data;
+    // Thống kê tổng doanh thu từ bảng 'orders'
+    public function getTongDoanhThu() {
+        // Trong SQL của bạn, cột là 'total_amount', trạng thái 'Đã giao' là id = 4
+        $sql = "SELECT SUM(total_amount) as total FROM orders WHERE status_id = 4"; 
+        $result = $this->conn->query($sql)->fetch();
+        return $result['total'] ?? 0;
     }
 
-    public function getRecentOrders($limit = 8)
-    {
-        $baseSelect = "SELECT o.id,
-                              o.order_date,
-                              o.total_amount,
-                              os.name AS ten_trang_thai,
-                              COALESCE(o.receiver_name,u.full_name, 'N/A') AS ten_khach_hang
-                              FROM orders o
-                              LEFT JOIN users u ON o.user_id = u.id
-                              ORDER BY o.order_date DESC
-                              LIMIT :limit";
-        
-        try {
-            $sql = str_replace('FROM orders o', 'FROM orders o INNER JOIN order_statuses os ON o.status_id = os.id', $baseSelect);
-            $stmt= $this->conn->prepare($sql);
-            $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (Exception $e) {
-            try{
-                $sql2 = str_replace('FROM orders o', 'FROM orders o INNER JOIN order_statuses os ON o.order_status_id = os.id', $baseSelect);
-                $stmt2 = $this->conn->prepare($sql2);
-                $stmt2->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
-                $stmt2->execute();
-                return $stmt2->fetchAll();
-
-            }catch (Exception $e2)
-            {
-                return [];
-            }
-        }
+    // Thống kê tổng số đơn hàng từ bảng 'orders'
+    public function getTongDonHang() {
+        $sql = "SELECT COUNT(*) as total FROM orders";
+        $result = $this->conn->query($sql)->fetch();
+        return $result['total'] ?? 0;
     }
 
-    public function getTopProducts($limit = 8)
-    {
-        try{
-            $sql="SELECT p.id,
-                         p.name,
-                         p.image,
-                         COALESCE(SUM(oi.quantity),0) AS so_luong_ban
-                     FROM order_items oi
-                    INNER JOIN products p ON oi.product_id = p.id
-                    GROUP BY p.id, p.name, p.image
-                    ORDER BY so_luong_ban DESC
-                    LIMIT :limit"; 
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        } catch (Exception $e) {
-            return [];
-        }
-        }
+    // Thống kê tổng số khách hàng từ bảng 'users'
+    public function getTongKhachHang() {
+        // Trong SQL của bạn, bảng là 'users', role_id = 2 là khách hàng
+        $sql = "SELECT COUNT(*) as total FROM users WHERE role_id = 2";
+        $result = $this->conn->query($sql)->fetch();
+        return $result['total'] ?? 0;
     }
-   
+
+    // Lấy 5 đơn hàng mới nhất
+    public function getDonHangMoiNhat() {
+        $sql = "SELECT orders.*, users.full_name 
+                FROM orders 
+                JOIN users ON orders.user_id = users.id 
+                ORDER BY orders.id DESC LIMIT 5";
+        return $this->conn->query($sql)->fetchAll();
+    }
+    public function getTongSanPham() {
+    $sql = "SELECT COUNT(*) as total FROM products";
+    return $this->conn->query($sql)->fetch()['total'] ?? 0;
+}
+}

@@ -103,4 +103,54 @@ class AdminDonHang {
             echo "Lỗi: " . $e->getMessage();
         }
     }
+    // Trong file models/AdminDonHang.php (hoặc class AdminDonHang)
+public function getDonHangFromKhachHang($id) {
+    try {
+        $sql = "SELECT 
+                    orders.*, 
+                    order_statuses.name AS status_name 
+                FROM orders 
+                JOIN order_statuses ON orders.status_id = order_statuses.id
+                WHERE orders.user_id = :id";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        
+        return $stmt->fetchAll();
+    } catch (Exception $e) {
+        echo "Lỗi: " . $e->getMessage();
+    }
+}
+public function getDonHangByKhachHang($id) {
+        try {
+            // SQL JOIN giữa bảng orders và order_statuses
+            // Lấy các cột cần thiết cho view chi tiết khách hàng
+            $sql = "SELECT orders.*, order_statuses.name as status_name 
+                    FROM orders 
+                    INNER JOIN order_statuses ON orders.status_id = order_statuses.id 
+                    WHERE orders.user_id = :id 
+                    ORDER BY orders.id DESC";
+            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            error_log("Lỗi getDonHangByKhachHang: " . $e->getMessage());
+            return [];
+        }
+    }
+
+public function resetPassword($id, $password) {
+    try {
+        $sql = "UPDATE users SET password = :password WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':password' => $password,
+            ':id' => $id
+        ]);
+    } catch (Exception $e) {
+        echo "Lỗi: " . $e->getMessage();
+    }
+}
 }

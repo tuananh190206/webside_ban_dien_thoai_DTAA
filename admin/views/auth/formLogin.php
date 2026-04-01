@@ -1,12 +1,20 @@
 <?php
+// Kiểm tra session nếu chưa có mới khởi tạo (thường index.php đã làm việc này)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$loginUrl = BASE_URL_ADMIN . '?act=login-admin';
+
+$loginUrl    = BASE_URL_ADMIN . '?act=login-admin';
 $registerUrl = BASE_URL_ADMIN . '?act=dang-ky-admin';
-$registeredOk = isset($_GET['registered']) && $_GET['registered'] === '1';
+
+// Lấy thông báo lỗi từ Session (do Controller gửi sang)
 $errMsg = $_SESSION['error'] ?? null;
-?><!DOCTYPE html>
+// Xóa lỗi ngay sau khi lấy ra để không hiện lại khi F5
+unset($_SESSION['error']); 
+
+$registeredOk = isset($_GET['registered']) && $_GET['registered'] === '1';
+?>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
@@ -42,38 +50,46 @@ $errMsg = $_SESSION['error'] ?? null;
       </div>
 
       <h2 class="auth-title">Đăng nhập tài khoản</h2>
-      <p class="auth-sub">Nhập email hoặc số điện thoại đã đăng ký — chỉ mất vài giây.</p>
+      <p class="auth-sub">Nhập email quản trị để tiếp tục công việc.</p>
 
-      <?php if ($registeredOk) { ?>
-        <div class="auth-alert auth-alert--success">Đăng ký thành công. Vui lòng đăng nhập bằng tài khoản vừa tạo.</div>
-      <?php } elseif ($errMsg) { ?>
-        <div class="auth-alert auth-alert--danger"><?= htmlspecialchars($errMsg) ?></div>
-      <?php } ?>
+      <?php if ($registeredOk): ?>
+        <div class="auth-alert auth-alert--success" style="color: green; margin-bottom: 15px;">
+             Đăng ký thành công. Vui lòng đăng nhập.
+        </div>
+      <?php endif; ?>
+
+      <?php if ($errMsg): ?>
+        <div class="auth-alert auth-alert--danger" style="color: red; margin-bottom: 15px;">
+            <?= htmlspecialchars($errMsg) ?>
+        </div>
+      <?php endif; ?>
 
       <form action="<?= BASE_URL_ADMIN ?>?act=check-login-admin" method="post" autocomplete="off">
         <div class="auth-field">
-          <label for="login-email">Email hoặc số điện thoại</label>
+          <label for="login-email">Email quản trị</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon"><i class="fas fa-user" aria-hidden="true"></i></span>
-            <input id="login-email" type="text" name="email" autocomplete="username" placeholder="your@email.com hoặc 09xx xxx xxx"
-              value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
+            <input id="login-email" type="email" name="email" required 
+                   placeholder="admin@example.com"
+                   value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
           </div>
         </div>
         <div class="auth-field">
           <label for="login-password">Mật khẩu</label>
           <div class="auth-input-wrap">
             <span class="auth-input-icon"><i class="fas fa-lock" aria-hidden="true"></i></span>
-            <input id="login-password" type="password" name="password" autocomplete="current-password" placeholder="Mật khẩu">
+            <input id="login-password" type="password" name="password" required 
+                   placeholder="Nhập mật khẩu">
           </div>
         </div>
-        <button type="submit" class="auth-submit">
+        <button type="submit" class="auth-submit" style="cursor: pointer;">
           <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-          Đăng nhập
+          Đăng nhập hệ thống
         </button>
       </form>
 
       <p class="auth-footer-link">
-        Chưa có tài khoản quản trị? <a href="<?= htmlspecialchars($registerUrl) ?>">Đăng ký ngay</a>
+        Quên mật khẩu? Vui lòng liên hệ quản trị viên cấp cao.
       </p>
     </div>
   </div>

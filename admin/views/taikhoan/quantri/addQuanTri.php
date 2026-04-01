@@ -28,6 +28,18 @@
                     <p class="text-red-500 text-sm mt-1"><?= $_SESSION['error']['email'] ?></p>
                 <?php endif; ?>
             </div>
+            <div class="col-span-2 md:col-span-1">
+    <label class="block font-bold mb-2 text-gray-700">Số điện thoại</label>
+    <input type="text" name="phone" required class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none">
+    <?php if(isset($_SESSION['error']['phone'])): ?>
+        <p class="text-red-500 text-sm mt-1"><?= $_SESSION['error']['phone'] ?></p>
+    <?php endif; ?>
+</div>
+
+<div class="col-span-2">
+    <label class="block font-bold mb-2 text-gray-700">Địa chỉ</label>
+    <input type="text" name="address" required class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none" value="Hà Nội">
+</div>
             <div class="col-span-2">
                 <label class="block font-bold mb-2 text-gray-700">Mật khẩu mặc định sẽ là: <span class="text-purple-600">123456</span></label>
             </div>
@@ -35,6 +47,7 @@
                 <a href="<?= BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri' ?>" class="px-6 py-3 bg-gray-200 rounded-lg font-bold">Hủy</a>
                 <button type="submit" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-bold shadow-lg hover:bg-purple-700 transition">Tạo tài khoản</button>
             </div>
+            
         </form>
     </div>
 </body>

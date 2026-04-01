@@ -1,143 +1,106 @@
 <?php require './views/layout/sidebar.php' ?>
-<div id="content-area" class="p-8">
-  <div id="home-page" class="page-content">
-    <div class="mb-6">
-      <h3 class="text-2xl font-semibold text-gray-800 mb-2">
-        Chào mừng đến với hệ thống quản lý SHOP ĐIỆN THOẠI
-      </h3>
-      <p class="text-gray-600">Dashboard tổng quan về hoạt động kinh doanh</p>
-    </div>
-
-    <!-- THỐNG KÊ -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
-      <!-- SẢN PHẨM -->
-      <div class="card bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
-        <p class="text-gray-500 text-sm">Tổng sản phẩm</p>
-        <p class="text-3xl font-bold text-gray-800 mt-2">256</p>
-      </div>
-
-      <!-- ĐƠN HÀNG -->
-      <div class="card bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
-        <p class="text-gray-500 text-sm">Đơn hàng</p>
-        <p class="text-3xl font-bold text-gray-800 mt-2">512</p>
-      </div>
-
-      <!-- KHÁCH HÀNG -->
-      <div class="card bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
-        <p class="text-gray-500 text-sm">Khách hàng</p>
-        <p class="text-3xl font-bold text-gray-800 mt-2">1,200</p>
-      </div>
-
-      <!-- DOANH THU -->
-      <div class="card bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
-        <p class="text-gray-500 text-sm">Doanh thu</p>
-        <p class="text-3xl font-bold text-gray-800 mt-2">3.2B</p>
-      </div>
-
-    </div>
-
-    <!-- DANH SÁCH -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-      <!-- ĐƠN HÀNG GẦN ĐÂY -->
-      <div class="bg-white rounded-xl shadow-lg p-6">
-        <h4 class="text-lg font-bold mb-4">Đơn hàng gần đây</h4>
-
-        <div class="space-y-3">
-          <div class="p-3 bg-gray-50 rounded-lg flex justify-between">
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Điều Khiển - DTAA Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { margin: 0; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+    .admin-panel { max-width: 1250px; margin: 40px auto; background: #f8f9fa; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px 40px; color: white; }
+    .stat-card { background: white; padding: 24px; border-radius: 12px; border: 1px solid #edf2f7; transition: transform 0.3s; height: 100%; }
+    .stat-card:hover { transform: translateY(-5px); }
+    .icon-box { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body>
+  <div class="admin-panel">
+    <div class="header">
+        <div class="flex justify-between items-center">
             <div>
-              <p class="font-medium">iPhone 14 Pro Max</p>
-              <p class="text-sm text-gray-500">Nguyễn Văn A - 01/03/2026</p>
+                <h1 class="text-3xl font-bold">Bảng Điều Khiển</h1>
+                <p>Chào mừng trở lại, <?= $_SESSION['user_admin']['full_name'] ?? 'Quản trị viên' ?>!</p>
             </div>
-            <span class="bg-green-100 text-green-700 px-2 py-1 rounded">Đã giao</span>
-          </div>
-
-          <div class="p-3 bg-gray-50 rounded-lg flex justify-between">
-            <div>
-              <p class="font-medium">Samsung S23 Ultra</p>
-              <p class="text-sm text-gray-500">Trần Thị B - 02/03/2026</p>
+            <div class="text-right">
+                <p class="text-sm opacity-80"><?= date('l, d F Y') ?></p>
             </div>
-            <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Đang xử lý</span>
-          </div>
         </div>
-      </div>
+    </div>
 
-      <!-- SẢN PHẨM BÁN CHẠY -->
-      <div class="bg-white rounded-xl shadow-lg p-6">
-        <h4 class="text-lg font-bold mb-4">Sản phẩm bán chạy</h4>
+    <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="stat-card shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Tổng doanh thu</p>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongDoanhThu, 0, ',', '.') ?>đ</h2>
+                    </div>
+                    <div class="icon-box bg-green-100 text-green-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
 
-        <div class="space-y-3">
-          <div class="p-3 bg-blue-50 rounded-lg flex justify-between">
-            <p>📱 iPhone 14</p>
-            <span class="font-bold text-blue-600">120 sold</span>
-          </div>
+            <div class="stat-card shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Tổng đơn hàng</p>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongDonHang) ?></h2>
+                    </div>
+                    <div class="icon-box bg-blue-100 text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                </div>
+            </div>
 
-          <div class="p-3 bg-green-50 rounded-lg flex justify-between">
-            <p>📱 Samsung S22</p>
-            <span class="font-bold text-green-600">98 sold</span>
-          </div>
+            <div class="stat-card shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Khách hàng</p>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongKhachHang) ?></h2>
+                    </div>
+                    <div class="icon-box bg-orange-100 text-orange-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
 
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-gray-700 uppercase text-sm tracking-wider">Đơn hàng mới nhất</h3>
+                <a href="<?= BASE_URL_ADMIN . '?act=don-hang' ?>" class="text-blue-500 text-xs font-bold hover:underline">XEM TẤT CẢ</a>
+            </div>
+            <table class="w-full text-left">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Mã đơn</th>
+                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Khách hàng</th>
+                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-right">Tổng tiền</th>
+                        <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Ngày đặt</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm">
+                    <?php if (!empty($listDonHangMoi)): ?>
+                        <?php foreach($listDonHangMoi as $dh): ?>
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 font-bold text-blue-600">#<?= $dh['order_code'] ?></td>
+                            <td class="px-6 py-4 font-medium text-gray-700"><?= $dh['full_name'] ?></td>
+                            <td class="px-6 py-4 text-right font-bold text-red-500"><?= number_format($dh['total_amount'], 0, ',', '.') ?>đ</td>
+                            <td class="px-6 py-4 text-center text-gray-500"><?= date('d/m/Y', strtotime($dh['order_date'])) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">Chưa có dữ liệu đơn hàng mới.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
   </div>
-
-  <!-- KHÁCH HÀNG -->
-  <div id="customers-page" class="page-content hidden">
-    <div class="bg-white p-6 rounded-xl shadow-lg">
-      <h3 class="text-xl font-bold mb-6">Danh sách khách hàng</h3>
-
-      <table class="w-full">
-        <thead>
-          <tr class="bg-gray-50">
-            <th class="p-3">Mã KH</th>
-            <th class="p-3">Tên</th>
-            <th class="p-3">Email</th>
-            <th class="p-3">SĐT</th>
-            <th class="p-3">Đơn hàng</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr class="border-b">
-            <td class="p-3">KH001</td>
-            <td class="p-3">Nguyễn Văn A</td>
-            <td class="p-3">a@gmail.com</td>
-            <td class="p-3">0901234567</td>
-            <td class="p-3">5</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- DANH MỤC -->
-  <div id="categories-page" class="page-content hidden">
-    <div class="bg-white p-6 rounded-xl shadow-lg">
-      <h3 class="text-xl font-bold mb-6">Danh mục sản phẩm</h3>
-
-      <div class="grid grid-cols-3 gap-4">
-        <div class="border p-4 rounded-lg">📱 iPhone</div>
-        <div class="border p-4 rounded-lg">📱 Samsung</div>
-        <div class="border p-4 rounded-lg">📱 Xiaomi</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SẢN PHẨM -->
-  <div id="products-page" class="page-content hidden">
-    <div class="bg-white p-6 rounded-xl shadow-lg">
-      <h3 class="text-xl font-bold mb-6">Quản lý sản phẩm</h3>
-      <p>Danh sách điện thoại</p>
-    </div>
-  </div>
-
-  <!-- ĐƠN HÀNG -->
-  <div id="orders-page" class="page-content hidden">
-    <div class="bg-white p-6 rounded-xl shadow-lg">
-      <h3 class="text-xl font-bold mb-6">Quản lý đơn hàng</h3>
-    </div>
-  </div>
-
-</div>
+</body>
+</html>
