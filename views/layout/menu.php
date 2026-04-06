@@ -11,7 +11,7 @@
                 <div class="col-lg-2">
                     <div class="logo">
                         <a href="index.html">
-                            <img src="assets/img/logo/LOGO.png" alt="Brand Logo">
+                            <img src="assets/img/logo/image.png" alt="Brand Logo">
                         </a>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
                             <!-- main menu navbar start -->
                             <nav class="desktop-menu">
                                 <ul>
-                                    <li><a href="index.html">Trang chủ</a>
+                                    <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</a>
 
                                     </li>
 
@@ -43,8 +43,8 @@
                                             <li><a href="blog-details-image.html">blog details image</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Giới thiệu</a></li>
-                                    <li><a href="#">Liên lệ</a></li>
+                                    <li><a href="<?= BASE_URL . '?act=gioi-thieu' ?>">Giới thiệu</a></li>
+                                    <li><a href="<?= BASE_URL . '?act=lien-he' ?>">Liên lệ</a></li>
                                 </ul>
                             </nav>
                             <!-- main menu navbar end -->

@@ -14,15 +14,12 @@
                         <div class="widget-title">
                             <div class="widget-logo">
                                 <a href="index.html">
-                                    <img src="assets/img/logo/logo.png" alt="brand logo">
+                                    <img src="assets/img/logo/image.png" alt="brand logo">
                                 </a>
                             </div>
                         </div>
                         <div class="widget-body">
-                            <p>Chúng tôi là đội ngũ yêu động vật, chuyên cung cấp các sản phẩm & dịch vụ chất lượng cao
-                                cho thú cưng.
-                                Hãy để chúng tôi đồng hành cùng bạn trong hành trình chăm sóc những người bạn nhỏ đáng
-                                yêu! </p>
+                            <p>DTAA là website chuyên cung cấp điện thoại chính hãng với giá tốt, cập nhật nhanh các sản phẩm mới từ những thương hiệu uy tín. Chúng tôi cam kết mang đến trải nghiệm mua sắm tiện lợi, giao hàng nhanh chóng và dịch vụ hỗ trợ tận tâm cho khách hàng. </p>
                         </div>
                     </div>
                 </div>
@@ -32,9 +29,9 @@
                         <div class="widget-body">
                             <address class="contact-block">
                                 <ul>
-                                    <li><i class="pe-7s-home"></i> 46C Mỹ đình 2 Nam Từ Liêm Hà Nội</li>
+                                    <li><i class="pe-7s-home"></i>  Nam Từ Liêm Hà Nội</li>
                                     <li><i class="pe-7s-mail"></i> <a
-                                            href="mailto:demo@plazathemes.com">shopthucung@gmail.com </a></li>
+                                            href="mailto:demo@plazathemes.com">dienthoaidtaa@gmail.com </a></li>
                                     <li><i class="pe-7s-call"></i> <a href="tel:(012)800456789987">(084)355732124</a></li>
                                 </ul>
                             </address>

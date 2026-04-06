@@ -30,6 +30,8 @@ match ($act) {
     'lich-su-mua-hang'=>(new HomeController())->lichSuMuaHang(),
     'chi-tiet-mua-hang'=>(new HomeController())->chiTietMuaHang(),
     'huy-don-hang'=>(new HomeController())->huyDonHang(),
+    'gioi-thieu' => (new HomeController())->gioiThieu(),
+    'lien-he' => (new HomeController())->lienHe(),
     //route login
     'login'=>(new HomeController())->formLogin(),
     'check-login'=>(new HomeController())->postLogin(),
