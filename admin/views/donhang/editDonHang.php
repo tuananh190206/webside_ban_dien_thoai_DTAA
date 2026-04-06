@@ -1,138 +1,60 @@
-<!-- header -->
-<?php
-require './views/layout/header.php';
-?>
-<!-- Navbar -->
-<?php
-include './views/layout/navbar.php';
-?>
-<!-- /.navbar -->
-
-<!-- Main Sidebar Container -->
-<?php
-include './views/layout/sidebar.php';
-?>
-
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1>Chỉnh sửa thông tin đơn hàng:</h1>
-        </div>
-      </div>
-    </div><!-- /.container-fluid -->
-  </section>
-
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-
-          <div class="card card-primary">
-            <div class="card-header default_cursor_land">
-              <h3 class="card-title default_cursor_land">Sửa mục thông tin đơn hàng:<?= $donHang['ma_don_hang'] ?></h3>
-            </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form action="<?= BASE_URL_ADMIN . '?act=sua-don-hang' ?>" method="POST">
-              <input type="text" name="don_hang_id" VALUE="<?= $donHang['id'] ?>" hidden>
-              <div class="card-body default_cursor_land">
-                <div class="form-group ">
-                  <label>Tên người nhận</label>
-                  <input type="text" class="form-control" name="ten_nguoi_nhan"
-                    value="<?= $donHang['ten_nguoi_nhan'] ?>" placeholder="Nhập tên người nhận">
-                  <?php if (isset($errors['ten_nguoi_nhan'])) { ?>
-                    <p class="text-danger"><?= $errors['ten_nguoi_nhan'] ?></p>
-                  <?php } ?>
-                </div>
-
-                <div class="form-group ">
-                  <label>Số điện thoại</label>
-                  <input type="text" class="form-control" name="sdt_nguoi_nhan"
-                    value="<?= $donHang['sdt_nguoi_nhan'] ?>" placeholder="Nhập số điện thoại người nhận">
-                  <?php if (isset($errors['sdt_nguoi_nhan'])) { ?>
-                    <p class="text-danger"><?= $errors['sdt_nguoi_nhan'] ?></p>
-                  <?php } ?>
-                </div>
-
-                <div class="form-group ">
-                  <label>Email</label>
-                  <input type="text" class="form-control" name="email_nguoi_nhan"
-                    value="<?= $donHang['email_nguoi_nhan'] ?>" placeholder="Nhập email người nhận">
-                  <?php if (isset($errors['email_nguoi_nhan'])) { ?>
-                    <p class="text-danger"><?= $errors['email_nguoi_nhan'] ?></p>
-                  <?php } ?>
-                </div>
-
-                <div class="form-group ">
-                  <label>Địa chỉ</label>
-                  <input type="text" class="form-control" name="dia_chi_nguoi_nhan"
-                    value="<?= $donHang['dia_chi_nguoi_nhan'] ?>" placeholder="Nhập tên người nhận">
-                  <?php if (isset($errors['dia_chi_nguoi_nhan'])) { ?>
-                    <p class="text-danger"><?= $errors['dia_chi_nguoi_nhan'] ?></p>
-                  <?php } ?>
-                </div>
-
-                <div class="form-group default_cursor_land">
-                  <label>Ghi chú</label>
-                  <textarea name="mo_ta" id="" class="form-control"
-                    placeholder="Nhập mô tả"><?= $donHang['ghi_chu'] ?></textarea>
-                </div>
-
-
-                <hr>
-                <div class="form-group">
-                  <label for="trang_thai_id">Trạng thái sản phẩm</label>
-                  <select id="trang_thai_id" name="trang_thai_id" class="form-control custom-select">
-                    <?php foreach ($listTrangThaiDonHang as $trangThai): ?>
-                      <option <?php
-                      if (
-                        $donHang['trang_thai_id'] > $trangThai['id']
-                        || $donHang['trang_thai_id'] == 9
-                        || $donHang['trang_thai_id'] == 10
-                        || $donHang['trang_thai_id'] == 11
-                      ) {
-                        echo 'disabled';
-                      }
-                      ?>
-                        <?= $trangThai['id'] == $donHang['trang_thai_id'] ? 'selected' : '' ?>
-                        value="<?= $trangThai['id'] ?>">
-                        <?= $trangThai['ten_trang_thai'] ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-
-              <!-- /.card-body -->
-
-              <div class="card-footer default_cursor_land">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
+<?php require './views/layout/sidebar.php' ?>
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cập nhật đơn hàng | Quản trị</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
+    .admin-panel { max-width: 800px; margin: 30px auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 25px; color: white; }
+    label { font-weight: 600; display: block; margin-top: 15px; color: #1e40af; font-size: 0.9rem; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="admin-panel">
+    <div class="header">
+        <h2 class="text-xl font-bold uppercase tracking-wider">Cập nhật đơn hàng #<?= $donHang['id'] ?></h2>
     </div>
-    <!-- /.container-fluid -->
-  </section>
-  <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
-<!-- footer -->
-<?php
-include './views/layout/footer.php';
-?>
-<!-- endfooter -->
-<!-- Page specific script -->
-<!-- Code injected by live-server -->
+    
+    <form action="<?= BASE_URL_ADMIN . '?act=sua-don-hang' ?>" method="POST" class="p-8">
+        <input type="hidden" name="don_hang_id" value="<?= $donHang['id'] ?>">
 
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label>Tên người nhận</label>
+                <input type="text" name="receiver_name" value="<?= $donHang['receiver_name'] ?>">
+                <p class="text-red-500 text-xs italic"><?= $_SESSION['error']['receiver_name'] ?? '' ?></p>
+            </div>
+            <div>
+                <label>Số điện thoại</label>
+                <input type="text" name="receiver_phone" value="<?= $donHang['receiver_phone'] ?>">
+                <p class="text-red-500 text-xs italic"><?= $_SESSION['error']['receiver_phone'] ?? '' ?></p>
+            </div>
+        </div>
+
+        <label>Địa chỉ người nhận</label>
+        <textarea name="receiver_address" rows="2"><?= $donHang['receiver_address'] ?></textarea>
+
+        <label class="text-blue-700">Trạng thái đơn hàng</label>
+        <select name="status_id" class="bg-blue-50 border-blue-200">
+            <?php foreach ($listTrangThaiDonHang as $status): ?>
+                <option <?= $status['id'] == $donHang['status_id'] ? 'selected' : '' ?> value="<?= $status['id'] ?>">
+                    <?= $status['name'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <label>Ghi chú đơn hàng</label>
+        <textarea name="note" rows="3"><?= $donHang['note'] ?></textarea>
+
+        <div class="mt-8">
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition uppercase shadow-lg">Lưu thay đổi</button>
+            <a href="<?= BASE_URL_ADMIN . '?act=don-hang' ?>" class="block text-center mt-4 text-gray-500 hover:underline">Quay lại danh sách</a>
+        </div>
+    </form>
+  </div>
 </body>
-
 </html>

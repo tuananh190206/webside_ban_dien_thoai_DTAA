@@ -114,7 +114,17 @@
             <div class="error"><?= $errors['name'] ?></div>
           <?php endif; ?>
         </div>
+<label>Số lượng</label>
+<input type="number" name="quantity" value="<?= $sanPham['quantity'] ?>">
 
+<label>Ngày nhập</label>
+<input type="date" name="import_date" value="<?= $sanPham['import_date'] ?>">
+
+<label>Trạng thái</label>
+<select name="status">
+    <option value="1" <?= $sanPham['status'] == 1 ? 'selected' : '' ?>>Hiển thị</option>
+    <option value="2" <?= $sanPham['status'] == 2 ? 'selected' : '' ?>>Ẩn</option>
+</select>
         <!-- MÔ TẢ -->
         <div class="form-group">
           <label>Mô tả</label>

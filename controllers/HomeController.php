@@ -26,22 +26,22 @@ class HomeController
     //     echo "day la trang chu";
     // }
 
-    // public function chiTietSanPham()
-    // {
-    //     $id = $_GET['id_san_pham'];
-    //     $sanPham = $this->modelSanPham->getDetailSanPham($id);
-    //     $listAnhSanPham = $this->modelSanPham->getListAnhSanPham($id);
-    //     $listBinhLuan = $this->modelSanPham->getBinhLuanFormSanPham($id);
-    //     $listSanPhamCungDanhMuc = $this->modelSanPham->getListSanPhamDanhMuc($sanPham['danh_muc_id']);
-    //     // var_dump($listSanPhamCungDanhMuc);die;
+    public function chiTietSanPham()
+    {
+        $id = $_GET['id_san_pham'];
+        $sanPham = $this->modelSanPham->getDetailSanPham($id);
+        $listAnhSanPham = $this->modelSanPham->getListAnhSanPham($id);
+        $listBinhLuan = $this->modelSanPham->getBinhLuanFormSanPham($id);
+        $listSanPhamCungDanhMuc = $this->modelSanPham->getListSanPhamDanhMuc($sanPham['category_id']);
+        // var_dump($listSanPhamCungDanhMuc);die;
 
-    //     if ($sanPham) {
-    //         require_once './views/detailSanPham.php';
-    //     } else {
-    //         header("Location: " . BASE_URL);
-    //         exit();
-    //     }
-    // }
+        if ($sanPham) {
+            require_once './views/detailSanPham.php';
+        } else {
+            header("Location: " . BASE_URL);
+            exit();
+        }
+    }
 
     // public function formLogin()
     // {

@@ -6,12 +6,15 @@ class AdminDonHang {
         $this->conn = connectDB();
     }
 
-    // Lấy danh sách tất cả sản phẩm kèm tên danh mục
+    // 1. Lấy danh sách tất cả đơn hàng (Hiển thị ở trang List)
     public function getAllDonHang(){
         try {
-            $sql = "SELECT don_hangs.*, trang_thai_don_hangs.ten_trang_thai
-                    FROM don_hangs
-                    INNER JOIN trang_thai_don_hangs ON don_hangs.trang_thai_id = trang_thai_don_hangs.id";
+            $sql = "SELECT orders.*, 
+                           orders.total_amount AS total_price, 
+                           order_statuses.name AS ten_trang_thai
+                    FROM orders
+                    INNER JOIN order_statuses ON orders.status_id = order_statuses.id
+                    ORDER BY orders.order_date DESC";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
@@ -22,103 +25,132 @@ class AdminDonHang {
         }
     }
 
-     public function getAllTrangThaiDonHang(){
+    // 2. Lấy danh sách tất cả trạng thái đơn hàng (Dùng cho dropdown select)
+    public function getAllTrangThaiDonHang(){
         try {
-            $sql = "SELECT * FROM trang_thai_don_hangs";
-
+            $sql = "SELECT * FROM order_statuses";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
-
             return $stmt->fetchAll();
         } catch(Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
 
-   
-   public function getDetailDonHang($id){
-    try {
-        $sql = "SELECT don_hangs.*, trang_thai_don_hangs.ten_trang_thai, tai_khoans.ho_ten, tai_khoans.email, tai_khoans.so_dien_thoai,phuong_thuc_thanh_toans.ten_phuong_thuc
-                    FROM don_hangs
-                    INNER JOIN trang_thai_don_hangs ON don_hangs.trang_thai_id = trang_thai_don_hangs.id 
-                    INNER JOIN tai_khoans ON don_hangs.tai_khoan_id = tai_khoans.id 
-                    INNER JOIN phuong_thuc_thanh_toans ON don_hangs.phuong_thuc_thanh_toan_id = phuong_thuc_thanh_toans.id 
-                    WHERE don_hangs.id = :id";
+    // 3. Lấy chi tiết 1 đơn hàng (Dùng cho trang Detail và Edit)
+    public function getDetailDonHang($id){
+        try {
+            $sql = "SELECT orders.*, 
+                           orders.total_amount AS total_price,
+                           order_statuses.name AS ten_trang_thai, 
+                           users.full_name, users.email AS user_email, users.phone AS user_phone,
+                           payment_methods.name AS ten_phuong_thuc
+                    FROM orders
+                    INNER JOIN order_statuses ON orders.status_id = order_statuses.id 
+                    INNER JOIN users ON orders.user_id = users.id 
+                    INNER JOIN payment_methods ON orders.payment_method_id = payment_methods.id 
+                    WHERE orders.id = :id";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':id' => $id]);
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
 
-        return $stmt->fetch();
-    } catch (Exception $e) {
-        echo "Lỗi: " . $e->getMessage();
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
     }
-}
 
-public function getListSpDonHang($id){
+    // 4. Lấy danh sách sản phẩm thuộc đơn hàng (Dùng cho trang Detail)
+    public function getListSpDonHang($id){
+        try {
+            $sql = "SELECT order_items.*, products.name AS ten_san_pham, products.image
+                    FROM order_items 
+                    INNER JOIN products ON order_items.product_id = products.id
+                    WHERE order_items.order_id = :id";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    // 5. Cập nhật thông tin đơn hàng
+    public function updateDonHang($id, $receiver_name, $receiver_phone, $receiver_email, $receiver_address, $note, $status_id){
+        try {
+            $sql = "UPDATE orders SET 
+                        receiver_name = :receiver_name,
+                        receiver_phone = :receiver_phone,
+                        receiver_email = :receiver_email,
+                        receiver_address = :receiver_address,
+                        note = :note,
+                        status_id = :status_id
+                    WHERE id = :id";
+
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':receiver_name' => $receiver_name,
+                ':receiver_phone' => $receiver_phone,
+                ':receiver_email' => $receiver_email,
+                ':receiver_address' => $receiver_address,
+                ':note' => $note,
+                ':status_id' => $status_id,
+                ':id' => $id,
+            ]);
+        } catch(Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+    // Trong file models/AdminDonHang.php (hoặc class AdminDonHang)
+public function getDonHangFromKhachHang($id) {
     try {
-        $sql = "SELECT chi_tiet_don_hangs.*, san_phams.ten_san_pham
-        FROM chi_tiet_don_hangs 
-        INNER JOIN san_phams ON chi_tiet_don_hangs.san_pham_id = san_phams.id
-         WHERE chi_tiet_don_hangs.don_hang_id = :id";
-
+        $sql = "SELECT 
+                    orders.*, 
+                    order_statuses.name AS status_name 
+                FROM orders 
+                JOIN order_statuses ON orders.status_id = order_statuses.id
+                WHERE orders.user_id = :id";
+        
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':id' => $id]);
-
+        
         return $stmt->fetchAll();
     } catch (Exception $e) {
         echo "Lỗi: " . $e->getMessage();
     }
 }
-
-
-public function updateDonHang($id,$ten_nguoi_nhan,$sdt_nguoi_nhan, $email_nguoi_nhan, $dia_chi_nguoi_nhan, $ghi_chu, $trang_thai_id){
+public function getDonHangByKhachHang($id) {
         try {
-               $sql = "UPDATE don_hangs SET 
-                    ten_nguoi_nhan = :ten_nguoi_nhan,
-                    sdt_nguoi_nhan = :sdt_nguoi_nhan,
-                    email_nguoi_nhan = :email_nguoi_nhan,
-                    dia_chi_nguoi_nhan = :dia_chi_nguoi_nhan,
-                    ghi_chu = :ghi_chu,
-                    trang_thai_id = :trang_thai_id
-
-                    WHERE id = :id";
-
-            $stmt = $this->conn->prepare($sql);
-           $stmt->execute([
-                ':ten_nguoi_nhan' => $ten_nguoi_nhan,
-                ':sdt_nguoi_nhan' => $sdt_nguoi_nhan,
-                ':email_nguoi_nhan' => $email_nguoi_nhan,
-                ':dia_chi_nguoi_nhan' => $dia_chi_nguoi_nhan,
-                ':ghi_chu' => $ghi_chu,
-                ':trang_thai_id' => $trang_thai_id,
-                ':id' => $id,
-            ]);
-
+            // SQL JOIN giữa bảng orders và order_statuses
+            // Lấy các cột cần thiết cho view chi tiết khách hàng
+            $sql = "SELECT orders.*, order_statuses.name as status_name 
+                    FROM orders 
+                    INNER JOIN order_statuses ON orders.status_id = order_statuses.id 
+                    WHERE orders.user_id = :id 
+                    ORDER BY orders.id DESC";
             
-            // lay id san pham vua them
-            return true;
-        } catch(Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
-        }
-    }
-
-   public function getDonHangFromKhachHang($id){
-        try {
-            $sql = "SELECT don_hangs.*, trang_thai_don_hangs.ten_trang_thai
-                    FROM don_hangs
-                    INNER JOIN trang_thai_don_hangs ON don_hangs.trang_thai_id = trang_thai_don_hangs.id
-                    WHERE don_hangs.tai_khoan_id = :id
-                    ";
-
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':id'=>$id]);   
-
+            $stmt->execute([':id' => $id]);
+            
             return $stmt->fetchAll();
-        } catch(Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
+        } catch (Exception $e) {
+            error_log("Lỗi getDonHangByKhachHang: " . $e->getMessage());
+            return [];
         }
     }
 
-
+public function resetPassword($id, $password) {
+    try {
+        $sql = "UPDATE users SET password = :password WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':password' => $password,
+            ':id' => $id
+        ]);
+    } catch (Exception $e) {
+        echo "Lỗi: " . $e->getMessage();
+    }
 }
-?>
+}

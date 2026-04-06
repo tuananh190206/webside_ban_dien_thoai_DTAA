@@ -31,7 +31,7 @@
                     <!-- product details inner end -->
                     <div class="product-details-inner">
                         <div class="row">
-                            <div class="col-lg-5">
+                            <!-- <div class="col-lg-5">
                                 <div class="product-large-slider">
                                     <?php foreach ($listAnhSanPham as $key => $anhSanPham): ?>
                                         <div class="pro-large-img img-zoom">
@@ -48,13 +48,13 @@
                                     <?php endforeach; ?>
                                 </div>
 
-                            </div>
+                            </div> -->
                             <div class="col-lg-7">
                                 <div class="product-details-des">
                                     <div class="manufacturer-name">
-                                        <a href="#"><?= $sanPham['ten_danh_muc'] ?></a>
+                                        <a href="#"><?= $sanPham['category'] ?></a>
                                     </div>
-                                    <h3 class="product-name"><?= $sanPham['ten_san_pham'] ?></h3>
+                                    <h3 class="product-name"><?= $sanPham['name'] ?></h3>
                                     <div class="ratings d-flex">
                                         <div class="pro-review">
                                             <?php $countComment = count($listBinhLuan); ?>
@@ -62,27 +62,27 @@
                                         </div>
                                     </div>
                                     <div class="price-box">
-                                        <?php if ($sanPham['gia_khuyen_mai']) { ?>
+                                        <?php if ($sanPham['discount_price']) { ?>
                                             <span
-                                                class="price-regular"><?= formatPrice($sanPham['gia_khuyen_mai']) . 'VNĐ'; ?></span>
+                                                class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
                                             <span
-                                                class="price-old"><del><?= formatPrice($sanPham['gia_san_pham']) . 'VNĐ'; ?></del></span>
+                                                class="price-old"><del><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></del></span>
                                         <?php } else { ?>
                                             <span
-                                                class="price-regular"><?= formatPrice($sanPham['gia_san_pham']) . 'VNĐ'; ?></span>
+                                                class="price-regular"><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></span>
                                         <?php } ?>
                                     </div>
                                     <div class="availability">
                                         <i class="fa fa-check-circle"></i>
-                                        <span><?= $sanPham['so_luong'] . ' trong kho' ?></span>
+                                        <span><?= $sanPham['quantity'] . ' trong kho' ?></span>
                                     </div>
-                                    <p class="pro-desc"><?= $sanPham['mo_ta'] ?></p>
+                                    <p class="pro-desc"><?= $sanPham['description'] ?></p>
                                     <form action="<?=BASE_URL .'?act=them-gio-hang'?>"method="POST">
                                         <div class="quantity-cart-box d-flex align-items-center">
                                             <h6 class="option-title">Số lượng:</h6>
                                             <div class="quantity">
                                                 <input type="hidden" name="san_pham_id" value="<?= $sanPham['id'] ?>">
-                                                <div class="pro-qty"><input type="text" value="1" name="so_luong"></div>
+                                                <div class="pro-qty"><input type="text" value="1" name="quantity"></div>
                                             </div>
                                             <div class="action_link">
                                                <button class="btn btn-cart2>  " href="#">Thêm vào giỏ hàng</button>

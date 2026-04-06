@@ -1,4 +1,5 @@
 <?php
+
 class AdminTaiKhoan
 {
     public $conn;
@@ -8,186 +9,189 @@ class AdminTaiKhoan
         $this->conn = connectDB();
     }
 
-    // Lấy danh sách tất cả sản phẩm kèm tên danh mục
-    public function getAllTaiKhoan($chuc_vu_id)
+    // 1. Lấy danh sách tài khoản theo role_id (1: Admin, 2: Khách hàng)
+ public function getAllTaiKhoan($role_id)
     {
         try {
-            $sql = "SELECT * FROM tai_khoans WHERE  chuc_vu_id = :chuc_vu_id";
-
+            $sql = "SELECT * FROM users WHERE role_id = :role_id";
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':chuc_vu_id' => $chuc_vu_id]);
-
+            $stmt->execute([':role_id' => $role_id]);
             return $stmt->fetchAll();
         } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
+            return false;
         }
     }
 
-    public function insertTaiKhoan($ho_ten, $email, $password, $chuc_vu_id)
+    // 2. Thêm mới tài khoản quản trị
+    public function insertTaiKhoan($full_name, $email, $phone, $address, $password, $role_id, $status) {
+        try {
+            $sql = "INSERT INTO users (full_name, email, phone, address, password, role_id, status) 
+                    VALUES (:full_name, :email, :phone, :address, :password, :role_id, :status)";
+            
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':full_name' => $full_name,
+                ':email'     => $email,
+                ':phone'     => $phone,
+                ':address'   => $address,
+                ':password'  => $password,
+                ':role_id'   => $role_id,
+                ':status'    => $status
+            ]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // 3. Lấy chi tiết một tài khoản theo ID
+    public function getDetailTaiKhoan($id) {
+        try {
+            $sql = "SELECT * FROM users WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            return $stmt->fetch(); 
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // 4. Cập nhật thông tin tài khoản (Dùng cho cả Admin sửa Admin và Cá nhân tự sửa)
+    public function updateTaiKhoan($id, $full_name, $email, $phone, $address, $status)
     {
         try {
-            $sql = 'INSERT INTO tai_khoans (ho_ten, email, mat_khau, chuc_vu_id)
-                VALUES (:ho_ten, :email, :password, :chuc_vu_id)';
+            $sql = "UPDATE users SET 
+                    full_name = :full_name,
+                    email = :email,
+                    phone = :phone,
+                    address = :address,
+                    status = :status
+                    WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':full_name' => $full_name,
+                ':email'     => $email,
+                ':phone'     => $phone,
+                ':address'   => $address,
+                ':status'    => $status,
+                ':id'        => $id,
+            ]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
-            $stmt->execute([
-                ':ho_ten' => $ho_ten,
-                ':email' => $email,
+    // 5. Xóa tài khoản
+    public function deleteTaiKhoan($id) {
+        try {
+            $sql = "DELETE FROM users WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([':id' => $id]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // 6. Reset hoặc Đổi mật khẩu
+    public function resetPassword($id, $password)
+    {
+        try {
+            $sql = "UPDATE users SET password = :password WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
                 ':password' => $password,
-                ':chuc_vu_id' => $chuc_vu_id
+                ':id'       => $id,
             ]);
-
-            return true;
         } catch (Exception $e) {
-            echo "Lỗi" . $e->getMessage();
+            return false;
         }
     }
 
-    public function getDetailTaiKhoan($id)
+    // 7. Kiểm tra đăng nhập (Sử dụng password_verify để bảo mật)
+  // Trong AdminTaiKhoan.php
+public function checkLogin($email, $password) {
+    $sql = "SELECT * FROM users WHERE email = :email";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([':email' => $email]);
+    $user = $stmt->fetch();
+
+    if ($user && $password == $user['password']) { // So sánh pass text thuần
+        return $user; // Trả về mảng chứa id, email, full_name...
+    }
+    return false;
+}
+
+    // 8. Lấy thông tin tài khoản bằng Email (Dùng cho Session)
+    public function getTaiKhoanFromEmail($email)
     {
         try {
-            $sql = "SELECT * FROM tai_khoans WHERE id= :id";
-
+            $sql = "SELECT * FROM users WHERE email = :email";
             $stmt = $this->conn->prepare($sql);
-
-            $stmt->execute([
-                ':id' => $id,
-
-            ]);
-
+            $stmt->execute([':email' => $email]);
             return $stmt->fetch();
         } catch (Exception $e) {
-            echo "Lỗi" . $e->getMessage();
+            return false;
         }
     }
 
+    // 9. Đếm số lượng Admin (Để chặn xóa Admin cuối cùng)
+    public function countAdmin() {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM users WHERE role_id = 1";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch();
+            return $result['total'];
+        } catch (Exception $e) {
+            return 0;
+        }
+    }
 
-    public function updateTaiKhoan($id, $ho_ten, $email, $so_dien_thoai, $trang_thai)
+    // 10. Cập nhật chi tiết khách hàng (Đầy đủ trường)
+    public function updateKhachHang($id, $full_name, $email, $phone, $birthday, $gender, $address, $status)
     {
         try {
-            $sql = "UPDATE tai_khoans SET 
-                    ho_ten = :ho_ten,
+            $sql = "UPDATE users SET 
+                    full_name = :full_name,
                     email = :email,
-                    so_dien_thoai = :so_dien_thoai,
-                    trang_thai = :trang_thai
-
+                    phone = :phone,
+                    birthday = :birthday,
+                    gender = :gender,
+                    address = :address,
+                    status = :status
                     WHERE id = :id";
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([
-                ':ho_ten' => $ho_ten,
-                ':email' => $email,
-                ':so_dien_thoai' => $so_dien_thoai,
-                ':trang_thai' => $trang_thai,
-                ':id' => $id,
+            return $stmt->execute([
+                ':full_name' => $full_name,
+                ':email'     => $email,
+                ':phone'     => $phone,
+                ':birthday'  => $birthday,
+                ':gender'    => $gender,
+                ':address'   => $address,
+                ':status'    => $status,
+                ':id'        => $id,
             ]);
-
-
-            // lay id san pham vua them
-            return true;
         } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
+            return false;
         }
     }
-    public function resetPassword($id, $mat_khau)
-    {
-        try {
-            $sql = "UPDATE tai_khoans SET 
-                    mat_khau = :mat_khau
-
-                    WHERE id = :id";
-
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([
-                ':mat_khau' => $mat_khau,
-
-                ':id' => $id,
-            ]);
-
-
-            // lay id san pham vua them
-            return true;
-        } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
-        }
-    }
-
-     public function updateKhachHang($id, $ho_ten, $email, $so_dien_thoai,$ngay_sinh,$gioi_tinh,$dia_chi, $trang_thai)
-    {
-        try {
-            $sql = "UPDATE tai_khoans SET 
-                    ho_ten = :ho_ten,
-                    email = :email,
-                    so_dien_thoai = :so_dien_thoai,
-                    ngay_sinh = :ngay_sinh,
-                    gioi_tinh = :gioi_tinh,
-                    dia_chi = :dia_chi,
-                    trang_thai = :trang_thai
-
-                    WHERE id = :id";
-
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([
-                ':ho_ten' => $ho_ten,
-                ':email' => $email,
-                ':so_dien_thoai' => $so_dien_thoai,
-                ':ngay_sinh' => $ngay_sinh,
-                ':gioi_tinh' => $gioi_tinh,
-                ':dia_chi' => $dia_chi,
-                ':trang_thai' => $trang_thai,
-                ':id' => $id,
-            ]);
-
-
-            // lay id san pham vua them
-            return true;
-        } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
-        }
-    }
-   public function checkLogin($email, $mat_khau){
+   public function getBinhLuanByKhachHang($id) {
     try {
-        $sql = "SELECT * FROM tai_khoans WHERE email = :email";
+        // JOIN bảng reviews với products để lấy tên sản phẩm
+        $sql = "SELECT reviews.*, products.name as product_name 
+                FROM reviews 
+                INNER JOIN products ON reviews.product_id = products.id 
+                WHERE reviews.user_id = :id 
+                ORDER BY reviews.review_date DESC";
+        
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':email' => $email]);
-        $user = $stmt->fetch();
-
-        if ($user &&($mat_khau== $user['mat_khau'])) {
-            if ($user['chuc_vu_id'] == 1) {
-                if ($user['trang_thai'] == 1) {
-                    return $user['email']; // Trường hợp đăng nhập thành công
-                } else {
-                    return "Tài khoản bị cấm";
-                }
-            } else {
-                return "Tài khoản không có quyền đăng nhập";
-            }
-        } else {
-            return "Bạn nhập sai thông tin mật khẩu hoặc tài khoản";
-        }
-
-    } catch (\Exception $e) {
-        echo "lỗi: " . $e->getMessage();
-        return false;
+        $stmt->execute([':id' => $id]);
+        
+        return $stmt->fetchAll();
+    } catch (Exception $e) {
+        error_log("Lỗi getBinhLuanByKhachHang: " . $e->getMessage());
+        return [];
     }
 }
-public function getTaiKhoanFormEmail($email)
-    {
-        try {
-            $sql = "SELECT * FROM tai_khoans WHERE email= :email";
-
-            $stmt = $this->conn->prepare($sql);
-
-            $stmt->execute([
-                ':email' => $email,
-
-            ]);
-
-            return $stmt->fetch();
-        } catch (Exception $e) {
-            echo "Lỗi" . $e->getMessage();
-        }
-    }
 }
-?>
