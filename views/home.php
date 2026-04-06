@@ -1,194 +1,480 @@
-<?php require 'views/layout/master.php' ?>
+<?php require_once 'layout/header.php'; ?>
+<?php require_once 'layout/menu.php'; ?>
+<style>
+    .product-item img {
+        width: 263px;
+        ;
+        height: 263px;
+    }
 
-<!-- <section class="slider-area">
-    <div class="slider-active slick-arrow-style slick-dot-style">
-        <div class="single-slider d-flex align-items-center" 
-     style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('uploads/1754805552iphone_16_pro_max_bda3030b4b.png'); 
-            height: 600px; 
-            background-size: cover; 
-            background-position: center center; 
-            background-repeat: no-repeat;">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="slider-content text-left">
-                    <h2 class="text-white display-4 font-weight-bold animated fadeInUp">Flagship Smartphone 2026</h2>
-                    <p class="text-white lead animated fadeInUp" style="animation-delay: 0.5s;">Sở hữu ngay siêu phẩm công nghệ hàng đầu với ưu đãi độc quyền tại ShopDTAA.</p>
-                    <div class="slide-btn animated fadeInUp" style="animation-delay: 0.8s;">
-                        <a href="?act=danh-sach-san-pham" class="btn btn-primary btn-lg mt-3 rounded-pill shadow">Khám Phá Ngay</a>
+    .banner-slide-item {
+        width: 454px;
+        height: 454px;
+    }
+</style>
+
+<main>
+    <!-- hero slider area start -->
+     <section class="slider-area">
+            <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
+                <!-- single slider item start -->
+                <div class="hero-single-slide hero-overlay">
+                    <div class="hero-slider-item bg-img" data-bg="assets/img/slider/Gemini_Generated_Image_fz9yzefz9yzefz9y.png">
+                        <div class="container">
+                            <div class="row">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-single-slide hero-overlay">
+                    <div class="hero-slider-item bg-img" data-bg="assets/img/slider/Gemini_Generated_Image_qo5i82qo5i82qo5i.png">
+                        <div class="container">
+                            <div class="row">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-single-slide hero-overlay">
+                    <div class="hero-slider-item bg-img" data-bg="assets/img/slider/Gemini_Generated_Image_x3bu09x3bu09x3bu.png">
+                        <div class="container">
+                            <div class="row">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- single slider item start -->
+
+               
+            </div>
+        </section>
+    <!-- hero slider area end -->
+
+
+
+    <!-- service policy area start -->
+    <div class="service-policy section-padding">
+        <div class="container">
+            <div class="row mtn-30">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="policy-item">
+                        <div class="policy-icon">
+                            <i class="pe-7s-plane"></i>
+                        </div>
+                        <div class="policy-content">
+                            <h6>Giao hàng</h6>
+                            <p>Miễn phí giao hàng</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="policy-item">
+                        <div class="policy-icon">
+                            <i class="pe-7s-help2"></i>
+                        </div>
+                        <div class="policy-content">
+                            <h6>Hỗ trợ</h6>
+                            <p>Hỗ trợ 24/7</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="policy-item">
+                        <div class="policy-icon">
+                            <i class="pe-7s-back"></i>
+                        </div>
+                        <div class="policy-content">
+                            <h6>Hoàn trả</h6>
+                            <p>Miễn phí hoàn trả 30 ngày đầu tiên</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="policy-item">
+                        <div class="policy-icon">
+                            <i class="pe-7s-credit"></i>
+                        </div>
+                        <div class="policy-content">
+                            <h6>Thanh toán</h6>
+                            <p>Bảo mật thanh toán</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-    </div>
-</section> -->
+    <!-- service policy area end -->
 
-<section class="service-policy-area py-5 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="service-policy-item d-flex align-items-center p-4 bg-white shadow-sm rounded mb-4">
-                    <div class="service-icon mr-3">
-                        <i class="fa fa-truck fa-2x text-primary"></i>
+    <!-- banner statistics area start -->
+    <div class="banner-statistics-area">
+        <div class="container">
+            <div class="row row-20 mtn-20">
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="assets/img/slider/Gemini_Generated_Image_fz9yzefz9yzefz9y.png" alt="product banner">
+                        </a>
+                        <div class="banner-content text-right">
+                       
+                        </div>
+                    </figure>
+                </div>
+                <div class="col-sm-6">
+                    <figure class="banner-statistics mt-20">
+                        <a href="#">
+                            <img src="assets/img/slider/Gemini_Generated_Image_qo5i82qo5i82qo5i.png" alt="product banner">
+                        </a>
+                        <div class="banner-content text-right">
+                            
+                        </div>
+                    </figure>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- banner statistics area end -->
+
+    <!-- product area start -->
+    <section class="product-area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <!-- section title start -->
+                    <div class="section-title text-center">
+                        <h2 class="title">Sản phẩm của chúng tôi</h2>
+                        <p class="sub-title">Sản phẩm được cập nhật liên tục</p>
                     </div>
-                    <div class="service-content">
-                        <h5 class="mb-0">Giao hàng hỏa tốc</h5>
-                        <p class="mb-0 text-muted">Miễn phí nội thành trong 2h</p>
-                    </div>
+                    <!-- section title start -->
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="service-policy-item d-flex align-items-center p-4 bg-white shadow-sm rounded mb-4">
-                    <div class="service-icon mr-3">
-                        <i class="fa fa-shield fa-2x text-primary"></i>
-                    </div>
-                    <div class="service-content">
-                        <h5 class="mb-0">Bảo hành 12 tháng</h5>
-                        <p class="mb-0 text-muted">Cam kết hàng chính hãng 100%</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="service-policy-item d-flex align-items-center p-4 bg-white shadow-sm rounded mb-4">
-                    <div class="service-icon mr-3">
-                        <i class="fa fa-headphones fa-2x text-primary"></i>
-                    </div>
-                    <div class="service-content">
-                        <h5 class="mb-0">Hỗ trợ 24/7</h5>
-                        <p class="mb-0 text-muted">Kỹ thuật viên chuyên nghiệp</p>
+            <div class="row">
+                <div class="col-12">
+                    <div class="product-container">
+
+
+                        <!-- product tab content start -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab1">
+                                <div class="product-carousel-4 slick-row-10 slick-arrow-style">
+
+                                    <?php foreach ($listSanPham as $key => $sanPham): ?>
+
+                                        <div class="product-item">
+                                            <figure class="product-thumb">
+                                                <a
+                                                    href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                                                    <img class="pri-img" src="<?= $sanPham['image'] ?>" alt="product">
+                                                    <img class="sec-img" src="<?= $sanPham['image'] ?>"
+                                                        alt="product">
+                                                </a>
+                                                <div class="product-badge">
+                                                    <?php
+                                                    $ngayNhap = new DateTime($sanPham['import_date']);
+                                                    $ngayHienTai = new DateTime();
+                                                    $tinhNgay = $ngayHienTai->diff(targetObject: $ngayNhap);
+
+                                                    if ($tinhNgay->days <= 7) {
+                                                        ?>
+                                                        <div class="product-label new">
+                                                            <span>Mới</span>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                    ?>
+
+                                                    <?php
+                                                    if ($sanPham['discount_price']) {
+                                                        ?>
+
+                                                        <div class="product-label discount">
+                                                            <span>Giảm giá sâu</span>
+                                                        </div>
+
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                                <div class="cart-hover">
+                                                    
+                                                </div>
+                                            </figure>
+                                            <div class="product-caption text-center">
+
+                                                <h6 class="product-name">
+                                                    <a
+                                                        href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>"><?= $sanPham['name'] ?></a>
+                                                </h6>
+                                                <div class="price-box">
+                                                    <?php if ($sanPham['discount_price']) { ?>
+                                                        <span
+                                                            class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
+                                                        <span
+                                                            class="price-old"><del><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></del></span>
+                                                    <?php } else { ?>
+                                                        <span
+                                                            class="price-regular"><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></span>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- product item end -->
+                                    <?php endforeach; ?>
+
+
+                                    <!-- product item start -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product tab content end -->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <!-- product area end -->
 
-<section class="product-area py-5">
-    <div class="container">
-        <div class="section-title text-center mb-5">
-            <h2 class="font-weight-bold">Sản Phẩm</h2>
-            <p class="text-muted">Những mẫu điện thoại dẫn đầu xu hướng thị trường</p>
+    <!-- product banner statistics area start -->
+    <section class="product-banner-statistics">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="product-banner-carousel slick-row-10">
+                        <!-- banner single slide start -->
+
+                        <!-- banner single slide start -->
+                        <!-- banner single slide start -->
+                        <?php foreach ($listSanPham as $key => $sanPham): ?>
+                            <div class="banner-slide-item">
+
+                                <figure class="banner-statistics">
+                                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                                        <img src="<?= $sanPham['image'] ?>">
+                                    </a>
+
+                                </figure>
+
+                            </div>
+                        <?php endforeach; ?>
+                        <!-- banner single slide start -->
+                        <!-- banner single slide start -->
+                        <!-- <div class="banner-slide-item">
+
+
+                            <figure class="banner-statistics">
+                                <a href="#">
+                                    <img src="<?= $sanPham['image'] ?>" alt="product banner">
+                                </a>
+                                <div class="banner-content banner-content_style2">
+                                    <h5 class="banner-text3"><a href="#">Adidas</a></h5>
+                                </div>
+                            </figure>
+                           
+                        </div> -->
+                        <!-- banner single slide start -->
+                        <!-- banner single slide start -->
+
+                        <!-- banner single slide start -->
+                        <!-- banner single slide start -->
+
+                        <!-- banner single slide start -->
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="row">
-            <?php foreach ($listSanPham as $sanPham) : ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="product-card border rounded p-3 text-center h-100 shadow-hover">
-                        <div class="product-image mb-3">
-                            <a href="?act=chi-tiet-san-pham&id_san_pham=<?= $sanPham['id'] ?>">
-                                <img src="<?= $sanPham['image'] ?>" alt="<?= $sanPham['name'] ?>" class="img-fluid rounded">
+    </section>
+    <!-- product banner statistics area end -->
+
+    <!-- featured product area start -->
+    <section class="feature-product section-padding">
+       
+    </section>
+    <!-- featured product area end -->
+
+    <!-- testimonial area start -->
+   
+    <!-- testimonial area end -->
+
+    <!-- group product start -->
+    <section class="group-product-area section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="group-product-banner">
+                        <figure class="banner-statistics">
+                            <a href="#">
+                                <img src="https://azpet.com.vn/wp-content/uploads/2021/06/Alaska.jpg"
+                                    alt="product banner">
+                            </a>
+                            <div class="banner-content banner-content_style3 text-center">
+                                <h6 class="banner-text1">Shoe</h6>
+                                <h2 class="banner-text2">All</h2>
+                                <a href="shop.html" class="btn btn-text">Mua ngay</a>
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories-group-wrapper">
+                        <!-- section title start -->
+                        <div class="section-title-append">
+                            <h4>Sản phẩm bán chạy nhất</h4>
+                            <div class="slick-append"></div>
+                        </div>
+                        <!-- section title start -->
+
+                        <!-- group list carousel start -->
+                        <div class="group-list-item-wrapper">
+                            <?php foreach ($listSanPham as $key => $sanPham): ?>
+                                <div class="group-list-carousel">
+                                    <!-- group list item start -->
+                                    <div class="group-slide-item">
+                                        <div class="group-item">
+                                            <div class="group-item-thumb">
+                                                <a href="product-details.html">
+                                                    <img src="<?= $sanPham['image']; ?>" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="group-item-desc">
+
+                                                <h5 class="group-product-name"><a href="product-details.html">
+
+                                                        <?= $sanPham['name'] ?></a></h5>
+                                                <div class="price-box">
+                                                    <span class="price-regular"><?= $sanPham['price'] ?></span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- group list carousel start -->
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories-group-wrapper">
+                        <!-- section title start -->
+                        <div class="section-title-append">
+                            <h4>Sản phẩm siêu sale</h4>
+                            <div class="slick-append"></div>
+                        </div>
+                        <!-- section title start -->
+
+                        <!-- group list carousel start -->
+                        <div class="group-list-item-wrapper">
+                            <?php foreach ($listSanPham as $key => $sanPham): ?>
+                                <div class="group-list-carousel">
+                                    <!-- group list item start -->
+                                    <div class="group-slide-item">
+                                        <div class="group-item">
+                                            <div class="group-item-thumb">
+                                                <a href="product-details.html">
+                                                    <img src="<?= $sanPham['image']; ?>" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="group-item-desc">
+
+                                                <h5 class="group-product-name"><a href="product-details.html">
+
+                                                        <?= $sanPham['name'] ?></a></h5>
+                                                <div class="price-box">
+                                                    <span class="price-regular"><?= $sanPham['price'];?><del><?= $sanPham['discount_price']; ?></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- group list carousel start -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- group product end -->
+
+    <!-- latest blog area start -->
+
+    <!-- latest blog area end -->
+
+    <!-- brand logo area start -->
+    <div class="brand-logo section-padding pt-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="brand-logo-carousel slick-row-10 slick-arrow-style">
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/1.png" alt="">
                             </a>
                         </div>
-                        <div class="product-content">
-                            <h6 class="font-weight-bold mb-2">
-                                <a href="?act=chi-tiet-san-pham&id_san_pham=<?= $sanPham['id'] ?>" class="text-dark">
-                                    <?= $sanPham['name'] ?>
-                                </a>
-                            </h6>
-                            <div class="price-box mb-3">
-                                <?php if ($sanPham['discount_price']) : ?>
-                                    <span class="text-danger font-weight-bold"><?= number_format($sanPham['discount_price']) ?>đ</span>
-                                    <del class="text-muted ml-2 small"><?= number_format($sanPham['price']) ?>đ</del>
-                                <?php else : ?>
-                                    <span class="text-primary font-weight-bold"><?= number_format($sanPham['price']) ?>đ</span>
-                                <?php endif; ?>
-                            </div>
-                            <div class="product-action">
-                                <a href="?act=them-gio-hang&id_san_pham=<?= $sanPham['id'] ?>" class="btn btn-outline-primary btn-sm btn-block rounded-pill">
-                                    <i class="fa fa-shopping-cart mr-1"></i> Thêm vào giỏ
-                                </a>
-                            </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/2.png" alt="">
+                            </a>
                         </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/3.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/4.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/5.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
+
+                        <!-- single brand start -->
+                        <div class="brand-item">
+                            <a href="#">
+                                <img src="assets/img/brand/6.png" alt="">
+                            </a>
+                        </div>
+                        <!-- single brand end -->
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-
-<!-- <section class="brand-area py-5 border-top">
-    <div class="container">
-        <div class="brand-active slick-padding-15">
-            <div class="brand-item text-center">
-                <img src="assets/img/brand/1.png" alt="Brand 1" class="img-fluid opacity-50 grayscale">
-            </div>
-            <div class="brand-item text-center">
-                <img src="assets/img/brand/2.png" alt="Brand 2" class="img-fluid opacity-50 grayscale">
-            </div>
-            <div class="brand-item text-center">
-                <img src="assets/img/brand/3.png" alt="Brand 3" class="img-fluid opacity-50 grayscale">
-            </div>
-            <div class="brand-item text-center">
-                <img src="assets/img/brand/4.png" alt="Brand 4" class="img-fluid opacity-50 grayscale">
-            </div>
-            <div class="brand-item text-center">
-                <img src="assets/img/brand/5.png" alt="Brand 5" class="img-fluid opacity-50 grayscale">
             </div>
         </div>
     </div>
-</section> -->
+    <!-- brand logo area end -->
+</main>
 
-<style>
-    .shadow-hover {
-        transition: all 0.3s ease;
-    }
-    .shadow-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
-    .grayscale {
-        filter: grayscale(100%);
-        transition: 0.3s;
-    }
-    .grayscale:hover {
-        filter: grayscale(0%);
-    }
-</style>
-<style>
-    .slider-area {
-        position: relative;
-        overflow: hidden;
-    }
-    .slider-content h1 {
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-    }
-    .slider-content p {
-        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
-    }
-    /* Tùy chỉnh các nút điều hướng slide */
-    .slick-prev, .slick-next {
-        position: absolute;
-        top: 50%;
-        z-index: 5;
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        transform: translateY(-50%);
-    }
-    .slick-prev { left: 30px; }
-    .slick-next { right: 30px; }
-    .slick-prev:hover, .slick-next:hover {
-        background: #007bff;
-    }
-</style>
-<script>
-    $(document).ready(function() {
-        $('.hero-slider-active').slick({
-            autoplay: true,
-            autoplaySpeed: 5000,
-            dots: true,
-            arrows: true,
-            prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-angle-left"></i></button>',
-            nextArrow: '<button type="button" class="slick-next"><i class="fa fa-angle-right"></i></button>',
-            fade: true, // Hiệu ứng mờ dần (sang trọng hơn cho Corporate)
-            cssEase: 'linear'
-        });
-    });
-</script>
-<?php require 'views/layout/footer.php' ?>
 
+
+<!-- Quick view modal start -->
+
+<!-- Quick view modal end -->
+
+
+
+<?php require_once './views/miniCart.php'; ?>
+<?php require_once 'layout/footer.php'; ?>
