@@ -24,6 +24,8 @@ match ($act) {
     'trangchu'=>(new HomeController())->trangchu(),
     'chi-tiet-san-pham'=>(new HomeController())->chiTietSanPham(),
     'them-gio-hang'=>(new HomeController())->addGioHang(),
+    'cap-nhat-gio-hang'=>(new HomeController())->capNhatGioHang(),
+    'xoa-gio-hang'=>(new HomeController())->xoaGioHang(),
     'gio-hang'=>(new HomeController())->gioHang(),
     'thanh-toan'=>(new HomeController())->thanhToan(),
     'xu-ly-thanh-toan'=>(new HomeController())->postThanhToan(),
