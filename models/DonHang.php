@@ -8,25 +8,24 @@ class DonHang
         $this->conn = connectDB();
     }
 
-    public function addDonHang($tai_khoan_id, $ten_nguoi_nhan, $email_nguoi_nhan, $sdt_nguoi_nhan, $dia_chi_nguoi_nhan, $ghi_chu, $tong_tien, $phuong_thuc_thanh_toan_id, $ngay_dat, $ma_don_hang, $trang_thai_id)
+    public function addDonHang($userId, $receiverName, $receiverEmail, $receiverPhone, $receiverAddress, $note, $totalAmount, $paymentMethodId, $orderDate, $orderCode, $statusId)
     {
         try {
-            $sql = 'INSERT INTO don_hangs (tai_khoan_id,ten_nguoi_nhan,email_nguoi_nhan,sdt_nguoi_nhan,dia_chi_nguoi_nhan,ghi_chu,tong_tien,phuong_thuc_thanh_toan_id,ngay_dat,ma_don_hang,trang_thai_id)VALUE (:tai_khoan_id,:ten_nguoi_nhan,:email_nguoi_nhan,:sdt_nguoi_nhan,:dia_chi_nguoi_nhan,:ghi_chu,:tong_tien,:phuong_thuc_thanh_toan_id,:ngay_dat,:ma_don_hang,:trang_thai_id)';
-
+            $sql = 'INSERT INTO orders (user_id,receiver_name, receiver_email, receiver_phone, receiver_address, note, total_amount, payment_method_id, order_date, order_code, status_id)
+            VALUES (:user_id, :receiver_name, :receiver_email, :receiver_phone, :receiver_address, :note, :total_amount, :payment_method_id, :order_date, :order_code, :status_id)';
             $stmt = $this->conn->prepare($sql);
             $stmt->execute(
-                [
-                    ':tai_khoan_id' => $tai_khoan_id,
-                    ':ten_nguoi_nhan' => $ten_nguoi_nhan,
-                    ':email_nguoi_nhan' => $email_nguoi_nhan,
-                    ':sdt_nguoi_nhan' => $sdt_nguoi_nhan,
-                    ':dia_chi_nguoi_nhan' => $dia_chi_nguoi_nhan,
-                    ':ghi_chu' => $ghi_chu,
-                    ':tong_tien' => $tong_tien,
-                    ':phuong_thuc_thanh_toan_id' => $phuong_thuc_thanh_toan_id,
-                    ':ngay_dat' => $ngay_dat,
-                    ':trang_thai_id' => 1,
-                    ':ma_don_hang' => $ma_don_hang
+                [':user_id' => $userId,
+                    ':receiver_name' => $receiverName,
+                    ':receiver_email' => $receiverEmail,
+                    ':receiver_phone' => $receiverPhone,
+                    ':receiver_address' => $receiverAddress,
+                    ':note' => $note,
+                    ':total_amount' => $totalAmount,
+                    ':payment_method_id' => $paymentMethodId,
+                    ':order_date' => $orderDate,
+                    ':order_code' => $orderCode,
+                    ':status_id' => $statusId,
                 ]
             );
 
@@ -35,30 +34,30 @@ class DonHang
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function addChiTietDonHang($donhangId, $sanPhamId, $donGia, $soLuong, $thanhTien)
+    public function addChiTietDonHang($orderId, $productId, $price, $quantity, $totalPrice)
     {
         try {
-            $sql = "INSERT INTO chi_tiet_don_hangs (don_hang_id, san_pham_id, don_gia, so_luong, thanh_tien)
-            VALUE (:don_hang_id, :san_pham_id, :don_gia, :so_luong, :thanh_tien)";
+            $sql = "INSERT INTO order_items (order_id, product_id, price, quantity, total_price)
+            VALUE (:order_id, :product_id, :price, :quantity, :total_price)";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
-                ':don_hang_id' => $donhangId,
-                ':san_pham_id' => $sanPhamId,
-                ':don_gia' => $donGia,
-                ':so_luong' => $soLuong,
-                ':thanh_tien' => $thanhTien
+                ':order_id' => $orderId,
+                ':product_id' => $productId,
+                ':price' => $price,
+                ':quantity' => $quantity,
+                ':total_price' => $totalPrice
             ]);
             return true;
         } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getDonHangFromUser($taikhoanId){
+    public function getDonHangFromUser($userId){
         try{
-            $sql = "SELECT * FROM don_hangs WHERE tai_khoan_id = :tai_khoan_id";
+            $sql = "SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_date DESC, id DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([
-                'tai_khoan_id' => $taikhoanId,
+                'user_id' => $userId,
             ]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(Exception $e){
@@ -68,7 +67,7 @@ class DonHang
     public function getTrangThaiDonHang()
     {
         try {
-            $sql = "SELECT * FROM trang_thai_don_hangs";
+            $sql = "SELECT * FROM order_statuses";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -79,7 +78,7 @@ class DonHang
     public function getPhuongThucThanhToan()
     {
         try {
-            $sql = "SELECT * FROM phuong_thuc_thanh_toans";
+            $sql = "SELECT * FROM payment_methods";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -90,7 +89,7 @@ class DonHang
     public function getDonHangById($donHangId)
     {
         try {
-            $sql = "SELECT * FROM don_hangs WHERE id = :id";
+            $sql = "SELECT * FROM orders WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([':id'=>$donHangId]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -98,26 +97,42 @@ class DonHang
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function updateTrangThaiDonHang($donHangId,$trangThaiId)
+
+    public function getDonHangByIdAndUser($donHangId,$userId)
     {
         try {
-            $sql = "UPDATE don_hangs SET trang_thai_id = :trang_thai_id WHERE id = :id";
+            $sql = "SELECT * FROM orders WHERE id = :id AND user_id=:user_id";
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':id'=>$donHangId,':trang_thai_id'=>$trangThaiId]);
+            $stmt->execute([':id'=>$donHangId,':user_id'=>$userId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+    public function updateTrangThaiDonHang($donHangId,$statusId)
+    {
+        try {
+            $sql = "UPDATE orders SET status_id = :status_id WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id'=>$donHangId,':status_id'=>$statusId]);
             return true;
         } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }
     }
-    public function getChiTietDonHangByDonHangId($donHangId)
+    public function getChiTietDonHangByDonHangId($orderId)
     {
         try {
-            $sql = "SELECT chi_tiet_don_hangs.*,san_phams.ten_san_pham,san_phams.hinh_anh
-            FROM chi_tiet_don_hangs JOIN san_phams ON chi_tiet_don_hangs.san_pham_id=san_phams.id
-            WHERE chi_tiet_don_hangs.don_hang_id=:don_hang_id";
+            $sql = 'SELECT order_items.id, order_items.order_id, order_items.product_id,
+                order_items.price AS don_gia, order_items.quantity AS so_luong, order_items.total_price AS thanh_tien,
+                products.name AS ten_san_pham, products.image AS hinh_anh
+            FROM order_items
+            INNER JOIN products ON order_items.product_id = products.id
+            WHERE order_items.order_id = :order_id';
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':don_hang_id'=>$donHangId]);
-           return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute([':order_id' => $orderId]);
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             echo "Lỗi: " . $e->getMessage();
         }

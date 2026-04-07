@@ -54,6 +54,25 @@ class HomeController
         $chiTiet = $this->modelGioHang->getDetailGioHang($gioHang['id']);
         return [$gioHang, is_array($chiTiet) ? $chiTiet : []];
     }
+    private function mapTrangThaiDonHang(): array
+    {
+        $rows = $this->modelDonHang->getTrangThaiDonHang();
+        $map = [];
+        foreach ($rows ?: [] as $r) {
+            $map[$r['id']] = $r['name'] ?? $r['ten_trang_thai'] ?? '';
+        }
+        return $map;
+    }
+
+    private function mapPhuongThucThanhToan(): array
+    {
+        $rows = $this->modelDonHang->getPhuongThucThanhToan();
+        $map = [];
+        foreach ($rows ?: [] as $r) {
+            $map[$r['id']] = $r['name'] ?? $r['ten_phuong_thuc'] ?? '';
+        }
+        return $map;
+    }
 
     // public function chiTietSanPham()
     // {
@@ -346,28 +365,39 @@ class HomeController
     //     }
 
     // }
-    // public function lichSuMuaHang(){
-    //     if(isset($_SESSION['user_client'])){
-    //          $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
-    //         $tai_khoan_id = $user['id'];
-    //         //lấy ra đơn sách trạng thái đơn hàng 
-    //         $arrTrangThaiDonHang = $this->modelDonHang->getAllTrangThaiDonHang();
-
-    //         // lẩy ra danh sách trạngt thái thanh toán 
-    //         $arrPhuongThucThanhToan = $this->modelDonHang->getAllPhuongThucThanhToan();
-    //         //lấy ra danh sách tất cả đơn hang của tài khoản
-    //         $donHangs = $this->modelDonHang->getDonHangFormUser($tai_khoan_id);
-    //        require_once './views/lichSuMuaHang.php';
-          
-    //     }else{
-    //         var_dump('Bạn chưa đăng nhập');  
-    //         die;
-    //     }
-    // }
-    // public function chiTietMuaHang(){
-
-    // }
-    // public function huyDonHang(){
-
-    // }
+    public function lichSuMuaHang(){
+        $this->yeuCauKhachHangDangNhap();
+        [, $chiTietGioHang] = $this->layGioHangChoUser();
+        $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
+        $donHangs = $this->modelDonHang->getDonHangFromUser($user['id']);
+        $phuongThucThanhToan = $this->modelDonHang->getPhuongThucThanhToan();
+        $trangThaiDonHang = $this->mapTrangThaiDonHang();
+        require_once './views/lichSuMuaHang.php';
+    }
+    public function chiTietMuaHang(){
+            $this->yeuCauKhachHangDangNhap();
+            [, $chiTietGioHang] = $this->layGioHangChoUser();
+            $id = (int) ($_GET['id'] ?? 0);
+        $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
+        $donHang = $this->modelDonHang->getDonHangByIdAndUser($id, $user['id']);
+        if (!$donHang) {
+            header('Location: ' . BASE_URL . '?act=lich-su-mua-hang');
+            exit();
+        }
+        $chiTietDonHang = $this->modelDonHang->getChiTietDonHangByDonHangId($id);
+        $trangThaiDonHang = $this->mapTrangThaiDonHang();
+        $phuongThucThanhToan = $this->mapPhuongThucThanhToan();
+        require_once './views/chiTietMuaHang.php';
+    }
+    public function huyDonHang(){
+        $this->yeuCauKhachHangDangNhap();
+        $id = (int) ($_GET['id'] ?? 0);
+        $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
+        $donHang = $this->modelDonHang->getDonHangByIdAndUser($id, $user['id']);
+        if ($donHang && donHangCoTheHuy($donHang['status_id'] ?? 0)) {
+            $this->modelDonHang->updateTrangThaiDonHang($id, TRANG_THAI_DON_HUY);
+        }
+        header('Location: ' . BASE_URL . '?act=lich-su-mua-hang');
+        exit();
+    }
 }   
