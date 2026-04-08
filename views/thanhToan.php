@@ -1,5 +1,5 @@
-<?php require_once 'layout/header.php'; ?>
-<?php require_once 'layout/menu.php'; ?>
+<?php require_once __DIR__ . '/layout/header.php'; ?>
+<?php require_once __DIR__ . '/layout/menu.php'; ?>
 <main>
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
@@ -174,6 +174,6 @@
     <!-- checkout main wrapper end -->
 </main>
 
-<?php require_once 'views/miniCart.php'; ?>
+<?php require_once __DIR__ . '/miniCart.php'; ?>
 
-<?php require_once 'layout/footer.php'; ?>
+<?php require_once __DIR__ . '/layout/footer.php'; ?>
