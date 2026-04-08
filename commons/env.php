@@ -3,10 +3,23 @@
 // Biến môi trường, dùng chung toàn hệ thống
 // Khai báo dưới dạng HẰNG SỐ để không phải dùng $GLOBALS
 
-define('BASE_URL'       , 'http://localhost/webside_ban_dien_thoai_DTAA/'); // Đường dẫn gốc của ứng dụng
-
-//đường dẫn vào đường admin
-define('BASE_URL_ADMIN'       , 'http://localhost/webside_ban_dien_thoai_DTAA/admin/');
+// URL gốc: tự suy ra từ DOCUMENT_ROOT để tránh 404 khi project nằm trong thư mục lồng nhau (vd: webise.../webside.../)
+if (!defined('BASE_URL')) {
+    $docRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;
+    $appRoot = realpath(__DIR__ . '/..');
+    $basePath = '/';
+    if ($docRoot && $appRoot && strpos($appRoot, $docRoot) === 0) {
+        $rel = substr($appRoot, strlen($docRoot));
+        $rel = str_replace('\\', '/', $rel);
+        $basePath = '/' . trim($rel, '/') . '/';
+    }
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (!empty($_SERVER['SERVER_PORT']) && (string) $_SERVER['SERVER_PORT'] === '443');
+    $proto = $https ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    define('BASE_URL', $proto . '://' . $host . $basePath);
+    define('BASE_URL_ADMIN', $proto . '://' . $host . rtrim($basePath, '/') . '/admin/');
+}
 
 define('DB_HOST'    , 'localhost');
 define('DB_PORT'    , 3306);

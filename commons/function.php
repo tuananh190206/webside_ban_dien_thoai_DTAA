@@ -64,7 +64,7 @@ function uploadFileAlbum($file,$folderUpload, $key){
 }
 function checkLoginAdmin(){
     if(!isset($_SESSION['user_admin'])){
-        header('Location: '.BASE_URL_ADMIN  . '?act=login-admin');
+        header('Location: ' . BASE_URL . '?act=login');
         exit();
     }
 

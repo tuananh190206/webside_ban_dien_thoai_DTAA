@@ -117,21 +117,66 @@ class HomeController
             header('Location: ' . BASE_URL . '?act=login');
             exit();
         }
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
+        $identifier = trim($_POST['email'] ?? '');
+        $password = (string) ($_POST['password'] ?? '');
 
-        $result = $this->modelTaiKhoan->checkLogin($email, $password);
+        $result = $this->modelTaiKhoan->checkLoginUnified($identifier, $password);
 
-        if ($result === $email) {
-            $userData = $this->modelTaiKhoan->getTaiKhoanFormEmail($email);
-            if ($userData) {
-                $_SESSION['user_client'] = $userData;
+        if (is_array($result) && !empty($result['ok'])) {
+            $cookiePath = parse_url(BASE_URL, PHP_URL_PATH) ?: '/';
+            $cookiePath = rtrim($cookiePath, '/') . '/';
+            $rememberVal = $identifier;
+            if (trim((string) ($result['email'] ?? '')) !== '') {
+                $rememberVal = strtolower(trim((string) $result['email']));
+            } elseif (trim((string) ($result['phone'] ?? '')) !== '') {
+                $rememberVal = trim((string) $result['phone']);
             }
-            header('Location: ' . BASE_URL);
-            exit();
+            if (!empty($_POST['remember'])) {
+                setcookie('client_remember_email', $rememberVal, [
+                    'expires' => time() + 30 * 86400,
+                    'path' => $cookiePath,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]);
+            } else {
+                setcookie('client_remember_email', '', [
+                    'expires' => time() - 3600,
+                    'path' => $cookiePath,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]);
+            }
+
+            $roleId = (int) $result['role_id'];
+
+            if ($roleId === 1) {
+                unset($_SESSION['user_client']);
+                $_SESSION['user_admin'] = [
+                    'id' => (int) $result['id'],
+                    'email' => (string) $result['email'],
+                    'full_name' => (string) $result['full_name'],
+                ];
+                header('Location: ' . BASE_URL_ADMIN);
+                exit();
+            }
+
+            if ($roleId === 2) {
+                unset($_SESSION['user_admin']);
+                $userData = $this->modelTaiKhoan->getTaiKhoanById((int) $result['id']);
+                if ($userData) {
+                    unset($userData['password']);
+                }
+                $_SESSION['user_client'] = $userData;
+                header('Location: ' . BASE_URL);
+                exit();
+            }
         }
 
-        $_SESSION['error'] = $result;
+        $msg = 'Đăng nhập thất bại, vui lòng thử lại.';
+        if (is_string($result)) {
+            $msg = $result;
+        }
+        $_SESSION['error'] = $msg;
         $_SESSION['flash'] = true;
         header('Location: ' . BASE_URL . '?act=login');
         exit();
@@ -250,6 +295,79 @@ class HomeController
         unset($_SESSION['user_client']);
         header('Location: ' . BASE_URL);
         exit();
+    }
+
+    // ========== ĐĂNG KÝ KHÁCH HÀNG ==========
+    public function formRegister(): void
+    {
+        if (isset($_SESSION['user_client'])) {
+            header('Location: ' . BASE_URL);
+            exit();
+        }
+        [, $chiTietGioHang] = $this->layGioHangChoUser();
+        require_once './views/auth/formRegister.php';
+        unset($_SESSION['error']);
+        unset($_SESSION['old_register']);
+    }
+
+    public function postRegister(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '?act=dang-ky');
+            exit();
+        }
+
+        $ho_ten = trim($_POST['ho_ten'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $so_dien_thoai = trim($_POST['so_dien_thoai'] ?? '');
+        $password = $_POST['password'] ?? '';
+        $password_confirm = $_POST['password_confirm'] ?? '';
+        $dieu_khoan = isset($_POST['dieu_khoan']) && $_POST['dieu_khoan'] === '1';
+
+        $errors = [];
+        if (empty($ho_ten)) {
+            $errors[] = 'Họ tên không được để trống.';
+        }
+        if (empty($email)) {
+            $errors[] = 'Email không được để trống.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Email không hợp lệ.';
+        }
+        if (!$dieu_khoan) {
+            $errors[] = 'Vui lòng đồng ý điều khoản dịch vụ.';
+        }
+        if (strlen($password) < 6) {
+            $errors[] = 'Mật khẩu phải từ 6 ký tự.';
+        }
+        if ($password !== $password_confirm) {
+            $errors[] = 'Xác nhận mật khẩu không khớp.';
+        }
+
+        if ($this->modelTaiKhoan->getTaiKhoanFormEmail($email)) {
+            $errors[] = 'Email đã tồn tại.';
+        }
+
+        if (!empty($errors)) {
+            $_SESSION['error'] = implode(' ', $errors);
+            $_SESSION['old_register'] = $_POST;
+            header('Location: ' . BASE_URL . '?act=dang-ky');
+            exit();
+        }
+
+        $hash_pass = password_hash($password, PASSWORD_BCRYPT);
+        $dia_chi = '';
+        $check = $this->modelTaiKhoan->insertTaiKhoan($ho_ten, $email, $so_dien_thoai, $dia_chi, $hash_pass, 2, 1);
+
+        if ($check) {
+            unset($_SESSION['old_register']);
+            header('Location: ' . BASE_URL . '?act=login&registered=1');
+            exit();
+        } else {
+            $_SESSION['error'] = 'Không thể tạo tài khoản. Email hoặc số điện thoại có thể đã tồn tại.';
+            $_SESSION['old_register'] = $_POST;
+            header('Location: ' . BASE_URL . '?act=dang-ky');
+            exit();
+        }
     }
 
     public function capNhatGioHang(): void

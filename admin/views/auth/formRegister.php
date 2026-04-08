@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$loginUrl = BASE_URL_ADMIN . '?act=login-admin';
+$loginUrl = BASE_URL . '?act=login';
 $registerUrl = BASE_URL_ADMIN . '?act=dang-ky-admin';
 $errRaw = $_SESSION['error'] ?? null;
 $errMsg = is_array($errRaw) ? implode(' ', $errRaw) : (string) ($errRaw ?? '');
@@ -27,8 +27,8 @@ $old = $_SESSION['old_register_admin'] ?? [];
         <i class="fas fa-mobile-alt" aria-hidden="true"></i>
         <span>Phone Store</span>
       </div>
-      <h1>Tạo tài khoản quản trị hôm nay</h1>
-      <p class="auth-lead">Một tài khoản để điều hành cửa hàng điện thoại: nhanh hơn, rõ ràng hơn.</p>
+      <h1>Tạo tài khoản quản trị</h1>
+      <p class="auth-lead">Chỉ quản trị viên đang đăng nhập mới tạo được tài khoản admin mới.</p>
       <ul class="auth-features">
         <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Quản lý sản phẩm &amp; khuyến mãi</span></li>
         <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Theo dõi đơn hàng &amp; khách hàng</span></li>
@@ -38,8 +38,8 @@ $old = $_SESSION['old_register_admin'] ?? [];
 
     <div class="auth-main">
       <div class="auth-tabs">
-        <a href="<?= htmlspecialchars($loginUrl) ?>" class="auth-tab">Đăng nhập</a>
-        <a href="<?= htmlspecialchars($registerUrl) ?>" class="auth-tab is-active">Đăng ký</a>
+        <a href="<?= htmlspecialchars(BASE_URL_ADMIN) ?>" class="auth-tab">Dashboard</a>
+        <a href="<?= htmlspecialchars($registerUrl) ?>" class="auth-tab is-active">Tạo admin</a>
       </div>
 
       <h2 class="auth-title">Đăng ký tài khoản</h2>

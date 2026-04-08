@@ -37,8 +37,10 @@ match ($act) {
     'dang-xuat'=>(new HomeController())->dangXuatKhachHang(),
     'gioi-thieu' => (new HomeController())->gioiThieu(),
     'lien-he' => (new HomeController())->lienHe(),
-    //route login
+    //route login / đăng ký khách
     'login'=>(new HomeController())->formLogin(),
     'check-login'=>(new HomeController())->postLogin(),
-    
+    'register'=>(new HomeController())->formRegister(),
+    'dang-ky'=>(new HomeController())->formRegister(),
+    'check-register'=>(new HomeController())->postRegister(),
 };
