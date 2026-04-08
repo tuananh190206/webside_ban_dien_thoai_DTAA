@@ -174,7 +174,7 @@
                                                     <?php
                                                     $ngayNhap = new DateTime($sanPham['import_date']);
                                                     $ngayHienTai = new DateTime();
-                                                    $tinhNgay = $ngayHienTai->diff(targetObject: $ngayNhap);
+                                                    $tinhNgay = $ngayHienTai->diff($ngayNhap);
 
                                                     if ($tinhNgay->days <= 7) {
                                                         ?>
@@ -203,8 +203,8 @@
                                                         <input type="hidden" name="so_luong" value="1">
                                                         <button type="submit"
                                                             class="btn btn-cart2"
-                                                            <?= (int) ($sanPham['so_luong'] ?? 0) < 1 ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : '' ?>>
-                                                            <?= (int) ($sanPham['so_luong'] ?? 0) < 1 ? 'Hết hàng' : 'Thêm vào giỏ' ?>
+                                                            <?= (int) ($sanPham['quantity'] ?? 0) < 1 ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : '' ?>>
+                                                            <?= (int) ($sanPham['quantity'] ?? 0) < 1 ? 'Hết hàng' : 'Thêm vào giỏ' ?>
                                                         </button>
                                                     </form>
                                                 </div>
@@ -218,12 +218,12 @@
                                                 <div class="price-box">
                                                     <?php if ($sanPham['discount_price']) { ?>
                                                         <span
-                                                            class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
+                                                            class="price-regular"><?= formatPrice($sanPham['discount_price']) . ' VNĐ'; ?></span>
                                                         <span
-                                                            class="price-old"><del><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></del></span>
+                                                            class="price-old"><del><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></del></span>
                                                     <?php } else { ?>
                                                         <span
-                                                            class="price-regular"><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></span>
+                                                            class="price-regular"><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></span>
                                                     <?php } ?>
                                                 </div>
                                             </div>

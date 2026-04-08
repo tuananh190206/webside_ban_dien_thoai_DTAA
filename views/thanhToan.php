@@ -1,5 +1,5 @@
-<?php require_once __DIR__ . '/layout/header.php'; ?>
-<?php require_once __DIR__ . '/layout/menu.php'; ?>
+<?php require_once 'layout/header.php'; ?>
+<?php require_once 'layout/menu.php'; ?>
 <main>
     <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
@@ -36,30 +36,30 @@
 
 
                                 <div class="single-input-item">
-                                    <label for="ten_nguoi_nhan" class="required">Tên người nhận</label>
-                                    <input type="text" id="ten_nguoi_nhan" name="ten_nguoi_nhan"
-                                        value="<?= $user['ho_ten'] ?>" placeholder="Email Address" required />
+                                    <label for="receiver_name" class="required">Tên người nhận</label>
+                                    <input type="text" id="receiver_name" name="receiver_name"
+                                        value="<?= $user['full_name'] ?>" placeholder="Họ tên người nhận" required />
                                 </div>
                                 <div class="single-input-item">
-                                    <label for="email_nguoi_nhan" class="required">Địa chỉ email</label>
-                                    <input type="email" id="email_nguoi_nhan" name="email_nguoi_nhan"
+                                    <label for="receiver_email" class="required">Địa chỉ email</label>
+                                    <input type="email" id="receiver_email" name="receiver_email"
                                         value="<?= $user['email'] ?> " placeholder="Địa chỉ email" required />
                                 </div>
                                 <div class="single-input-item">
-                                    <label for="sdt_nguoi_nhan" class="required">Số điện thoại</label>
-                                    <input type="text" id="sdt_nguoi_nhan" name="sdt_nguoi_nhan"
-                                        value="<?= $user['so_dien_thoai'] ?> " placeholder="Số điện thoại" required />
+                                    <label for="receiver_phone" class="required">Số điện thoại</label>
+                                    <input type="text" id="receiver_phone" name="receiver_phone"
+                                        value="<?= $user['phone'] ?> " placeholder="Số điện thoại" required />
                                 </div>
                                 <div class="single-input-item">
-                                    <label for="dia_chi_nguoi_nhan" class="required">Địa chỉ</label>
-                                    <input type="text" id="dia_chi_nguoi_nhan" name="dia_chi_nguoi_nhan"
-                                        value="<?= $user['dia_chi'] ?> " placeholder="Địa chỉ" required />
+                                    <label for="receiver_address" class="required">Địa chỉ</label>
+                                    <input type="text" id="receiver_address" name="receiver_address"
+                                        value="<?= $user['address'] ?> " placeholder="Địa chỉ" required />
                                 </div>
 
 
                                 <div class="single-input-item">
-                                    <label for="ghi_chu">Ghi chú</label>
-                                    <textarea name="ghi_chu" id="ghi_chu" cols="30" rows="3"
+                                    <label for="note">Ghi chú</label>
+                                    <textarea name="note" id="note" cols="30" rows="3"
                                         placeholder="Vui lòng nhập ghi chú."></textarea>
                                 </div>
 
@@ -85,20 +85,17 @@
 
                                             <?php
                                             $tongGioHang = 0;
-                                            foreach ($chiTietGioHang as $key => $sanPham):
+                                            foreach ($chiTietGioHang as $key => $row):
                                                 ?>
                                                 <tr>
-                                                    <td><a href=""><?= $sanPham['ten_san_pham'] ?>
-                                                            <strong>x<?= $sanPham['so_luong'] ?></strong></a>
+                                                    <td><a href=""><?= $row['name'] ?>
+                                                            <strong>x<?= $row['quantity'] ?></strong></a>
                                                     </td>
                                                     <td> <?php
-                                                    if ($sanPham['gia_khuyen_mai']) {
-                                                        $tong_tien = $sanPham['gia_khuyen_mai'] * $sanPham['so_luong'];
-                                                    } else {
-                                                        $tong_tien = $sanPham['gia_san_pham'] * $sanPham['so_luong'];
-                                                    }
-                                                    $tongGioHang += $tong_tien;
-                                                    echo formatPrice($tong_tien);
+                                                    $price = !empty($row['discount_price']) ? $row['discount_price'] : $row['price'];
+                                                    $subtotal = $price * $row['quantity'];
+                                                    $tongGioHang += $subtotal;
+                                                    echo formatPrice($subtotal);
                                                     ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -174,6 +171,6 @@
     <!-- checkout main wrapper end -->
 </main>
 
-<?php require_once __DIR__ . '/miniCart.php'; ?>
+<?php require_once 'views/miniCart.php'; ?>
 
-<?php require_once __DIR__ . '/layout/footer.php'; ?>
+<?php require_once 'layout/footer.php'; ?>
