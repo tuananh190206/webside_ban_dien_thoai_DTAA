@@ -72,3 +72,15 @@ function checkLoginAdmin(){
 function formatPrice($price){
     return number_format($price, 0, ',', '.');
 }
+function donHangCoTheHuy($trangThaiId): bool
+{
+    $id = (int) $trangThaiId;
+    if (defined('TRANG_THAI_DON_HUY') && $id === (int) TRANG_THAI_DON_HUY) {
+        return false;
+    }
+    if (defined('TRANG_THAI_DON_HOAN_THANH') && $id === (int) TRANG_THAI_DON_HOAN_THANH) {
+        return false;
+    }
+    $allowed = defined('TRANG_THAI_DUOC_HUY_BOI_KHACH') ? TRANG_THAI_DUOC_HUY_BOI_KHACH : [1];
+    return in_array($id, (array) $allowed, true);
+}

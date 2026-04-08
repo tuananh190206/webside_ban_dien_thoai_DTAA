@@ -198,7 +198,15 @@
                                                     ?>
                                                 </div>
                                                 <div class="cart-hover">
-                                                    
+                                                    <form action="<?= BASE_URL . '?act=them-gio-hang' ?>" method="POST">
+                                                        <input type="hidden" name="san_pham_id" value="<?= (int) $sanPham['id'] ?>">
+                                                        <input type="hidden" name="so_luong" value="1">
+                                                        <button type="submit"
+                                                            class="btn btn-cart2"
+                                                            <?= (int) ($sanPham['so_luong'] ?? 0) < 1 ? 'disabled style="opacity:0.6;cursor:not-allowed;"' : '' ?>>
+                                                            <?= (int) ($sanPham['so_luong'] ?? 0) < 1 ? 'Hết hàng' : 'Thêm vào giỏ' ?>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </figure>
                                             <div class="product-caption text-center">

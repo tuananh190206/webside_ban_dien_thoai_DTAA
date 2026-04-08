@@ -1,4 +1,12 @@
 <!-- Start Header Area -->
+<?php
+$soLuongGioHangHeader = 0;
+if (isset($chiTietGioHang) && is_array($chiTietGioHang)) {
+    foreach ($chiTietGioHang as $r) {
+        $soLuongGioHangHeader += (int) ($r['so_luong'] ?? 0);
+    }
+}
+?>
 <header class="header-area header-wide">
 
 
@@ -10,6 +18,7 @@
                 <!-- start logo area -->
                 <div class="col-lg-2">
                     <div class="logo">
+
                         <a href="index.html">
                             <img src="assets/img/logo/image.png" alt="Brand Logo">
                         </a>
@@ -24,6 +33,7 @@
                             <!-- main menu navbar start -->
                             <nav class="desktop-menu">
                                 <ul>
+
                                     <li><a href="<?= BASE_URL . '?act=/' ?>">Trang chủ</a>
 
                                     </li>
@@ -66,13 +76,12 @@
                         </div>
                         <div class="header-configure-area">
                             <ul class="nav justify-content-end">
-                                <label for="">
+                                <span class="mr-2 small text-muted">
                                     <?php
                                     if (isset($_SESSION['user_client']['email'])) {
-                                        echo $_SESSION['user_client']['email'];
+                                        echo htmlspecialchars($_SESSION['user_client']['email']);
                                     } ?>
-                                </label>
-                                </label>
+                                </span>
                                 <li class="user-hover">
                                     <a href="#">
                                         <i class="pe-7s-user"></i>
@@ -82,8 +91,9 @@
                                         if (!isset($_SESSION['user_client']['email'])) { ?>
                                             <li><a href="<?= BASE_URL . '?act=login' ?>">Đăng nhập</a></li>
                                         <?php } else { ?>
-                                            <li><a href="my-account.html">Tài khoản</a></li>
-                                            <li><a href="<?= BASE_URL . '?act=lich-su-mua-hang' ?>">Đơn hàng</a></li>
+                                            <li><a href="<?= BASE_URL ?>?act=tai-khoan">Tài khoản khách hàng</a></li>
+                                            <li><a href="<?= BASE_URL . '?act=lich-su-mua-hang' ?>">Đơn hàng của tôi</a></li>
+                                            <li><a href="<?= BASE_URL ?>?act=dang-xuat">Đăng xuất</a></li>
                                         <?php } ?>
                                     </ul>
                                 </li>
@@ -94,9 +104,9 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="minicart-btn">
+                                    <a href="<?= BASE_URL ?>?act=gio-hang" class="minicart-btn" title="Giỏ hàng">
                                         <i class="pe-7s-shopbag"></i>
-                                        <div class="notification">2</div>
+                                        <div class="notification"><?= $soLuongGioHangHeader > 0 ? (int) $soLuongGioHangHeader : '0' ?></div>
                                     </a>
                                 </li>
                             </ul>

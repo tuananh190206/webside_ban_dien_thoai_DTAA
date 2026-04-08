@@ -32,10 +32,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                    <tr>
-                                    <th colspan="5">Thông tin sản phẩm</th>
+                                    <th colspan="5">Sản phẩm trong đơn</th>
                                    </tr>
                                 </thead>
-                                <>
+                                <tbody>
                                     <tr class="text-center">
                                         <th>Hình ảnh</th>
                                         <th>Tên sản phẩm</th>
@@ -43,7 +43,7 @@
                                         <th>Số lượng</th>
                                         <th>Thành tiền</th>
                                     </tr>
-                                    <?php foreach($chiTietDonHang as $item) : ?>
+                                    <?php foreach($chiTietDonHang ?? [] as $item) : ?>
                                         <tr>
                                             <td><img class="img-fluid" src="<?= BASE_URL . $item['hinh_anh'] ?>" alt="Product" width="100px" alt=""></td>
                                             <td><?=$item['ten_san_pham']?></td>
@@ -63,49 +63,59 @@
                             <table class="table table-bordered">
                                 <thead>
                                    <tr>
-                                    <th colspan="5">Thông tin sản phẩm</th>
+                                    <th colspan="3">Thông tin giao hàng &amp; thanh toán</th>
                                    </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
                                     <th colspan="2">Người nhận</th>
-                                    <td><?=$donHang['ten_nguoi_nhan']?></td>
+                                    <td><?= htmlspecialchars($donHang['receiver_name'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Email</th>
-                                    <td><?=$donHang['email_nguoi_nhan']?></td>
+                                    <td><?= htmlspecialchars($donHang['receiver_email'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Số điện thoại</th>
-                                    <td><?=$donHang['sdt_nguoi_nhan']?></td>
+                                    <td><?= htmlspecialchars($donHang['receiver_phone'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Địa chỉ</th>
-                                    <td><?=$donHang['dia_chi_nguoi_nhan']?></td>
+                                    <td><?= htmlspecialchars($donHang['receiver_address'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Ngày đặt</th>
-                                    <td><?=$donHang['ngay_dat']?></td>
+                                    <td><?= htmlspecialchars($donHang['order_date'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Ghi chú</th>
-                                    <td><?=$donHang['ghi_chu']?></td>
+                                    <td><?= htmlspecialchars($donHang['note'] ?? '') ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Tổng tiền</th>
-                                    <td><?=formatPrice( $donHang['tong_tien'])?></td>
+                                    <td><?= formatPrice($donHang['total_amount'] ?? 0) ?></td>
                                    </tr>
                                   <tr>
                                     <th colspan="2">Phương thức thanh toán</th>
-                                    <td><?=$phuongThucThanhToan[$donHang['phuong_thuc_thanh_toan_id']]?></td>
+                                    <td><?= htmlspecialchars($phuongThucThanhToan[$donHang['payment_method_id'] ?? 0] ?? '') ?></td>
                                    </tr>
                                   <tr>
-                                    <th colspan="2">Trangj thái đơn hàng</th>
-                                    <td><?=$trangThaiDonHang[$donHang['trang_thai_id']]?></td>
+                                    <th colspan="2">Trạng thái đơn hàng</th>
+                                    <td><?= htmlspecialchars($trangThaiDonHang[$donHang['status_id'] ?? 0] ?? '') ?></td>
                                    </tr>
                                 </tbody>
                             </table>
                         </div>
+                        <?php if (donHangCoTheHuy($donHang['status_id'] ?? 0)) : ?>
+                        <div class="mt-3 d-flex gap-2">
+                            <a href="<?= BASE_URL ?>?act=huy-don-hang&id=<?= (int) $donHang['id'] ?>" class="btn btn-sqr" onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy đơn</a>
+                            <a href="<?= BASE_URL ?>?act=lich-su-mua-hang" class="btn btn-sqr bg-secondary border-secondary">Quay lại</a>
+                        </div>
+                        <?php else: ?>
+                        <div class="mt-3">
+                            <a href="<?= BASE_URL ?>?act=lich-su-mua-hang" class="btn btn-sqr bg-secondary border-secondary">Quay lại</a>
+                        </div>
+                        <?php endif; ?>
                         <!-- Cart Update Option -->
                     </div>
                 </div>
@@ -114,7 +124,6 @@
     </div>
     <!-- cart main wrapper end -->
 </main>
-
 <?php require_once 'views/miniCart.php'; ?>
 
 <?php require_once 'layout/footer.php'; ?>

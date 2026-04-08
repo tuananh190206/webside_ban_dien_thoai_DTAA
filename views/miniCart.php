@@ -1,7 +1,15 @@
-<!-- Quick view modal start -->
-
-<!-- Quick view modal end -->
-
+<?php
+if (!isset($chiTietGioHang) || !is_array($chiTietGioHang)) {
+    $chiTietGioHang = [];
+}
+$miniCartCount = 0;
+$miniCartSubtotal = 0;
+foreach ($chiTietGioHang as $row) {
+    $miniCartCount += (int) ($row['so_luong'] ?? 0);
+    $gia = !empty($row['gia_khuyen_mai']) ? (float) $row['gia_khuyen_mai'] : (float) ($row['gia_san_pham'] ?? 0);
+    $miniCartSubtotal += $gia * (int) ($row['so_luong'] ?? 0);
+}
+?>
 <!-- offcanvas mini cart start -->
 <div class="offcanvas-minicart-wrapper">
     <div class="minicart-inner">
@@ -13,53 +21,48 @@
             <div class="minicart-content-box">
                 <div class="minicart-item-wrapper">
                     <ul>
+                        <?php if (empty($chiTietGioHang)) : ?>
+                            <li class="minicart-item">
+                                <p class="text-muted">Chưa có sản phẩm trong giỏ.</p>
+                            </li>
+                        <?php else :
+                            foreach ($chiTietGioHang as $sanPham) :
+                                $donGia = !empty($sanPham['gia_khuyen_mai']) ? (float) $sanPham['gia_khuyen_mai'] : (float) $sanPham['gia_san_pham'];
+                                ?>
                         <li class="minicart-item">
                             <div class="minicart-thumb">
-                                <a href="product-details.html">
-                                    <img src="<?=$sanPham['hinh_anh']?>" alt="product">
+                                <a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $sanPham['san_pham_id'] ?>">
+                                    <img src="<?= BASE_URL . htmlspecialchars($sanPham['hinh_anh']) ?>" alt="">
                                 </a>
                             </div>
                             <div class="minicart-content">
                                 <h3 class="product-name">
-                                    <a href="product-details.html"><?=$sanPham['ten_san_pham']?></a>
+                                    <a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $sanPham['san_pham_id'] ?>"><?= htmlspecialchars($sanPham['ten_san_pham']) ?></a>
                                 </h3>
                                 <p>
-                                    <span class="cart-quantity"> <?=$sanPham['so_luong']?><strong>&times;</strong></span>
-                                    <span class="cart-price"><?=$sanPham['gia_san_pham']?></span>
+                                    <span class="cart-quantity"> <?= (int) $sanPham['so_luong'] ?><strong>&times;</strong></span>
+                                    <span class="cart-price"><?= formatPrice($donGia) ?></span>
                                 </p>
                             </div>
-                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
+                            <a href="<?= BASE_URL ?>?act=xoa-gio-hang&san_pham_id=<?= (int) $sanPham['san_pham_id'] ?>" class="minicart-remove" title="Xóa"><i class="pe-7s-close"></i></a>
                         </li>
-                        <li class="minicart-item">
-                            <div class="minicart-thumb">
-                                <a href="product-details.html">
-                                    <img src="<?=$sanPham['hinh_anh']?>" alt="product">
-                                </a>
-                            </div>
-                            <div class="minicart-content">
-                                <h3 class="product-name">
-                                    <a href="product-details.html"><?=$sanPham['ten_san_pham']?></a>
-                                </h3>
-                                <p>
-                                    <span class="cart-quantity"> <?=$sanPham['so_luong']?><strong>&times;</strong></span>
-                                    <span class="cart-price"><?=$sanPham['gia_san_pham']?></span>
-                                </p>
-                            </div>
-                            <button class="minicart-remove"><i class="pe-7s-close"></i></button>
-                        </li>
-                       
+                        <?php endforeach;
+                        endif; ?>
                     </ul>
                 </div>
 
-                
+                <?php if (!empty($chiTietGioHang)) : ?>
+                <div class="minicart-pricing-box border-top pt-2">
+                    <p><strong>Tạm tính:</strong> <?= formatPrice($miniCartSubtotal) ?></p>
+                </div>
+                <?php endif; ?>
 
                 <div class="minicart-button">
-                    <a href="<?=BASE_URL . '?act=gio-hang'?>"><i class="fa fa-shopping-cart"></i>Xem Giỏ Hàng</a>
-                    <a href="cart.html"><i class="fa fa-share"></i>Thanh Toán</a>
+                    <a href="<?= BASE_URL ?>?act=gio-hang"><i class="fa fa-shopping-cart"></i> Xem giỏ hàng</a>
+                    <a href="<?= BASE_URL ?>?act=thanh-toan"><i class="fa fa-share"></i> Thanh toán</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</main>
 <!-- offcanvas mini cart end -->
