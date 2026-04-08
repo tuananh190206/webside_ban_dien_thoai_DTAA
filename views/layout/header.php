@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="assets/css/plugins/jqueryui.min.css">
     <!-- main style css -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Header pill + layout (luôn giữ khi đồng bộ code — form đăng nhập/đăng ký dùng client-auth.css riêng) -->
+    <link rel="stylesheet" href="assets/css/client-header-pills.css">
 
 </head>
 <body></body>
