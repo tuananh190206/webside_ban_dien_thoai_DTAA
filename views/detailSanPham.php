@@ -128,9 +128,9 @@
                                                     </div>
                                                     <div class="review-box">
                                                         <div class="post-author">
-                                                            <p><span><?= $binhLuan['full_name'] ?? 'Khách hàng' ?> - </span><?= $binhLuan['review_date'] ?></p>
+                                                            <p><span><?= $binhLuan['full_name'] ?? 'Khách hàng' ?> - </span><?= $binhLuan['content'] ?></p>
                                                         </div>
-                                                        <p><?= $binhLuan['noi_dung'] ?></p>
+                                                        <p><?= $binhLuan['content'] ?></p>
                                                     </div>
                                                 </div>
                                             <?php endforeach; ?>

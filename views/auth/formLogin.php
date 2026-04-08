@@ -23,9 +23,17 @@ $rememberVal = $_COOKIE['client_remember_email'] ?? '';
             <?php if (!empty($_GET['registered']) && $_GET['registered'] === '1') { ?>
                 <div class="client-auth-alert client-auth-alert--ok">Đăng ký thành công. Vui lòng đăng nhập.</div>
             <?php } ?>
-            <?php if (isset($_SESSION['error'])) { ?>
-                <div class="client-auth-alert client-auth-alert--err"><?= htmlspecialchars($_SESSION['error']) ?></div>
-            <?php } ?>
+            <?php if (!empty($_SESSION['error'])) { ?>
+    <div class="client-auth-alert client-auth-alert--err">
+        <?php if (is_array($_SESSION['error'])): ?>
+            <?php foreach ($_SESSION['error'] as $err): ?>
+                <p><?= htmlspecialchars($err) ?></p>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <?= htmlspecialchars($_SESSION['error']) ?>
+        <?php endif; ?>
+    </div>
+<?php } ?>
 
             <form action="<?= BASE_URL . '?act=check-login' ?>" method="post" autocomplete="on">
                 <div class="client-auth-field">

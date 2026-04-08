@@ -313,15 +313,14 @@
                 <div class="col-lg-6">
                     <div class="group-product-banner">
                         <figure class="banner-statistics">
-                            <a href="#">
-                                <img src="https://azpet.com.vn/wp-content/uploads/2021/06/Alaska.jpg"
-                                    alt="product banner">
-                            </a>
-                            <div class="banner-content banner-content_style3 text-center">
+                             <a href="product-details.html">
+                                                    <img src="<?= $sanPham['image']; ?>" alt="">
+                                                </a>
+                            <!-- <div class="banner-content banner-content_style3 text-center">
                                 <h6 class="banner-text1">Shoe</h6>
                                 <h2 class="banner-text2">All</h2>
                                 <a href="shop.html" class="btn btn-text">Mua ngay</a>
-                            </div>
+                            </div> -->
                         </figure>
                     </div>
                 </div>
