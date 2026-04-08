@@ -141,7 +141,7 @@
                                     <div class="single-payment-method">
                                         <div class="payment-method-name">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" id="directbank"  value="2" name="phuong_thuc_thanh_toan_id" value="bank"
+                                                <input type="radio" id="directbank" value="2" name="phuong_thuc_thanh_toan_id"
                                                     class="custom-control-input" />
                                                 <label class="custom-control-label" for="directbank">Thanh toán bằng
                                                     ngân hàng</label>
@@ -157,7 +157,8 @@
                                             <input type="checkbox" class="custom-control-input" id="terms" required />
                                             <label class="custom-control-label" for="terms">Xác nhận đơn hàng</label>
                                         </div>
-                                        <button type="submit" class="btn btn-sqr">Đặt hàng </button>
+                                        <button type="submit" class="btn btn-sqr">Tiến hành đặt hàng</button>
+                                        <a href="<?= BASE_URL ?>?act=gio-hang" class="btn btn-sqr bg-secondary border-secondary ml-2">Quay lại giỏ hàng</a>
                                     </div>
                                 </div>
 
