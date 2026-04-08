@@ -51,6 +51,7 @@
                                 </div>
                                 <div class="single-input-item">
                                     <button class="btn btn-sqr">Đăng nhập</button>
+                                    <a href="<?= BASE_URL ?>" class="btn btn-sqr bg-secondary border-secondary ml-2">Quay lại</a>
                                 </div>
                             </form>
                         </div>

@@ -82,10 +82,11 @@
                                             <h6 class="option-title">Số lượng:</h6>
                                             <div class="quantity">
                                                 <input type="hidden" name="san_pham_id" value="<?= $sanPham['id'] ?>">
-                                                <div class="pro-qty"><input type="text" value="1" name="quantity"></div>
+                                                <div class="pro-qty"><input type="text" value="1" name="so_luong"></div>
                                             </div>
                                             <div class="action_link">
-                                               <button class="btn btn-cart2>  " href="#">Thêm vào giỏ hàng</button>
+                                               <button class="btn btn-cart2" type="submit">Thêm vào giỏ hàng</button>
+                                               <a href="<?= BASE_URL ?>" class="btn btn-cart2 bg-secondary border-secondary ml-2">Quay lại</a>
                                           </div>
                                         </div>
                                     </form>

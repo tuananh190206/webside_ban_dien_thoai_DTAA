@@ -28,7 +28,7 @@ $soMatHangGio = isset($chiTietGioHang) && is_array($chiTietGioHang) ? count($chi
         <div class="container">
             <div class="row mb-4">
                 <div class="col-12">
-                    <h4 class="mb-1">Xin chào, <?= htmlspecialchars($user['ho_ten'] ?? 'Khách hàng') ?></h4>
+                    <h4 class="mb-1">Xin chào, <?= htmlspecialchars($user['full_name'] ?? 'Khách hàng') ?></h4>
                     <p class="text-muted mb-0"><small><?= htmlspecialchars($user['email'] ?? '') ?></small></p>
                 </div>
             </div>
@@ -75,20 +75,23 @@ $soMatHangGio = isset($chiTietGioHang) && is_array($chiTietGioHang) ? count($chi
                                 <small class="text-muted">Email không đổi được tại đây.</small>
                             </div>
                             <div class="single-input-item mb-3">
-                                <label for="ho_ten">Họ và tên <span class="text-danger">*</span></label>
-                                <input type="text" name="ho_ten" id="ho_ten" class="form-control" required
-                                    value="<?= htmlspecialchars($user['ho_ten'] ?? '') ?>">
+                                <label for="full_name">Họ và tên <span class="text-danger">*</span></label>
+                                <input type="text" name="full_name" id="full_name" class="form-control" required
+                                    value="<?= htmlspecialchars($user['full_name'] ?? '') ?>">
                             </div>
                             <div class="single-input-item mb-3">
-                                <label for="so_dien_thoai">Số điện thoại</label>
-                                <input type="text" name="so_dien_thoai" id="so_dien_thoai" class="form-control"
-                                    value="<?= htmlspecialchars($user['so_dien_thoai'] ?? '') ?>">
+                                <label for="phone">Số điện thoại</label>
+                                <input type="text" name="phone" id="phone" class="form-control"
+                                    value="<?= htmlspecialchars($user['phone'] ?? '') ?>">
                             </div>
                             <div class="single-input-item mb-3">
-                                <label for="dia_chi">Địa chỉ</label>
-                                <textarea name="dia_chi" id="dia_chi" class="form-control" rows="3"><?= htmlspecialchars($user['dia_chi'] ?? '') ?></textarea>
+                                <label for="address">Địa chỉ</label>
+                                <textarea name="address" id="address" class="form-control" rows="3"><?= htmlspecialchars($user['address'] ?? '') ?></textarea>
                             </div>
-                            <button type="submit" class="btn btn-sqr">Lưu thông tin</button>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-sqr">Lưu thông tin</button>
+                                <a href="<?= BASE_URL ?>" class="btn btn-sqr bg-secondary border-secondary">Quay lại</a>
+                            </div>
                         </form>
                     </div>
                 </div>

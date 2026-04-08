@@ -46,16 +46,7 @@
                                             <td><?= htmlspecialchars($donhang['order_code'] ?? '') ?></td>
                                             <td><?= htmlspecialchars($donhang['order_date'] ?? '') ?></td>
                                             <td><?= formatPrice($donhang['total_amount'] ?? 0) ?></td>
-                                            <td>
-                                                <?php
-                                                if (is_array($trangThaiDonHang[$donhang['status_id']])) {
-                                                    echo "Lỗi: Đây là mảng!";
-                                                    print_r($trangThaiDonHang[$donhang['status_id']]);
-                                                } else {
-                                                    echo htmlspecialchars($trangThaiDonHang[$donhang['status_id']] ?? '');
-                                                }
-                                                ?>
-                                            </td>
+                                            <td><?= htmlspecialchars($phuongThucThanhToan[$donhang['payment_method_id'] ?? 0] ?? '') ?></td>
                                             <td><?= htmlspecialchars($trangThaiDonHang[$donhang['status_id'] ?? 0] ?? '') ?></td>
                                             <td>
                                                 <a href="<?= BASE_URL ?>?act=chi-tiet-mua-hang&id=<?= $donhang['id'] ?>" class="btn btn-sqr">chi tiết đơn hàng</a>
@@ -69,6 +60,9 @@
                             </table>
                         </div>
                         <!-- Cart Update Option -->
+                        <div class="mt-3">
+                            <a href="<?= BASE_URL ?>" class="btn btn-sqr bg-secondary border-secondary">Quay lại trang chủ</a>
+                        </div>
                     </div>
                 </div>
             </div>

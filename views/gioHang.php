@@ -64,44 +64,42 @@
                                         <td colspan="6" class="text-center py-5">Giỏ hàng của bạn đang trống. <a href="<?= BASE_URL ?>">Tiếp tục mua sắm</a></td>
                                         </tr>
                                         <?php else: 
-                                    foreach ($chiTietGioHang as $key => $sanPham): 
+                                    foreach ($chiTietGioHang as $key => $row): 
                                         ?>
                                         <tr>
-                                            <td class="pro-thumbnail"><a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $sanPham['san_pham_id'] ?>"><img class="img-fluid"
-                                                        src="<?= BASE_URL . $sanPham['hinh_anh'] ?>" alt="Product" /></a></td>
-                                            <td class="pro-title"><a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $sanPham['san_pham_id'] ?>"><?= htmlspecialchars($sanPham['ten_san_pham']) ?></a></td>
+                                            <td class="pro-thumbnail"><a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $row['product_id'] ?>"><img class="img-fluid"
+                                                        src="<?= BASE_URL . $row['image'] ?>" alt="Product" /></a></td>
+                                            <td class="pro-title"><a href="<?= BASE_URL ?>?act=chi-tiet-san-pham&id_san_pham=<?= (int) $row['product_id'] ?>"><?= htmlspecialchars($row['name']) ?></a></td>
                                             <td class="pro-price"><span>
-                                                    <?php if ($sanPham['gia_khuyen_mai']) { ?>
-                                                        <?= formatPrice($sanPham['gia_khuyen_mai']) ?>
+                                                    <?php if ($row['discount_price']) { ?>
+                                                        <?= formatPrice($row['discount_price']) ?>
                                                     <?php }else{ ?>
-                                                        <?= formatPrice($sanPham['gia_san_pham']) ?>
+                                                        <?= formatPrice($row['price']) ?>
                                                     <?php }?>    
                                                 </span></td>
                                                 <?php 
-                                                 $tonMax = max(0, (int) ($sanPham['ton_kho_san_pham'] ?? 0));
-                                                 $slHienTai = (int) $sanPham['so_luong'];
-                                                 $gioiHanTang = max($tonMax, $slHienTai);
-                                                  ?>
+                                                 $stock = max(0, (int) ($row['stock'] ?? 0));
+                                                 $currentQty = (int) $row['quantity'];
+                                                 ?>
                                             <td class="pro-quantity">
-                                                <form action="<?= BASE_URL ?>?act=cap-nhat-gio-hang" method="post" class="cart-qty-form m-0">
-                                                    <input type="hidden" name="san_pham_id" value="<?= (int) $sanPham['san_pham_id'] ?>">
-                                                    <div class="pro-qty">
-                                                        <input type="text" name="so_luong" value="<?= $slHienTai ?>" class="qty-input">
+                                                <form action="<?= BASE_URL ?>?act=cap-nhat-gio-hang" method="post">
+                                                    <input type="hidden" name="san_pham_id" value="<?= (int) $row['product_id'] ?>">
+                                                    <div class="input-group input-group-sm mx-auto" style="width: 100px;">
+                                                        <button class="btn btn-outline-secondary btn-minus" type="button">-</button>
+                                                        <input type="text" name="so_luong" class="form-control text-center" value="<?= $currentQty ?>" readonly style="background-color: #fff;">
+                                                        <button class="btn btn-outline-secondary btn-plus" type="button">+</button>
                                                     </div>
                                                 </form>
                                             </td>
                                             <td class="pro-subtotal"><span>
                                                         <?php
-                                                        if($sanPham['gia_khuyen_mai']) {
-                                                           $tong_tien=$sanPham['gia_khuyen_mai'] * $sanPham['so_luong'];
-                                                        } else {
-                                                            $tong_tien=$sanPham['gia_san_pham'] * $sanPham['so_luong'];
-                                                        }
-                                                          $tongGioHang += $tong_tien;
-                                                         echo formatPrice($tong_tien);
+                                                        $price = $row['discount_price'] ? $row['discount_price'] : $row['price'];
+                                                        $subtotal = $price * $row['quantity'];
+                                                        $tongGioHang += $subtotal;
+                                                        echo formatPrice($subtotal);
                                                         ?>
                                             </span></td>
-                                            <td class="pro-remove"><a href="<?= BASE_URL ?>?act=xoa-gio-hang&san_pham_id=<?= (int) $sanPham['san_pham_id'] ?>" onclick="return confirm('Xóa sản phẩm khỏi giỏ?');"><i class="fa fa-trash-o"></i></a></td>
+                                            <td class="pro-remove"><a href="<?= BASE_URL ?>?act=xoa-gio-hang&san_pham_id=<?= (int) $row['product_id'] ?>" onclick="return confirm('Xóa sản phẩm khỏi giỏ?');"><i class="fa fa-trash-o"></i></a></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -120,7 +118,7 @@
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
-                                            <td>Tổng tiền sản phâm</td>
+                                            <td>Tổng tiền sản phẩm</td>
                                             <td><?=formatPrice($tongGioHang)?></td>
                                         </tr>
                                         <tr>
@@ -149,31 +147,38 @@
     <!-- cart main wrapper end -->
 </main>
 <script>
-    (function() {
-        // Chờ template main.js xử lý thêm các nút +/- xong
-        setTimeout(function() {
-            var forms = document.querySelectorAll('.cart-qty-form');
-            forms.forEach(function(form) {
-                var input = form.querySelector('.qty-input');
-                var buttons = form.querySelectorAll('.qtybtn');
-
-                // Khi click nút +/- của template
-                buttons.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        // Delay một chút để main.js cập nhật xong value của input
-                        setTimeout(function() {
-                            form.submit();
-                        }, 100);
-                    });
-                });
-
-                // Khi thay đổi trực tiếp trong input
-                input.addEventListener('change', function() {
-                    form.submit();
-                });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Xử lý nút tăng
+        document.querySelectorAll('.btn-plus').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var input = this.closest('.input-group').querySelector('input[name="so_luong"]');
+                var val = parseInt(input.value);
+                if (!isNaN(val)) {
+                    input.value = val + 1;
+                    this.closest('form').submit();
+                }
             });
-        }, 500);
-    })();
+        });
+
+        // Xử lý nút giảm
+        document.querySelectorAll('.btn-minus').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var input = this.closest('.input-group').querySelector('input[name="so_luong"]');
+                var val = parseInt(input.value);
+                if (!isNaN(val)) {
+                    if (val > 1) {
+                        input.value = val - 1;
+                        this.closest('form').submit();
+                    } else if (val === 1) {
+                        if (confirm('Bạn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                            input.value = 0;
+                            this.closest('form').submit();
+                        }
+                    }
+                }
+            });
+        });
+    });
 </script>
 
 <?php require_once __DIR__ . '/miniCart.php'; ?>

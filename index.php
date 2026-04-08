@@ -34,6 +34,7 @@ match ($act) {
     'huy-don-hang'=>(new HomeController())->huyDonHang(),
     'tai-khoan'=>(new HomeController())->taiKhoanKhachHang(),
     'cap-nhat-tai-khoan'=>(new HomeController())->capNhatTaiKhoanKhach(),
+    'dang-xuat'=>(new HomeController())->dangXuatKhachHang(),
     'gioi-thieu' => (new HomeController())->gioiThieu(),
     'lien-he' => (new HomeController())->lienHe(),
     //route login
