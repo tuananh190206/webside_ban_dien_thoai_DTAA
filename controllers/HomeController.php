@@ -319,80 +319,77 @@ class HomeController
         require_once './views/thanhToan.php';
     }
 
-    public function postThanhToan()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: ' . BASE_URL . '?act=thanh-toan');
-            exit();
-        }
-        $this->yeuCauKhachHangDangNhap();
-        
-        $receiver_name = trim($_POST['receiver_name'] ?? $_POST['ten_nguoi_nhan'] ?? '');
-        $receiver_email = trim($_POST['receiver_email'] ?? $_POST['email_nguoi_nhan'] ?? '');
-        $receiver_phone = trim($_POST['receiver_phone'] ?? $_POST['sdt_nguoi_nhan'] ?? '');
-        $receiver_address = trim($_POST['receiver_address'] ?? $_POST['dia_chi_nguoi_nhan'] ?? '');
-        $note = trim($_POST['note'] ?? $_POST['ghi_chu'] ?? '');
-        $total_amount = (float) ($_POST['total_amount'] ?? $_POST['tong_tien'] ?? 0);
-        $payment_method_id = (int) ($_POST['payment_method_id'] ?? $_POST['phuong_thuc_thanh_toan_id'] ?? 0);
-
-        $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
-        $userId = $user['id'];
-        [$gioHang, $chiTietGioHang] = $this->layGioHangChoUser();
-
-        if (!$gioHang || empty($chiTietGioHang)) {
-            header('Location: ' . BASE_URL . '?act=gio-hang');
-            exit();
-        }
-
-        $calculatedTotal = 0;
-        foreach ($chiTietGioHang ?: [] as $item) {
-            $price = !empty($item['discount_price']) ? (float) $item['discount_price'] : (float) $item['price'];
-            $qty = (int) ($item['quantity'] ?? 0);
-            $calculatedTotal += $price * $qty;
-        }
-        $calculatedTotal += PHI_VAN_CHUYEN;
-        if (abs($calculatedTotal - $total_amount) > 1) {
-            $total_amount = $calculatedTotal;
-        }
-
-        $order_date = date('Y-m-d');
-        $status_id = 1;
-        $order_code = 'DH' . time() . rand(1000, 9999);
-
-        $orderId = $this->modelDonHang->addDonHang(
-            $userId,
-            $receiver_name,
-            $receiver_email,
-            $receiver_phone,
-            $receiver_address,
-            $note,
-            $total_amount,
-            $payment_method_id,
-            $order_date,
-            $order_code,
-            $status_id
-        );
-
-        if ($orderId) {
-            foreach ($chiTietGioHang as $item) {
-                $price = !empty($item['discount_price']) ? (float) $item['discount_price'] : (float) $item['price'];
-                $qty = (int) $item['quantity'];
-                $this->modelDonHang->addChiTietDonHang(
-                    $orderId,
-                    (int) $item['product_id'],
-                    $price,
-                    $qty,
-                    $price * $qty
-                );
-            }
-            $this->modelGioHang->clearDetailGioHang($gioHang['id']);
-            header('Location: ' . BASE_URL . '?act=lich-su-mua-hang');
-            exit();
-        }
-
+  public function postThanhToan()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('Location: ' . BASE_URL . '?act=thanh-toan');
         exit();
     }
+
+    $this->yeuCauKhachHangDangNhap();
+
+    // 1. Lấy đúng tên 'name' từ file View bạn vừa gửi
+    $receiver_name     = trim($_POST['receiver_name'] ?? '');
+    $receiver_email    = trim($_POST['receiver_email'] ?? '');
+    $receiver_phone    = trim($_POST['receiver_phone'] ?? '');
+    $receiver_address  = trim($_POST['receiver_address'] ?? '');
+    $note              = trim($_POST['note'] ?? '');
+    $total_amount      = (float) ($_POST['tong_tien'] ?? 0); // Khớp với name="tong_tien" trong View
+    $payment_method_id = (int) ($_POST['phuong_thuc_thanh_toan_id'] ?? 0); // Khớp với name="phuong_thuc_thanh_toan_id"
+
+    // 2. Lấy thông tin giỏ hàng
+    $user = $this->modelTaiKhoan->getTaiKhoanFormEmail($_SESSION['user_client']['email']);
+    $userId = $user['id'];
+    [$gioHang, $chiTietGioHang] = $this->layGioHangChoUser();
+
+    if (!$gioHang || empty($chiTietGioHang)) {
+        header('Location: ' . BASE_URL . '?act=gio-hang');
+        exit();
+    }
+
+    // 3. Tạo thông tin bổ trợ
+    $order_date = date('Y-m-d H:i:s');
+    $order_code = 'DH' . strtoupper(substr(md5(time()), 0, 8));
+    $status_id  = 1; // Mặc định: Chờ xác nhận
+
+    // 4. Gọi Model add đơn hàng (Đảm bảo đúng thứ tự 11 tham số của Model DonHang)
+    $orderId = $this->modelDonHang->addDonHang(
+        $userId,            // 1
+        $receiver_name,     // 2
+        $receiver_email,    // 3
+        $receiver_phone,    // 4
+        $receiver_address,  // 5
+        $note,              // 6
+        $total_amount,      // 7
+        $payment_method_id, // 8
+        $order_date,        // 9
+        $order_code,        // 10
+        $status_id          // 11
+    );
+
+    if ($orderId) {
+        // 5. Lưu chi tiết đơn hàng
+        foreach ($chiTietGioHang as $item) {
+            $price = !empty($item['discount_price']) ? (float) $item['discount_price'] : (float) $item['price'];
+            $this->modelDonHang->addChiTietDonHang(
+                $orderId,
+                $item['product_id'],
+                $price,
+                $item['quantity'],
+                $price * $item['quantity']
+            );
+        }
+
+        // 6. Xóa giỏ hàng và chuyển hướng về lịch sử
+        $this->modelGioHang->clearDetailGioHang($gioHang['id']);
+        header('Location: ' . BASE_URL . '?act=lich-su-mua-hang');
+        exit();
+    } else {
+        // Nếu không có orderId trả về tức là lỗi SQL
+        echo "Lỗi: Không thể tạo đơn hàng. Vui lòng kiểm tra lại Database.";
+        exit();
+    }
+}
 
     public function lichSuMuaHang()
     {
