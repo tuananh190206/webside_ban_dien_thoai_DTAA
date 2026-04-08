@@ -29,12 +29,12 @@ if($act!== 'login-admin'&& $act!=='check-login-admin' && $act!=='check-logout-ad
 
 match ($act) {
     // route danh mục
-    'danh-muc' => (new AdminDanhMucController())->danhSachDanhMuc(),
-    'form-them-danh-muc' => (new AdminDanhMucController())->formAddDanhMuc(),
-    'them-danh-muc' => (new AdminDanhMucController())->postAddDanhMuc(),
-    'form-sua-danh-muc' => (new AdminDanhMucController())->formEditDanhMuc(),
-    'sua-danh-muc' => (new AdminDanhMucController())->postEditDanhMuc(),
-    'xoa-danh-muc' => (new AdminDanhMucController())->deleteDanhMuc(),
+    'danh-muc' => (new AdminCategoryController())->listCategory(),
+    'form-them-danh-muc' => (new AdminCategoryController())->formAddCategory(),
+    'them-danh-muc' => (new AdminCategoryController())->postAddCategory(),
+    'form-sua-danh-muc' => (new AdminCategoryController())->formEditCategory(),
+    'sua-danh-muc' => (new AdminCategoryController())->postEditCategory(),
+    'xoa-danh-muc' => (new AdminCategoryController())->deleteCategory(),
 
     // route Sản phẩm
     'san-pham' => (new AdminSanPhamController())->danhSachSanPham(),
@@ -43,8 +43,7 @@ match ($act) {
     'form-sua-san-pham' => (new AdminSanPhamController())->formEditSanPham(),
     'sua-san-pham' => (new AdminSanPhamController())->postEditSanPham(),
     'xoa-san-pham' => (new AdminSanPhamController())->deleteSanPham(),
-    'sua-album-anh-san-pham' => (new AdminSanPhamController())->postEditAnhSanPham(),
-    'chi-tiet-san-pham' => (new AdminSanPhamController())->detailSanPham(),
+    'chi-tiet-san-pham' => (new AdminSanPhamController())->chiTietSanPham(),
 
 
      // route đơn hàng
