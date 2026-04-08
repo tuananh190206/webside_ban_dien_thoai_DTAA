@@ -115,10 +115,23 @@ public function checkLogin($email, $password) {
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch();
 
-    if ($user && $password == $user['password']) { // So sánh pass text thuần
-        return $user; // Trả về mảng chứa id, email, full_name...
+    if (!$user) {
+        return false;
     }
-    return false;
+    if ((int) ($user['role_id'] ?? 0) !== 1) {
+        return false;
+    }
+    if ((int) ($user['status'] ?? 0) !== 1) {
+        return false;
+    }
+    $stored = $user['password'] ?? '';
+    $ok = false;
+    if (is_string($stored) && strlen($stored) >= 60 && strncmp($stored, '$2', 2) === 0) {
+        $ok = password_verify($password, $stored);
+    } else {
+        $ok = hash_equals((string) $stored, (string) $password);
+    }
+    return $ok ? $user : false;
 }
 
     // 8. Lấy thông tin tài khoản bằng Email (Dùng cho Session)

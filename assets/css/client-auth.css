@@ -1,0 +1,260 @@
+/* Trang đăng nhập / đăng ký — giao diện hiện đại */
+.client-auth-page {
+  min-height: 58vh;
+  padding: 40px 16px 72px;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(236, 72, 153, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(124, 58, 237, 0.08), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 0% 80%, rgba(244, 114, 182, 0.1), transparent 45%),
+    linear-gradient(165deg, #faf8fc 0%, #f1f5f9 45%, #eef2ff 100%);
+}
+
+.client-auth-card {
+  position: relative;
+  max-width: 440px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 20px 50px -12px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  padding: 0 2rem 2.25rem;
+  padding-top: 1.25rem;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  overflow: hidden;
+}
+
+.client-auth-card--wide {
+  max-width: 480px;
+}
+
+.client-auth-card__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f472b6 0%, #ec4899 35%, #a855f7 70%, #7c3aed 100%);
+  border-radius: 22px 22px 0 0;
+}
+
+.client-auth-card__top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.35rem;
+  padding-top: 0.35rem;
+}
+
+.client-auth-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5b21b6 !important;
+  text-decoration: none !important;
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  border-radius: 999px;
+  transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+.client-auth-home-btn:hover {
+  color: #4c1d95 !important;
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+  border-color: rgba(124, 58, 237, 0.55);
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.18);
+  transform: translateY(-1px);
+}
+.client-auth-home-btn i {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.client-auth-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.client-auth-sub {
+  font-size: 0.95rem;
+  color: #64748b;
+  text-align: center;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.client-auth-alert {
+  font-size: 0.875rem;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.1rem;
+}
+.client-auth-alert--ok {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+.client-auth-alert--err {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.client-auth-field {
+  margin-bottom: 1.15rem;
+}
+.client-auth-field label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.01em;
+}
+.client-auth-field .optional {
+  font-weight: 500;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.client-auth-field input[type="text"],
+.client-auth-field input[type="email"],
+.client-auth-field input[type="password"],
+.client-auth-field input[type="tel"] {
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fafbfc 0%, #f8fafc 100%);
+  font-size: 0.95rem;
+  color: #0f172a;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.client-auth-field input:focus {
+  outline: none;
+  border-color: #c084fc;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.18);
+}
+.client-auth-field input::placeholder {
+  color: #94a3b8;
+}
+
+.client-auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1.35rem;
+}
+
+.client-auth-remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #475569;
+  cursor: pointer;
+  user-select: none;
+}
+.client-auth-remember input {
+  width: 17px;
+  height: 17px;
+  accent-color: #7c3aed;
+}
+
+.client-auth-link {
+  color: #7c3aed;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.client-auth-link:hover {
+  color: #6d28d9;
+  text-decoration: underline;
+}
+
+.client-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #fff !important;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #fb7185 0%, #f472b6 18%, #ec4899 50%, #db2777 100%);
+  box-shadow:
+    0 4px 14px rgba(236, 72, 153, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset;
+  transition: transform 0.15s, box-shadow 0.2s, filter 0.2s;
+}
+.client-auth-btn:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    0 8px 28px rgba(219, 39, 119, 0.42),
+    0 1px 0 rgba(255, 255, 255, 0.25) inset;
+  transform: translateY(-2px);
+}
+.client-auth-btn:active {
+  transform: translateY(0);
+}
+.client-auth-btn i {
+  font-size: 1.05rem;
+}
+
+.client-auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+.client-auth-terms input {
+  margin-top: 4px;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  accent-color: #7c3aed;
+}
+
+.client-auth-footer {
+  text-align: center;
+  margin-top: 1.65rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+@media (max-width: 575.98px) {
+  .client-auth-card {
+    padding-left: 1.35rem;
+    padding-right: 1.35rem;
+    padding-bottom: 1.85rem;
+    border-radius: 18px;
+  }
+  .client-auth-card__accent {
+    border-radius: 18px 18px 0 0;
+  }
+  .client-auth-title {
+    font-size: 1.45rem;
+  }
+}

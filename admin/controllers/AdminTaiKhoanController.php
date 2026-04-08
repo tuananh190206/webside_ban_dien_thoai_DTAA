@@ -18,53 +18,59 @@ class AdminTaiKhoanController
     // ============================================================
 
     public function formLoginAdmin() {
-        if (isset($_SESSION['user_admin'])) {
-            header("Location: " . BASE_URL_ADMIN);
-            exit();
-        }
-        // Sửa: Theo ảnh file là formLogin.php
-        require_once './views/auth/formLogin.php'; 
+        header('Location: ' . BASE_URL . '?act=login');
+        exit();
     }
 
     public function postLoginAdmin()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            $user = $this->modelTaiKhoan->checkLogin($email, $password);
-
-            if (is_array($user) && $user['role_id'] == 1) { 
-                $_SESSION['user_admin'] = [
-                    'id' => $user['id'],
-                    'email' => $user['email'],
-                    'full_name' => $user['full_name']
-                ];
-                header("Location: " . BASE_URL_ADMIN);
-                exit();
-            } else {
-                $_SESSION['error'] = is_string($user) ? $user : "Email hoặc mật khẩu không chính xác!";
-                header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
-                exit();
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
         }
+        $identifier = trim($_POST['email'] ?? '');
+        $password = (string) ($_POST['password'] ?? '');
+        $model = new TaiKhoan();
+        $result = $model->checkLoginUnified($identifier, $password);
+
+        if (is_array($result) && !empty($result['ok']) && (int) $result['role_id'] === 1) {
+            unset($_SESSION['user_client']);
+            $_SESSION['user_admin'] = [
+                'id' => (int) $result['id'],
+                'email' => (string) $result['email'],
+                'full_name' => (string) $result['full_name'],
+            ];
+            header('Location: ' . BASE_URL_ADMIN);
+            exit();
+        }
+
+        $_SESSION['error'] = is_string($result) ? $result : 'Email hoặc mật khẩu không chính xác!';
+        header('Location: ' . BASE_URL . '?act=login');
+        exit();
     }
 
     public function logout()
     {
         unset($_SESSION['user_admin']);
-        header("Location: " . BASE_URL_ADMIN . '?act=login-admin');
+        header('Location: ' . BASE_URL . '?act=login');
         exit();
     }
 
     public function formRegisterAdmin() {
-        // Sửa: Theo ảnh file là formRegister.php
-        require_once './views/auth/formRegister.php'; 
+        if (!isset($_SESSION['user_admin'])) {
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
+        }
+        require_once './views/auth/formRegister.php';
         unset($_SESSION['error']);
         unset($_SESSION['old_register_admin']);
     }
 
     public function postRegisterAdmin() {
+        if (!isset($_SESSION['user_admin'])) {
+            header('Location: ' . BASE_URL . '?act=login');
+            exit();
+        }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $ho_ten = $_POST['ho_ten'] ?? '';
             $email = $_POST['email'] ?? '';
@@ -83,7 +89,8 @@ class AdminTaiKhoanController
                 $check = $this->modelTaiKhoan->insertTaiKhoan($ho_ten, $email, $so_dien_thoai, 'Hà Nội', $hash_pass, 1, 1);
 
                 if ($check) {
-                    header("Location: " . BASE_URL_ADMIN . "?act=login-admin&registered=1");
+                    $_SESSION['success'] = 'Đã tạo tài khoản quản trị mới.';
+                    header('Location: ' . BASE_URL_ADMIN . '?act=list-tai-khoan-quan-tri');
                     exit();
                 } else {
                     $errors[] = "Email hoặc số điện thoại đã tồn tại.";

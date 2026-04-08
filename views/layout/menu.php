@@ -6,6 +6,9 @@ if (isset($chiTietGioHang) && is_array($chiTietGioHang)) {
         $soLuongGioHangHeader += (int) ($r['so_luong'] ?? 0);
     }
 }
+$showClientAuthPills = !isset($_SESSION['user_client']['email']) && !isset($_SESSION['user_admin']);
+$showAdminStorefrontMenu = isset($_SESSION['user_admin']) && !isset($_SESSION['user_client']['email']);
+$headerUserEmail = $_SESSION['user_client']['email'] ?? ($_SESSION['user_admin']['email'] ?? '');
 ?>
 <header class="header-area header-wide">
 
@@ -19,7 +22,7 @@ if (isset($chiTietGioHang) && is_array($chiTietGioHang)) {
                 <div class="col-lg-2">
                     <div class="logo">
 
-                        <a href="index.html">
+                        <a href="<?= BASE_URL ?>">
                             <img src="assets/img/logo/image.png" alt="Brand Logo">
                         </a>
                     </div>
@@ -75,28 +78,43 @@ if (isset($chiTietGioHang) && is_array($chiTietGioHang)) {
                             </form>
                         </div>
                         <div class="header-configure-area">
-                            <ul class="nav justify-content-end">
-                                <span class="mr-2 small text-muted">
-                                    <?php
-                                    if (isset($_SESSION['user_client']['email'])) {
-                                        echo htmlspecialchars($_SESSION['user_client']['email']);
-                                    } ?>
-                                </span>
+                            <ul class="nav justify-content-end align-items-center flex-nowrap client-header-toolbar">
+                                <?php if ($showClientAuthPills) { ?>
+                                <li class="d-none d-sm-flex align-items-center client-header-auth-pills flex-shrink-0">
+                                    <a class="client-pill-login" href="<?= BASE_URL . '?act=login' ?>"><i class="fa fa-user" aria-hidden="true"></i> <span class="label">Đăng nhập</span></a>
+                                    <a class="client-pill-register" href="<?= BASE_URL . '?act=dang-ky' ?>"><i class="fa fa-user-plus" aria-hidden="true"></i> <span class="label">Đăng ký</span></a>
+                                </li>
+                                <?php } ?>
+                                <?php if ($headerUserEmail !== '') { ?>
+                                <li class="mr-2 d-none d-md-block">
+                                    <span class="small text-muted text-truncate d-inline-block" style="max-width:140px;"><?= htmlspecialchars($headerUserEmail) ?></span>
+                                </li>
+                                <?php } ?>
+                                <?php if (isset($_SESSION['user_client']['email'])) { ?>
                                 <li class="user-hover">
-                                    <a href="#">
+                                    <a href="#" aria-label="Tài khoản">
                                         <i class="pe-7s-user"></i>
                                     </a>
-                                    <ul class="dropdown-list">
-                                        <?php
-                                        if (!isset($_SESSION['user_client']['email'])) { ?>
-                                            <li><a href="<?= BASE_URL . '?act=login' ?>">Đăng nhập</a></li>
-                                        <?php } else { ?>
-                                            <li><a href="<?= BASE_URL ?>?act=tai-khoan">Tài khoản khách hàng</a></li>
-                                            <li><a href="<?= BASE_URL . '?act=lich-su-mua-hang' ?>">Đơn hàng của tôi</a></li>
-                                            <li><a href="<?= BASE_URL ?>?act=dang-xuat">Đăng xuất</a></li>
+                                    <ul class="dropdown-list dropdown-list--account">
+                                        <?php if (isset($_SESSION['user_admin'])) { ?>
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL_ADMIN ?>"><i class="fa fa-shield dropdown-account-icon" aria-hidden="true"></i><span>Quản trị</span></a></li>
                                         <?php } ?>
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL ?>?act=tai-khoan"><i class="fa fa-user-circle dropdown-account-icon" aria-hidden="true"></i><span>Tài khoản khách hàng</span></a></li>
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL . '?act=lich-su-mua-hang' ?>"><i class="fa fa-list-alt dropdown-account-icon" aria-hidden="true"></i><span>Đơn hàng của tôi</span></a></li>
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL ?>?act=dang-xuat"><i class="fa fa-sign-out dropdown-account-icon" aria-hidden="true"></i><span>Đăng xuất</span></a></li>
                                     </ul>
                                 </li>
+                                <?php } elseif ($showAdminStorefrontMenu) { ?>
+                                <li class="user-hover">
+                                    <a href="#" aria-label="Quản trị viên">
+                                        <i class="pe-7s-user"></i>
+                                    </a>
+                                    <ul class="dropdown-list dropdown-list--account">
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL_ADMIN ?>"><i class="fa fa-shield dropdown-account-icon" aria-hidden="true"></i><span>Quản trị</span></a></li>
+                                        <li><a class="dropdown-user-link" href="<?= BASE_URL_ADMIN ?>?act=logout-admin"><i class="fa fa-sign-out dropdown-account-icon" aria-hidden="true"></i><span>Đăng xuất</span></a></li>
+                                    </ul>
+                                </li>
+                                <?php } ?>
                                 <li>
                                     <a href="wishlist.html">
                                         <i class="pe-7s-like"></i>
