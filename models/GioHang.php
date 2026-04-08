@@ -68,7 +68,7 @@ class GioHang
             ';
 
             $stmt = $this->conn->prepare($sql);
-            $stmt->execute([':cart_id' => $cartId, ':product_id    ' => $productId, ':quantity' => $so_luong]);
+            $stmt->execute([':cart_id' => $cartId, ':product_id' => $productId, ':quantity' => $so_luong]);
 
             return true;
         } catch (Exception $e) {

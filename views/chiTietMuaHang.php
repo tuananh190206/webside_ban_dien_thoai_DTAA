@@ -107,8 +107,13 @@
                             </table>
                         </div>
                         <?php if (donHangCoTheHuy($donHang['status_id'] ?? 0)) : ?>
-                        <div class="mt-3">
+                        <div class="mt-3 d-flex gap-2">
                             <a href="<?= BASE_URL ?>?act=huy-don-hang&id=<?= (int) $donHang['id'] ?>" class="btn btn-sqr" onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy đơn</a>
+                            <a href="<?= BASE_URL ?>?act=lich-su-mua-hang" class="btn btn-sqr bg-secondary border-secondary">Quay lại</a>
+                        </div>
+                        <?php else: ?>
+                        <div class="mt-3">
+                            <a href="<?= BASE_URL ?>?act=lich-su-mua-hang" class="btn btn-sqr bg-secondary border-secondary">Quay lại</a>
                         </div>
                         <?php endif; ?>
                         <!-- Cart Update Option -->
