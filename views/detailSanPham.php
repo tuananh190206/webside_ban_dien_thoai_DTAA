@@ -1,7 +1,7 @@
 <?php require_once 'layout/header.php'; ?>
 <?php require_once 'layout/menu.php'; ?>
+
 <main>
-    <!-- breadcrumb area start -->
     <div class="breadcrumb-area">
         <div class="container">
             <div class="row">
@@ -9,9 +9,8 @@
                     <div class="breadcrumb-wrap">
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a>
-                                </li>
-                                <li class="breadcrumb-item"><a href="shop.html">Sản phẩm</a></li>
+                                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="#">Sản phẩm</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Chi tiết sản phẩm</li>
                             </ul>
                         </nav>
@@ -20,34 +19,37 @@
             </div>
         </div>
     </div>
-    <!-- breadcrumb area end -->
+    <div class="container mt-3">
+        <?php if (isset($_SESSION['flash_loi_gio_hang'])) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Lỗi: </strong> <?= $_SESSION['flash_loi_gio_hang']; ?>
+                <?php unset($_SESSION['flash_loi_gio_hang']); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+    </div>
 
-    <!-- page main wrapper start -->
     <div class="shop-main-wrapper section-padding pb-0">
         <div class="container">
             <div class="row">
-                <!-- product details wrapper start -->
-                <div class="col-lg-12 order-1 order-lg-2">
-                    <!-- product details inner end -->
+                <div class="col-lg-12">
                     <div class="product-details-inner">
                         <div class="row">
                             <div class="col-lg-5">
                                 <div class="product-large-slider">
-                                    <?php foreach ($listAnhSanPham as $key => $anhSanPham): ?>
+                                    <?php foreach ($listAnhSanPham as $anhSanPham): ?>
                                         <div class="pro-large-img img-zoom">
-                                            <img src="<?= BASE_URL . $anhSanPham['image_url'] ?>"
-                                                alt="product-details" />
+                                            <img src="<?= BASE_URL . $anhSanPham['image_url'] ?>" alt="product-details" />
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
                                 <div class="pro-nav slick-row-10 slick-arrow-style">
-                                    <?php foreach ($listAnhSanPham as $key => $anhSanPham): ?>
+                                    <?php foreach ($listAnhSanPham as $anhSanPham): ?>
                                         <div class="pro-nav-thumb">
                                             <img src="<?= BASE_URL . $anhSanPham['image_url'] ?>" alt="product-details">
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-
                             </div>
                             <div class="col-lg-7">
                                 <div class="product-details-des">
@@ -55,58 +57,66 @@
                                         <a href="#" style="color: #333; font-weight: bold; font-size: 24px;">Danh mục: <?= $sanPham['category_name'] ?></a>
                                     </div>
                                     <h3 class="product-name"><?= $sanPham['name'] ?></h3>
+                                    
                                     <div class="ratings d-flex">
                                         <div class="pro-review">
                                             <?php $countComment = count($listBinhLuan); ?>
                                             <span><?= $countComment . ' bình luận' ?></span>
                                         </div>
                                     </div>
+
                                     <div class="price-box">
-                                        <?php if ($sanPham['discount_price']) { ?>
-                                            <span
-                                                class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
-                                            <span
-                                                class="price-old"><del><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></del></span>
-                                        <?php } else { ?>
-                                            <span
-                                                class="price-regular"><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></span>
-                                        <?php } ?>
+                                        <?php if ($sanPham['discount_price']) : ?>
+                                            <span class="price-regular"><?= formatPrice($sanPham['discount_price']) . ' VNĐ'; ?></span>
+                                            <span class="price-old"><del><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></del></span>
+                                        <?php else : ?>
+                                            <span class="price-regular"><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></span>
+                                        <?php endif; ?>
                                     </div>
+
                                     <div class="availability">
-                                        <i class="fa fa-check-circle"></i>
-                                        <span><?= $sanPham['quantity'] . ' trong kho' ?></span>
+                                        <i class="fa <?= $sanPham['quantity'] > 0 ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' ?>"></i>
+                                        <span class="<?= $sanPham['quantity'] > 0 ? '' : 'text-danger fw-bold' ?>">
+                                            <?= $sanPham['quantity'] > 0 ? ($sanPham['quantity'] . ' sản phẩm trong kho') : 'Hết hàng' ?>
+                                        </span>
                                     </div>
+
                                     <p class="pro-desc"><?= $sanPham['description'] ?></p>
-                                    <form action="<?=BASE_URL .'?act=them-gio-hang'?>"method="POST">
+
+                                    <form action="<?= BASE_URL . '?act=add-gio-hang' ?>" method="POST">
                                         <div class="quantity-cart-box d-flex align-items-center">
                                             <h6 class="option-title">Số lượng:</h6>
                                             <div class="quantity">
                                                 <input type="hidden" name="san_pham_id" value="<?= $sanPham['id'] ?>">
-                                                <div class="pro-qty"><input type="text" value="1" name="so_luong"></div>
+                                                <div class="pro-qty">
+                                                    <input type="text" value="<?= $sanPham['quantity'] > 0 ? 1 : 0 ?>" name="so_luong">
+                                                </div>
                                             </div>
                                             <div class="action_link">
-                                               <button class="btn btn-cart2" type="submit">Thêm vào giỏ hàng</button>
-                                               <a href="<?= BASE_URL ?>" class="btn btn-cart2 bg-secondary border-secondary ml-2">Quay lại</a>
-                                          </div>
+                                                <?php if ($sanPham['quantity'] > 0) : ?>
+                                                    <button class="btn btn-cart2" type="submit">Thêm vào giỏ hàng</button>
+                                                <?php else : ?>
+                                                    <button class="btn btn-cart2 bg-secondary border-secondary" type="button" disabled>Hết hàng</button>
+                                                <?php endif; ?>
+                                                <a href="<?= BASE_URL ?>" class="btn btn-cart2 bg-dark border-dark ml-2">Quay lại</a>
+                                            </div>
                                         </div>
+                                        <?php if ($sanPham['quantity'] <= 0) : ?>
+                                            <p class="text-danger mt-2"><i>* Sản phẩm này hiện đã hết hàng, vui lòng quay lại sau.</i></p>
+                                        <?php endif; ?>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- product details inner end -->
 
-                    <!-- product details reviews start -->
                     <div class="product-details-reviews section-padding pb-0">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="product-review-info">
                                     <ul class="nav review-tab">
-
                                         <li>
-                                            <a class="active" data-bs-toggle="tab" href="#tab_three">Bình luận
-                                                (<?= $countComment ?>)</a>
+                                            <a class="active" data-bs-toggle="tab" href="#tab_three">Bình luận (<?= $countComment ?>)</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content reviews-tab">
@@ -117,133 +127,74 @@
                                                         <img src="<?= $binhLuan['avatar'] ?>" alt="Avatar">
                                                     </div>
                                                     <div class="review-box">
-
                                                         <div class="post-author">
-                                                            <p><span>Khách hàng-</span><?= $binhLuan['review_date'] ?></p>
+                                                            <p><span><?= $binhLuan['full_name'] ?? 'Khách hàng' ?> - </span><?= $binhLuan['review_date'] ?></p>
                                                         </div>
                                                         <p><?= $binhLuan['noi_dung'] ?></p>
                                                     </div>
                                                 </div>
                                             <?php endforeach; ?>
+                                            
                                             <form action="#" class="review-form">
                                                 <div class="form-group row">
                                                     <div class="col">
-                                                        <label class="col-form-label"><span class="text-danger">*</span>
-                                                            Bình luận của bạn</label>
+                                                        <label class="col-form-label"><span class="text-danger">*</span> Bình luận của bạn</label>
                                                         <textarea class="form-control" required></textarea>
-
                                                     </div>
                                                 </div>
-
                                                 <div class="buttons">
-                                                    <button class="btn btn-sqr" type="submit">Bình luận</button>
+                                                    <button class="btn btn-sqr" type="submit">Gửi bình luận</button>
                                                 </div>
-                                            </form> <!-- end of review-form -->
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- product details reviews end -->
                 </div>
-                <!-- product details wrapper end -->
             </div>
         </div>
     </div>
-    <!-- page main wrapper end -->
 
-    <!-- related products area start -->
     <section class="related-products section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <!-- section title start -->
                     <div class="section-title text-center">
                         <h2 class="title">Sản phẩm liên quan</h2>
                     </div>
-                    <!-- section title start -->
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="product-carousel-4 slick-row-10 slick-arrow-style">
-                        <!-- product item start -->
-                        <?php foreach ($listSanPhamCungDanhMuc as $key => $sanPham): ?>
-
+                        <?php foreach ($listSanPhamCungDanhMuc as $spLienQuan): ?>
                             <div class="product-item">
                                 <figure class="product-thumb">
-                                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
-                                        <img class="pri-img" src="<?= $sanPham['image'] ?>" alt="product">
-                                        <img class="sec-img" src="<?= $sanPham['image'] ?>" alt="product">
+                                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $spLienQuan['id']; ?>">
+                                        <img class="pri-img" src="<?= $spLienQuan['image'] ?>" alt="product">
+                                        <img class="sec-img" src="<?= $spLienQuan['image'] ?>" alt="product">
                                     </a>
-                                    <div class="product-badge">
-                                        <?php
-                                        $ngayNhap = new DateTime($sanPham['import_date']);
-                                        $ngayHienTai = new DateTime();
-                                        $tinhNgay = $ngayHienTai->diff($ngayNhap);
-
-                                        if ($tinhNgay->days <= 7) {
-                                            ?>
-                                            <div class="product-label new">
-                                                <span>Mới</span>
-                                            </div>
-                                            <?php
-                                        }
-                                        ?>
-
-                                        <?php
-                                        if ($sanPham['discount_price']) {
-                                            ?>
-
-                                            <div class="product-label discount">
-                                                <span>Giảm giá sâu</span>
-                                            </div>
-
-                                            <?php
-                                        }
-                                        ?>
-                                    </div>
                                     <div class="cart-hover">
                                         <button class="btn btn-cart">Xem chi tiết</button>
                                     </div>
                                 </figure>
                                 <div class="product-caption text-center">
-
                                     <h6 class="product-name">
-                                        <a
-                                            href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>"><?= $sanPham['name'] ?></a>
+                                        <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $spLienQuan['id']; ?>"><?= $spLienQuan['name'] ?></a>
                                     </h6>
                                     <div class="price-box">
-                                        <?php if ($sanPham['discount_price']) { ?>
-                                            <span
-                                                class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
-                                            <span
-                                                class="price-old"><del><?= formatPrice($sanPham['price']) . 'VNĐ'; ?></del></span>
-                                        <?php } else { ?>
-                                            <span
-                                                class="price-regular"><?= formatPrice($sanPham['discount_price']) . 'VNĐ'; ?></span>
-                                        <?php } ?>
+                                        <span class="price-regular"><?= formatPrice($spLienQuan['discount_price'] ?: $spLienQuan['price']) ?> VNĐ</span>
                                     </div>
                                 </div>
                             </div>
-                            <!-- product item end -->
                         <?php endforeach; ?>
-
-                        <!-- product item end -->
-
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- related products area end -->
 </main>
-<!-- Quick view modal start -->
-
-<!-- Quick view modal end -->
-
-
 
 <?php require_once 'layout/footer.php'; ?>

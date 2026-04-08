@@ -71,5 +71,25 @@ class SanPham {
             echo "Lỗi: " . $e->getMessage();
         }
     }
+    public function truSoLuongKho($san_pham_id, $so_luong_mua)
+{
+    try {
+        // Câu lệnh SQL trừ số lượng sản phẩm trong kho
+        $sql = "UPDATE products 
+                SET quantity = quantity - :so_luong_mua 
+                WHERE id = :id";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            ':so_luong_mua' => $so_luong_mua,
+            ':id' => $san_pham_id
+        ]);
+
+        return true;
+    } catch (Exception $e) {
+        echo "Lỗi Model: " . $e->getMessage();
+        return false;
+    }
+}
 }
 ?>
