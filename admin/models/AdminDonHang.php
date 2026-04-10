@@ -78,31 +78,77 @@ class AdminDonHang {
     }
 
     // 5. Cập nhật thông tin đơn hàng
-    public function updateDonHang($id, $receiver_name, $receiver_phone, $receiver_email, $receiver_address, $note, $status_id){
-        try {
-            $sql = "UPDATE orders SET 
-                        receiver_name = :receiver_name,
-                        receiver_phone = :receiver_phone,
-                        receiver_email = :receiver_email,
-                        receiver_address = :receiver_address,
-                        note = :note,
-                        status_id = :status_id
-                    WHERE id = :id";
+public function updateDonHang($id, $note, $status_id){
+    try {
+        // Lấy trạng thái hiện tại
+        $sqlCheck = "SELECT status_id FROM orders WHERE id = :id";
+        $stmtCheck = $this->conn->prepare($sqlCheck);
+        $stmtCheck->execute([':id' => $id]);
+        $current = $stmtCheck->fetch();
 
-            $stmt = $this->conn->prepare($sql);
-            return $stmt->execute([
-                ':receiver_name' => $receiver_name,
-                ':receiver_phone' => $receiver_phone,
-                ':receiver_email' => $receiver_email,
-                ':receiver_address' => $receiver_address,
-                ':note' => $note,
-                ':status_id' => $status_id,
-                ':id' => $id,
-            ]);
-        } catch(Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
+        if (!$current) return false;
+
+        $currentStatus = (int)$current['status_id'];
+
+        // ❌ Nếu đã hủy hoặc hoàn thành → khóa
+        if (in_array($currentStatus, [5, 6])) {
+            return false;
         }
+
+        // ❌ Không cho quay ngược
+        if ($status_id < $currentStatus) {
+            return false;
+        }
+
+        // ❌ Không cho hủy nếu đã xác nhận
+        if ($status_id == 5 && $currentStatus >= 2) {
+            return false;
+        }
+
+        // ===============================
+        // 🔥 THÊM LOGIC CỘNG KHO KHI HỦY
+        // ===============================
+        if ($status_id == 5 && $currentStatus != 5) {
+
+            // Lấy danh sách sản phẩm trong đơn
+            $sqlItems = "SELECT * FROM order_items WHERE order_id = :id";
+            $stmtItems = $this->conn->prepare($sqlItems);
+            $stmtItems->execute([':id' => $id]);
+            $items = $stmtItems->fetchAll();
+
+            foreach ($items as $item) {
+                $sqlUpdate = "UPDATE products 
+                              SET quantity = quantity + :qty,
+                                  status = 'in_stock'
+                              WHERE id = :pid";
+
+                $stmtUpdate = $this->conn->prepare($sqlUpdate);
+                $stmtUpdate->execute([
+                    ':qty' => $item['quantity'],
+                    ':pid' => $item['product_id']
+                ]);
+            }
+        }
+
+        // ===============================
+        // UPDATE đơn hàng
+        // ===============================
+        $sql = "UPDATE orders SET 
+                    note = :note,
+                    status_id = :status_id
+                WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':note' => $note,
+            ':status_id' => $status_id,
+            ':id' => $id,
+        ]);
+
+    } catch(Exception $e) {
+        echo "Lỗi: " . $e->getMessage();
     }
+}
     // Trong file models/AdminDonHang.php (hoặc class AdminDonHang)
 public function getDonHangFromKhachHang($id) {
     try {

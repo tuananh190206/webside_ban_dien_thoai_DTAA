@@ -8,17 +8,20 @@ class AdminDonHangController
         $this->modelDonHang = new AdminDonHang();
     }
 
+    // 📌 1. Danh sách đơn hàng
     public function danhSachDonHang()
     {
         $listDonHang = $this->modelDonHang->getAllDonHang();
         require_once './views/donhang/listDonHang.php';
     }
 
-    public function detailDonHang(){
-        $id = $_GET['id_don_hang'];
+    // 📌 2. Chi tiết đơn hàng
+    public function detailDonHang()
+    {
+        $id = $_GET['id_don_hang'] ?? 0;
+
         $donHang = $this->modelDonHang->getDetailDonHang($id);
         $sanPhamDonHang = $this->modelDonHang->getListSpDonHang($id);
-        $listTrangThaiDonHang = $this->modelDonHang->getAllTrangThaiDonHang();
 
         if ($donHang) {
             require_once './views/donhang/detailDonHang.php';
@@ -28,49 +31,94 @@ class AdminDonHangController
         }
     }
 
+    // 📌 3. Form sửa (CHỈ sửa trạng thái)
     public function formEditDonHang()
     {
-        $id = $_GET['id_don_hang'];
+        $id = $_GET['id_don_hang'] ?? 0;
+
         $donHang = $this->modelDonHang->getDetailDonHang($id);
         $listTrangThaiDonHang = $this->modelDonHang->getAllTrangThaiDonHang();
 
-        if ($donHang) {
-            require_once './views/donhang/editDonHang.php';
-            if(function_exists('deleteSessionError')) deleteSessionError();
-        } else {
+        if (!$donHang) {
             header("Location: " . BASE_URL_ADMIN . '?act=don-hang');
             exit();
         }
+
+        // ❌ Nếu đã hủy hoặc hoàn thành → không cho vào form
+        if (in_array($donHang['status_id'], [5, 6])) {
+            $_SESSION['error'] = ['logic' => 'Đơn hàng đã hoàn tất hoặc bị hủy, không thể chỉnh sửa'];
+            header("Location: " . BASE_URL_ADMIN . '?act=don-hang');
+            exit();
+        }
+
+        require_once './views/donhang/editDonHang.php';
+
+        if (function_exists('deleteSessionError')) {
+            deleteSessionError();
+        }
     }
 
+    // 📌 4. Xử lý update trạng thái
     public function postEditDonHang()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $don_hang_id = $_POST['don_hang_id'] ?? '';
-            $receiver_name = $_POST['receiver_name'] ?? '';
-            $receiver_phone = $_POST['receiver_phone'] ?? '';
-            $receiver_email = $_POST['receiver_email'] ?? '';
-            $receiver_address = $_POST['receiver_address'] ?? '';
+
+            $id = $_POST['don_hang_id'] ?? 0;
+            $status_id = $_POST['status_id'] ?? 0;
             $note = $_POST['note'] ?? '';
-            $status_id = $_POST['status_id'] ?? '';
 
             $errors = [];
-            if (empty($receiver_name)) $errors['receiver_name'] = 'Tên người nhận không được để trống';
-            if (empty($receiver_phone)) $errors['receiver_phone'] = 'Số điện thoại không được để trống';
-            if (empty($status_id)) $errors['status_id'] = 'Vui lòng chọn trạng thái đơn hàng';
+
+            if (empty($status_id)) {
+                $errors['status_id'] = 'Vui lòng chọn trạng thái';
+            }
+
+            // Lấy đơn hàng hiện tại
+            $donHang = $this->modelDonHang->getDetailDonHang($id);
+
+            if (!$donHang) {
+                $errors['logic'] = 'Đơn hàng không tồn tại';
+            } else {
+
+                $current = (int)$donHang['status_id'];
+
+                // ❌ Đã hủy hoặc hoàn thành → khóa
+                if (in_array($current, [5, 6])) {
+                    $errors['logic'] = 'Đơn hàng đã kết thúc, không thể sửa';
+                }
+
+                // ❌ Không cho quay ngược
+                if ($status_id < $current) {
+                    $errors['logic'] = 'Không thể quay ngược trạng thái';
+                }
+
+                // ❌ Không cho hủy nếu đã xác nhận
+                if ($status_id == 5 && $current >= 2) {
+                    $errors['logic'] = 'Không thể hủy đơn đã xác nhận';
+                }
+            }
 
             $_SESSION['error'] = $errors;
-            
-            if (empty($errors)) {
-                $this->modelDonHang->updateDonHang($don_hang_id, $receiver_name, $receiver_phone, $receiver_email, $receiver_address, $note, $status_id);
-                header("Location:" . BASE_URL_ADMIN . '?act=don-hang');
-                exit();
-            } else {
+
+            // ❌ Có lỗi → quay lại form
+            if (!empty($errors)) {
                 $_SESSION['flash'] = true;
-                header("Location:" . BASE_URL_ADMIN . '?act=form-sua-don-hang&id_don_hang=' . $don_hang_id);
+                header("Location:" . BASE_URL_ADMIN . '?act=form-sua-don-hang&id_don_hang=' . $id);
                 exit();
             }
+
+            // ✅ Update
+            $result = $this->modelDonHang->updateDonHang($id, $note, $status_id);
+
+            if (!$result) {
+                $_SESSION['error']['logic'] = 'Cập nhật thất bại';
+                header("Location:" . BASE_URL_ADMIN . '?act=form-sua-don-hang&id_don_hang=' . $id);
+                exit();
+            }
+
+            // ✅ Thành công
+            header("Location:" . BASE_URL_ADMIN . '?act=don-hang');
+            exit();
         }
     }
-    
 }

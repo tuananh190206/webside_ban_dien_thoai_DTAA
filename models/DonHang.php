@@ -35,24 +35,26 @@ class DonHang
         }
     }
 
-    public function addChiTietDonHang($orderId, $productId, $price, $quantity, $totalPrice)
-    {
-        try {
-            $sql = "INSERT INTO order_items (order_id, product_id, price, quantity, total_price)
-            VALUES (:order_id, :product_id, :price, :quantity, :total_price)";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([
-                ':order_id' => $orderId,
-                ':product_id' => $productId,
-                ':price' => $price,
-                ':quantity' => $quantity,
-                ':total_price' => $totalPrice
-            ]);
-            return true;
-        } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
-        }
+ public function addChiTietDonHang($orderId, $productId, $price, $quantity, $totalPrice)
+{
+    try {
+        $sql = "INSERT INTO order_items (order_id, product_id, price, quantity, total_price)
+                VALUES (:order_id, :product_id, :price, :quantity, :total_price)";
+        $stmt = $this->conn->prepare($sql);
+        $check = $stmt->execute([
+            ':order_id'    => $orderId,
+            ':product_id'  => $productId,
+            ':price'       => $price,
+            ':quantity'    => $quantity,
+            ':total_price' => $totalPrice
+        ]);
+        return $check;
+    } catch (PDOException $e) { // Sử dụng PDOException để bắt lỗi SQL
+        // Ghi log lỗi để kiểm tra thay vì echo ra màn hình làm hỏng giao diện
+        error_log("Lỗi SQL Chi tiết đơn hàng: " . $e->getMessage());
+        return false;
     }
+}
 
     public function getDonHangFromUser($userId)
     {

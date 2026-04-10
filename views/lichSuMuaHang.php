@@ -30,34 +30,36 @@
                         <!-- Cart Table Area -->
                         <div class="cart-table table-responsive">
                             <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Mã đơn hàng</th>
-                                        <th>Ngày đặt</th>
-                                        <th>Tổng tiền</th>
-                                        <th>Phương thức thanh toán</th>
-                                        <th>Trạng thái đơn hàng</th>
-                                        <th>Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($donHangs as $donhang) : ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($donhang['order_code'] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($donhang['order_date'] ?? '') ?></td>
-                                            <td><?= formatPrice($donhang['total_amount'] ?? 0) ?></td>
-                                            <td><?= htmlspecialchars($phuongThucThanhToan[$donhang['payment_method_id'] ?? 0] ?? '') ?></td>
-                                            <td><?= htmlspecialchars($trangThaiDonHang[$donhang['status_id'] ?? 0] ?? '') ?></td>
-                                            <td>
-                                                <a href="<?= BASE_URL ?>?act=chi-tiet-mua-hang&id=<?= $donhang['id'] ?>" class="btn btn-sqr">chi tiết đơn hàng</a>
-                                                <?php if (donHangCoTheHuy($donhang['status_id'] ?? 0)) : ?>
-                                                    <a href="<?= BASE_URL ?>?act=huy-don-hang&id=<?= $donhang['id'] ?>" class="btn btn-sqr" onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy đơn</a>
-                                                <?php endif; ?>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+    <thead>
+        <tr>
+            <th>Mã đơn hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Phương thức thanh toán</th>
+            <th>Trạng thái đơn hàng</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($donHangs as $donhang) : ?>
+            <tr>
+                <td><?= htmlspecialchars($donhang['order_code'] ?? '') ?></td>
+                <td><?= htmlspecialchars($donhang['order_date'] ?? '') ?></td>
+                <td><?= formatPrice($donhang['total_amount'] ?? 0) ?></td>
+                <td><?= htmlspecialchars($phuongThucThanhToan[$donhang['payment_method_id'] ?? 0] ?? '') ?></td>
+                <td><?= htmlspecialchars($trangThaiDonHang[$donhang['status_id'] ?? 0] ?? '') ?></td>
+                <td>
+                    <a href="<?= BASE_URL ?>?act=chi-tiet-mua-hang&id=<?= $donhang['id'] ?>" class="btn btn-sqr">Chi tiết</a>
+                    <?php if (donHangCoTheHuy($donhang['status_id'] ?? 0)) : ?>
+                        <a href="<?= BASE_URL ?>?act=huy-don-hang&id=<?= $donhang['id'] ?>" 
+                           class="btn btn-sqr" 
+                           onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy đơn</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
                         </div>
                         <!-- Cart Update Option -->
                         <div class="mt-3">

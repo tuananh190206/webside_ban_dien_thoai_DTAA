@@ -94,7 +94,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="copyright-text text-center">
-                        <p>&copy; 2025 <b>Website điện thoại</b><b>DTAA</b></a></p>
+                        <p>&copy; 2026 <b>Website điện thoại</b><b>DTAA</b></a></p>
                     </div>
                 </div>
             </div>
