@@ -70,11 +70,13 @@
             <td><?= $sanPham['quantity'] ?></td>
             <td><span class="text-blue-600 font-medium"><?= $sanPham['ten_danh_muc'] ?></span></td>
             <td>
-              <?php if($sanPham['status'] == 1): ?>
-                <span class="badge badge-success">Còn hàng</span>
-              <?php else: ?>
-                <span class="badge badge-danger">Dừng bán</span>
-              <?php endif; ?>
+            <?php if ($sanPham['quantity'] <= 0): ?>
+    <span class="badge badge-danger" style="background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; border: 1px solid #f5c6cb;">Hết hàng</span>
+  <?php elseif ($sanPham['status'] == 1): ?>
+    <span class="badge badge-success" style="background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; border: 1px solid #c3e6cb;">Còn hàng</span>
+  <?php else: ?>
+    <span class="badge badge-secondary" style="background-color: #e2e3e5; color: #383d41; padding: 4px 8px; border-radius: 4px; border: 1px solid #d6d8db;">Dừng bán</span>
+  <?php endif; ?>
             </td>
            <td>
   <div class="flex gap-2 justify-center">
