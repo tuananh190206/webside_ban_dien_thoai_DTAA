@@ -161,7 +161,6 @@ public function postEditSanPham()
                 $quantity, $import_date, $category_id, 
                 $status, $description, $file_thumb
             );
-<<<<<<< ducdat
 
             // Xử lý biến thể (Phiên bản, màu sắc...)
             // 1. Xóa các biến thể đã bị người dùng nhấn xóa
@@ -223,8 +222,7 @@ public function postEditSanPham()
             $_SESSION['flash'] = true;
             header("Location:" . BASE_URL_ADMIN . '?act=form-sua-san-pham&id_san_pham=' . $product_id);
             exit();
-=======
->>>>>>> main
+
         }
 
         header("Location: " . BASE_URL_ADMIN . '?act=san-pham');
