@@ -12,24 +12,30 @@ class AdminBaoCaoThongKeController
 
     public function home()
     {
+        // Lấy ngày bắt đầu và ngày kết thúc từ request
+        $startDate = $_GET['start_date'] ?? null;
+        $endDate = $_GET['end_date'] ?? null;
+
         // 1. Lấy tổng doanh thu từ các đơn hàng đã giao (status_id = 4)
-        $tongDoanhThu = $this->modelThongKe->getTongDoanhThu();
+        $tongDoanhThu = $this->modelThongKe->getTongDoanhThu($startDate, $endDate);
 
         // 2. Lấy tổng số lượng đơn hàng trong hệ thống
-        $tongDonHang = $this->modelThongKe->getTongDonHang();
+        $tongDonHang = $this->modelThongKe->getTongDonHang($startDate, $endDate);
 
         // 3. Lấy tổng số lượng khách hàng (role_id = 2)
-        $tongKhachHang = $this->modelThongKe->getTongKhachHang();
+        $tongKhachHang = $this->modelThongKe->getTongKhachHang($startDate, $endDate);
 
         // 4. Lấy tổng số sản phẩm đang kinh doanh
-        // (Bạn nên bổ sung hàm getTongSanPham vào Model nếu muốn hiển thị)
         $tongSanPham = $this->modelThongKe->getTongSanPham();
 
-        // 5. Lấy danh sách 5 đơn hàng mới nhất để hiển thị bảng
-        $listDonHangMoi = $this->modelThongKe->getDonHangMoiNhat();
+        // 5. Lấy danh sách đơn hàng
+        if ($startDate && $endDate) {
+            $listDonHangMoi = $this->modelThongKe->getDonHangTheoKhoangThoiGian($startDate, $endDate);
+        } else {
+            $listDonHangMoi = $this->modelThongKe->getDonHangMoiNhat();
+        }
 
         // 6. Truyền dữ liệu sang View
-        // Đường dẫn file view dựa trên cấu trúc thư mục của bạn
         require_once './views/home.php';
     }
 

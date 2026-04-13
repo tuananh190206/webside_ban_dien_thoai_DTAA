@@ -7,26 +7,43 @@ class AdminBaoCaoThongKe {
     }
 
     // Thống kê tổng doanh thu từ bảng 'orders'
-    public function getTongDoanhThu() {
-        // Trong SQL của bạn, cột là 'total_amount', trạng thái 'Đã giao' là id = 4
+    public function getTongDoanhThu($startDate = null, $endDate = null) {
         $sql = "SELECT SUM(total_amount) as total FROM orders WHERE status_id = 4"; 
+        if ($startDate && $endDate) {
+            $sql .= " AND order_date BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59'";
+        }
         $result = $this->conn->query($sql)->fetch();
         return $result['total'] ?? 0;
     }
 
     // Thống kê tổng số đơn hàng từ bảng 'orders'
-    public function getTongDonHang() {
-        $sql = "SELECT COUNT(*) as total FROM orders";
+    public function getTongDonHang($startDate = null, $endDate = null) {
+        $sql = "SELECT COUNT(*) as total FROM orders WHERE 1=1";
+        if ($startDate && $endDate) {
+            $sql .= " AND order_date BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59'";
+        }
         $result = $this->conn->query($sql)->fetch();
         return $result['total'] ?? 0;
     }
 
     // Thống kê tổng số khách hàng từ bảng 'users'
-    public function getTongKhachHang() {
-        // Trong SQL của bạn, bảng là 'users', role_id = 2 là khách hàng
+    public function getTongKhachHang($startDate = null, $endDate = null) {
         $sql = "SELECT COUNT(*) as total FROM users WHERE role_id = 2";
+        if ($startDate && $endDate) {
+            $sql .= " AND created_at BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59'";
+        }
         $result = $this->conn->query($sql)->fetch();
         return $result['total'] ?? 0;
+    }
+
+    // Lấy danh sách đơn hàng trong khoảng thời gian
+    public function getDonHangTheoKhoangThoiGian($startDate, $endDate) {
+        $sql = "SELECT orders.*, users.full_name 
+                FROM orders 
+                JOIN users ON orders.user_id = users.id 
+                WHERE orders.order_date BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59'
+                ORDER BY orders.id DESC";
+        return $this->conn->query($sql)->fetchAll();
     }
 
     // Lấy 5 đơn hàng mới nhất

@@ -30,11 +30,39 @@
     </div>
 
     <div class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Bộ lọc ngày -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+            <form action="<?= BASE_URL_ADMIN ?>" method="GET" class="flex flex-wrap items-end gap-4">
+                <input type="hidden" name="act" value="/">
+                <div>
+                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
+                    <input type="date" name="start_date" id="start_date" value="<?= $_GET['start_date'] ?? '' ?>" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm">
+                </div>
+                <div>
+                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
+                    <input type="date" name="end_date" id="end_date" value="<?= $_GET['end_date'] ?? '' ?>" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm">
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-150 ease-in-out">
+                        Lọc báo cáo
+                    </button>
+                    <a href="<?= BASE_URL_ADMIN ?>" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-md transition duration-150 ease-in-out">
+                        Làm mới
+                    </a>
+                </div>
+                <?php if (isset($_GET['start_date']) && isset($_GET['end_date'])): ?>
+                    <div class="ml-auto self-center text-sm text-gray-500 italic">
+                        Đang hiển thị dữ liệu từ <strong><?= date('d/m/Y', strtotime($_GET['start_date'])) ?></strong> đến <strong><?= date('d/m/Y', strtotime($_GET['end_date'])) ?></strong>
+                    </div>
+                <?php endif; ?>
+            </form>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="stat-card shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-500 font-medium">Tổng doanh thu</p>
+                        <p class="text-sm text-gray-500 font-medium">Doanh thu (Đã giao)</p>
                         <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongDoanhThu, 0, ',', '.') ?>đ</h2>
                     </div>
                     <div class="icon-box bg-green-100 text-green-600">
@@ -58,7 +86,7 @@
             <div class="stat-card shadow-sm">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-500 font-medium">Khách hàng</p>
+                        <p class="text-sm text-gray-500 font-medium">Khách hàng mới</p>
                         <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongKhachHang) ?></h2>
                     </div>
                     <div class="icon-box bg-orange-100 text-orange-600">
@@ -66,11 +94,25 @@
                     </div>
                 </div>
             </div>
+
+            <div class="stat-card shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Sản phẩm</p>
+                        <h2 class="text-2xl font-bold text-gray-800 mt-1"><?= number_format($tongSanPham) ?></h2>
+                    </div>
+                    <div class="icon-box bg-purple-100 text-purple-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-gray-700 uppercase text-sm tracking-wider">Đơn hàng mới nhất</h3>
+                <h3 class="font-bold text-gray-700 uppercase text-sm tracking-wider">
+                    <?= (isset($_GET['start_date']) && isset($_GET['end_date'])) ? 'Danh sách đơn hàng trong khoảng thời gian' : 'Đơn hàng mới nhất' ?>
+                </h3>
                 <a href="<?= BASE_URL_ADMIN . '?act=don-hang' ?>" class="text-blue-500 text-xs font-bold hover:underline">XEM TẤT CẢ</a>
             </div>
             <table class="w-full text-left">
