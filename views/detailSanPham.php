@@ -107,7 +107,7 @@
 
                                     <p class="pro-desc"><?= $sanPham['description'] ?></p>
 
-                                    <form action="<?= BASE_URL . '?act=add-gio-hang' ?>" method="POST">
+                                    <form action="<?= BASE_URL . '?act=them-gio-hang' ?>" method="POST">
                                         <div class="quantity-cart-box d-flex align-items-center">
                                             <h6 class="option-title">Số lượng:</h6>
                                             <div class="quantity">
