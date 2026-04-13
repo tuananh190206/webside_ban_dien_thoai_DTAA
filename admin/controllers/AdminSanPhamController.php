@@ -66,6 +66,41 @@ class AdminSanPhamController
                     }
                 }
 
+                // Xử lý thêm biến thể (Màu sắc, Dung lượng)
+                $v_colors = $_POST['variant_color'] ?? [];
+                $v_capacities = $_POST['variant_capacity'] ?? [];
+                $v_prices = $_POST['variant_price'] ?? [];
+                $v_discount_prices = $_POST['variant_discount_price'] ?? [];
+                $v_stocks = $_POST['variant_stock'] ?? [];
+                $v_images = $_FILES['variant_image'] ?? null;
+
+                if (!empty($v_colors)) {
+                    foreach ($v_colors as $index => $color) {
+                        $capacity = $v_capacities[$index] ?? '';
+                        $v_price = !empty($v_prices[$index]) ? $v_prices[$index] : $price;
+                        $v_discount = !empty($v_discount_prices[$index]) ? $v_discount_prices[$index] : null;
+                        $v_stock = !empty($v_stocks[$index]) ? $v_stocks[$index] : 0;
+                        
+                        $v_image_path = $file_thumb; // Mặc định sử dụng ảnh sản phẩm chính
+                        if (isset($v_images['name'][$index]) && $v_images['error'][$index] == 0) {
+                            $file = [
+                                'name' => $v_images['name'][$index],
+                                'type' => $v_images['type'][$index],
+                                'tmp_name' => $v_images['tmp_name'][$index],
+                                'error' => $v_images['error'][$index],
+                                'size' => $v_images['size'][$index]
+                            ];
+                            $upload_variant = uploadFile($file, './uploads/');
+                            if ($upload_variant) {
+                                $v_image_path = $upload_variant;
+                            }
+                        }
+
+                        // Lưu vào CSDL
+                        $this->modelSanPham->insertProductVariant($product_id, $capacity, $color, $v_price, $v_discount, $v_stock, $v_image_path);
+                    }
+                }
+
                 header("Location:" . BASE_URL_ADMIN . '?act=san-pham');
                 exit();
             } else {
@@ -82,6 +117,7 @@ class AdminSanPhamController
         $sanPham = $this->modelSanPham->getDetailSanPham($id);
         $listAnhSanPham = $this->modelSanPham->getListAnhSanPham($id);
         $listDanhMuc = $this->modelDanhMuc->getAllCategory();
+        $listVariants = $this->modelSanPham->getProductVariants($id);
 
         if ($sanPham) {
             require_once './views/sanpham/editSanPham.php';
@@ -125,6 +161,70 @@ public function postEditSanPham()
                 $quantity, $import_date, $category_id, 
                 $status, $description, $file_thumb
             );
+<<<<<<< ducdat
+
+            // Xử lý biến thể (Phiên bản, màu sắc...)
+            // 1. Xóa các biến thể đã bị người dùng nhấn xóa
+            $deleted_variants_str = $_POST['deleted_variants'] ?? '';
+            if (!empty($deleted_variants_str)) {
+                $deleted_ids = explode(',', $deleted_variants_str);
+                foreach ($deleted_ids as $did) {
+                    if (!empty($did) && is_numeric($did)) {
+                        $this->modelSanPham->destroyProductVariant($did);
+                    }
+                }
+            }
+
+            // 2. Thêm mới / Cập nhật biến thể
+            $v_ids = $_POST['variant_id'] ?? [];
+            $v_colors = $_POST['variant_color'] ?? [];
+            $v_capacities = $_POST['variant_capacity'] ?? [];
+            $v_prices = $_POST['variant_price'] ?? [];
+            $v_discounts = $_POST['variant_discount_price'] ?? [];
+            $v_stocks = $_POST['variant_stock'] ?? [];
+            $v_old_images = $_POST['variant_old_image'] ?? [];
+            $v_images = $_FILES['variant_image'] ?? null;
+
+            foreach ($v_ids as $index => $v_id) {
+                if (empty($v_colors[$index])) continue;
+                
+                $capacity = $v_capacities[$index] ?? '';
+                $color = $v_colors[$index];
+                $v_price = !empty($v_prices[$index]) ? $v_prices[$index] : $price;
+                $v_discount = !empty($v_discounts[$index]) ? $v_discounts[$index] : null;
+                $v_stock = !empty($v_stocks[$index]) ? $v_stocks[$index] : 0;
+                $v_image_path = !empty($v_old_images[$index]) ? $v_old_images[$index] : $new_file;
+
+                if (isset($v_images['name'][$index]) && $v_images['error'][$index] == 0) {
+                    $file = [
+                        'name' => $v_images['name'][$index],
+                        'type' => $v_images['type'][$index],
+                        'tmp_name' => $v_images['tmp_name'][$index],
+                        'error' => $v_images['error'][$index],
+                        'size' => $v_images['size'][$index]
+                    ];
+                    $upload_var = uploadFile($file, './uploads/');
+                    if ($upload_var) {
+                        $v_image_path = $upload_var;
+                    }
+                }
+
+                if ($v_id === 'new') {
+                    $this->modelSanPham->insertProductVariant($product_id, $capacity, $color, $v_price, $v_discount, $v_stock, $v_image_path);
+                } else {
+                    $this->modelSanPham->updateProductVariant($v_id, $capacity, $color, $v_price, $v_discount, $v_stock, $v_image_path);
+                }
+            }
+
+            header("Location:" . BASE_URL_ADMIN . '?act=san-pham');
+            exit();
+        } else {
+            $_SESSION['error'] = $errors;
+            $_SESSION['flash'] = true;
+            header("Location:" . BASE_URL_ADMIN . '?act=form-sua-san-pham&id_san_pham=' . $product_id);
+            exit();
+=======
+>>>>>>> main
         }
 
         header("Location: " . BASE_URL_ADMIN . '?act=san-pham');
@@ -197,6 +297,7 @@ public function postEditSanPham()
     // 2. Lấy dữ liệu từ Model
     $sanPham = $this->modelSanPham->getDetailSanPham($id);
     $listAnhSanPham = $this->modelSanPham->getListAnhSanPham($id);
+    $listVariants = $this->modelSanPham->getProductVariants($id);
 
     // 3. Kiểm tra nếu có sản phẩm thì render view, không thì quay về list
     if ($sanPham) {

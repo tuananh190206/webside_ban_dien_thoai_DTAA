@@ -69,6 +69,28 @@ class AdminSanPham
         }
     }
 
+    public function insertProductVariant($product_id, $capacity, $color, $price, $discount_price, $stock, $image)
+    {
+        try {
+            $sql = "INSERT INTO product_variants (product_id, capacity, color, price, discount_price, stock, image)
+                    VALUES (:product_id, :capacity, :color, :price, :discount_price, :stock, :image)";
+
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':product_id' => $product_id,
+                ':capacity' => $capacity,
+                ':color' => $color,
+                ':price' => $price,
+                ':discount_price' => $discount_price,
+                ':stock' => $stock,
+                ':image' => $image,
+            ]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+
     public function getDetailSanPham($id)
     {
         try {
@@ -173,6 +195,68 @@ public function updateSanPham($id, $name, $price, $discount_price, $quantity, $i
     {
         try {
             $sql = "DELETE FROM products WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([':id' => $id]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function getProductVariants($product_id)
+    {
+        try {
+            $sql = "SELECT * FROM product_variants WHERE product_id = :product_id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':product_id' => $product_id]);
+            return $stmt->fetchAll();
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function getDetailProductVariant($id)
+    {
+        try {
+            $sql = "SELECT * FROM product_variants WHERE id = :id";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            return $stmt->fetch();
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function updateProductVariant($id, $capacity, $color, $price, $discount_price, $stock, $image)
+    {
+        try {
+            $sql = "UPDATE product_variants SET 
+                        capacity = :capacity,
+                        color = :color,
+                        price = :price,
+                        discount_price = :discount_price,
+                        stock = :stock,
+                        image = :image
+                    WHERE id = :id";
+
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([
+                ':capacity' => $capacity,
+                ':color' => $color,
+                ':price' => $price,
+                ':discount_price' => $discount_price,
+                ':stock' => $stock,
+                ':image' => $image,
+                ':id' => $id
+            ]);
+        } catch (Exception $e) {
+            echo "Lỗi: " . $e->getMessage();
+        }
+    }
+
+    public function destroyProductVariant($id)
+    {
+        try {
+            $sql = "DELETE FROM product_variants WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             return $stmt->execute([':id' => $id]);
         } catch (Exception $e) {
