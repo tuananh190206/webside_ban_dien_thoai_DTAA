@@ -109,7 +109,6 @@ class SanPham {
         echo "Lỗi: " . $e->getMessage();
     }
 }
-<<<<<<< ducdat
 public function getVariantsByProductId($product_id) {
     // Truy vấn tất cả dung lượng, màu sắc, giá từ bảng product_variants
     $sql = "SELECT id, capacity, color, price, discount_price, stock, image 
@@ -120,7 +119,7 @@ public function getVariantsByProductId($product_id) {
     $stmt->execute([':product_id' => $product_id]);
     return $stmt->fetchAll();
 }
-=======
+
 
     // =========================
     // ADMIN UPDATE KHO
@@ -139,6 +138,6 @@ public function getVariantsByProductId($product_id) {
 
         $this->capNhatTrangThai($productId);
     }
->>>>>>> main
+
 }
 ?>

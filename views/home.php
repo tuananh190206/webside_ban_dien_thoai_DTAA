@@ -335,32 +335,35 @@
 
                         <!-- group list carousel start -->
                         <div class="group-list-item-wrapper">
-                            <?php foreach ($listSanPham as $key => $sanPham): ?>
-                                <div class="group-list-carousel">
-                                    <!-- group list item start -->
-                                    <div class="group-slide-item">
-                                        <div class="group-item">
-                                            <div class="group-item-thumb">
-                                                <a href="product-details.html">
-                                                    <img src="<?= $sanPham['image']; ?>" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="group-item-desc">
+                           <?php foreach ($listSanPham as $key => $sanPham): ?>
+    <div class="group-list-carousel">
+        <div class="group-slide-item">
+            <div class="group-item">
+                
+                <div class="group-item-thumb">
+                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                        <img src="<?= $sanPham['image']; ?>" alt="">
+                    </a>
+                </div>
 
-                                                <h5 class="group-product-name"><a href="product-details.html">
+                <div class="group-item-desc">
+                    <h5 class="group-product-name">
+                        <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                            <?= $sanPham['name'] ?>
+                        </a>
+                    </h5>
 
-                                                        <?= $sanPham['name'] ?></a></h5>
-                                                <div class="price-box">
-                                                    <span class="price-regular"><?= $sanPham['price'] ?></span>
+                    <div class="price-box">
+                        <span class="price-regular">
+                            <?= number_format($sanPham['price'] ?? 0, 0, ',', '.') ?> đ
+                        </span>
+                    </div>
+                </div>
 
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
                         </div>
                         <!-- group list carousel start -->
                     </div>
@@ -376,31 +379,35 @@
 
                         <!-- group list carousel start -->
                         <div class="group-list-item-wrapper">
-                            <?php foreach ($listSanPham as $key => $sanPham): ?>
-                                <div class="group-list-carousel">
-                                    <!-- group list item start -->
-                                    <div class="group-slide-item">
-                                        <div class="group-item">
-                                            <div class="group-item-thumb">
-                                                <a href="product-details.html">
-                                                    <img src="<?= $sanPham['image']; ?>" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="group-item-desc">
+                           <?php foreach ($listSanPham as $key => $sanPham): ?>
+    <div class="group-list-carousel">
+        <div class="group-slide-item">
+            <div class="group-item">
+                
+                <div class="group-item-thumb">
+                    <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                        <img src="<?= $sanPham['image']; ?>" alt="">
+                    </a>
+                </div>
 
-                                                <h5 class="group-product-name"><a href="product-details.html">
+                <div class="group-item-desc">
+                    <h5 class="group-product-name">
+                        <a href="<?= BASE_URL . '?act=chi-tiet-san-pham&id_san_pham=' . $sanPham['id']; ?>">
+                            <?= $sanPham['name'] ?>
+                        </a>
+                    </h5>
 
-                                                        <?= $sanPham['name'] ?></a></h5>
-                                                <div class="price-box">
-                                                    <span class="price-regular"><?= $sanPham['price'];?><del><?= $sanPham['discount_price']; ?></span>
-                                                </div>
+                    <div class="price-box">
+                        <span class="price-regular">
+                            <?= number_format($sanPham['price'] ?? 0, 0, ',', '.') ?> đ
+                        </span>
+                    </div>
+                </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
                         </div>
                         <!-- group list carousel start -->
                     </div>

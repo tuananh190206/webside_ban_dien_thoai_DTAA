@@ -110,16 +110,16 @@ $headerUserEmail = $_SESSION['user_client']['email'] ?? ($_SESSION['user_admin']
                                     </ul>
                                 </li>
                                 <?php } ?>
-                                <li>
+                                <!-- <li>
                                     <a href="wishlist.html">
                                         <i class="pe-7s-like"></i>
                                         <div class="notification">0</div>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li>
                                     <a href="<?= BASE_URL ?>?act=gio-hang" class="minicart-btn" title="Giỏ hàng">
                                         <i class="pe-7s-shopbag"></i>
-                                        <div class="notification"><?= $soLuongGioHangHeader > 0 ? (int) $soLuongGioHangHeader : '0' ?></div>
+                                        <!-- <div class="notification"><?= $soLuongGioHangHeader > 0 ? (int) $soLuongGioHangHeader : '0' ?></div> -->
                                     </a>
                                 </li>
                             </ul>
