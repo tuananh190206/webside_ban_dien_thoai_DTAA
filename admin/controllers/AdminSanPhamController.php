@@ -128,51 +128,40 @@ class AdminSanPhamController
         }
     }
 
-    public function postEditSanPham()
+public function postEditSanPham()
 {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $product_id = $_POST['product_id'] ?? '';
+        // PHẢI LÀ 'id_san_pham' mới khớp với file editSanPham.php bạn gửi
+        $product_id = $_POST['product_id'] ?? ''; 
+        
         $sanPhamOld = $this->modelSanPham->getDetailSanPham($product_id);
-        $old_file = $sanPhamOld['image'];
 
-        // Lấy đầy đủ dữ liệu từ POST
         $name = $_POST['name'] ?? '';
-        $price = $_POST['price'] ?? '';
-        $discount_price = $_POST['discount_price'] ?? '';
-        $quantity = $_POST['quantity'] ?? '';
+        $price = $_POST['price'] ?? 0;
+        $discount_price = $_POST['discount_price'] ?? 0;
+        $quantity = $_POST['quantity'] ?? 0; // Số lượng Admin nhập
         $import_date = $_POST['import_date'] ?? '';
         $category_id = $_POST['category_id'] ?? '';
-        $status = $_POST['status'] ?? '';
+        $status = $_POST['status'] ?? 0;
         $description = $_POST['description'] ?? '';
 
+        // Sửa lỗi Parse Error dấu == == ở dòng 113
         $image = $_FILES['image'] ?? null;
-        $errors = [];
-        
-        if (empty($name)) $errors['name'] = 'Tên sản phẩm không được để trống';
-        if (empty($category_id)) $errors['category_id'] = 'Danh mục không được để trống';
+        if ($image && $image['error'] === 0) {
+            $file_thumb = uploadFile($image, './uploads/');
+            if (!empty($sanPhamOld['image'])) deleteFile($sanPhamOld['image']);
+        } else {
+            $file_thumb = $sanPhamOld['image'] ?? '';
+        }
 
-        if (empty($errors)) {
-            // Xử lý file ảnh đại diện
-            if (isset($image) && $image['error'] == UPLOAD_ERR_OK) {
-                $new_file = uploadFile($image, './uploads/');
-                if (!empty($old_file)) deleteFile($old_file);
-            } else {
-                $new_file = $old_file;
-            }
-
-            // TRUYỀN ĐỦ 10 THAM SỐ VÀO MODEL
+        if (!empty($product_id)) {
+            // Gọi Model cập nhật
             $this->modelSanPham->updateSanPham(
-                $product_id, 
-                $name, 
-                $price, 
-                $discount_price, 
-                $quantity, 
-                $import_date, 
-                $category_id, 
-                $status, 
-                $description, 
-                $new_file
+                $product_id, $name, $price, $discount_price, 
+                $quantity, $import_date, $category_id, 
+                $status, $description, $file_thumb
             );
+<<<<<<< ducdat
 
             // Xử lý biến thể (Phiên bản, màu sắc...)
             // 1. Xóa các biến thể đã bị người dùng nhấn xóa
@@ -234,7 +223,12 @@ class AdminSanPhamController
             $_SESSION['flash'] = true;
             header("Location:" . BASE_URL_ADMIN . '?act=form-sua-san-pham&id_san_pham=' . $product_id);
             exit();
+=======
+>>>>>>> main
         }
+
+        header("Location: " . BASE_URL_ADMIN . '?act=san-pham');
+        exit();
     }
 }
 

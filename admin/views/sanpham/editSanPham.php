@@ -82,13 +82,13 @@
                     <?php endforeach; ?>
                 </select>
               </div>
-              <div>
-                <label>Trạng thái</label>
-                <select name="status">
-                    <option value="1" <?= $sanPham['status'] == 1 ? 'selected' : '' ?>>Đang bán</option>
-                    <option value="2" <?= $sanPham['status'] == 2 ? 'selected' : '' ?>>Dừng bán</option>
-                </select>
-              </div>
+             <div class="form-group">
+    <label class="text-blue-600 font-bold">Trạng thái hiển thị</label>
+    <select name="status" class="w-full p-3 border-2 border-blue-100 rounded-lg">
+        <option value="1" <?= $sanPham['status'] == 1 ? 'selected' : '' ?>>Còn hàng / Hiển thị</option>
+        <option value="0" <?= $sanPham['status'] == 0 ? 'selected' : '' ?>>Hết hàng / Tạm ẩn</option>
+    </select>
+</div>
           </div>
 
           <label>Ảnh đại diện sản phẩm</label>

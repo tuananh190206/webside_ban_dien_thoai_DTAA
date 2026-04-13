@@ -122,38 +122,37 @@ class AdminSanPham
         }
     }
 
-    public function updateSanPham($id, $name, $price, $discount_price, $quantity, $import_date, $category_id, $status, $description, $image)
-    {
-        try {
-            $sql = "UPDATE products SET 
-                        name = :name,
-                        price = :price,
-                        discount_price = :discount_price,
-                        quantity = :quantity,
-                        import_date = :import_date,
-                        category_id = :category_id,
-                        status = :status,
-                        description = :description,
-                        image = :image
-                    WHERE id = :id";
+public function updateSanPham($id, $name, $price, $discount_price, $quantity, $import_date, $category_id, $status, $description, $image)
+{
+    try {
+        // Logic: Nếu số lượng = 0 thì ép trạng thái về 0 (Hết hàng)
+        // Nếu số lượng > 0 thì giữ nguyên trạng thái người dùng chọn (Ẩn hoặc Hiện)
+        $final_status = ($quantity <= 0) ? 0 : $status;
 
-            $stmt = $this->conn->prepare($sql);
-            return $stmt->execute([
-                ':name' => $name,
-                ':price' => $price,
-                ':discount_price' => $discount_price,
-                ':quantity' => $quantity,
-                ':import_date' => $import_date,
-                ':category_id' => $category_id,
-                ':status' => $status,
-                ':description' => $description,
-                ':image' => $image,
-                ':id' => $id
-            ]);
-        } catch (Exception $e) {
-            echo "Lỗi: " . $e->getMessage();
-        }
+        $sql = "UPDATE products SET 
+                    name = :name, price = :price, discount_price = :discount_price, 
+                    quantity = :quantity, import_date = :import_date, 
+                    category_id = :category_id, status = :status, 
+                    description = :description, image = :image 
+                WHERE id = :id";
+
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':name' => $name,
+            ':price' => $price,
+            ':discount_price' => $discount_price,
+            ':quantity' => $quantity,
+            ':import_date' => $import_date,
+            ':category_id' => $category_id,
+            ':status' => $final_status, // Sử dụng biến đã xử lý
+            ':description' => $description,
+            ':image' => $image,
+            ':id' => $id
+        ]);
+    } catch (Exception $e) {
+        return false;
     }
+}
 
     public function getDetailAnhSanPham($id)
     {
