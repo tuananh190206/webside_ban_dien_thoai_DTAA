@@ -90,6 +90,7 @@ class HomeController
         [, $chiTietGioHang] = $this->layGioHangChoUser();
         $id = (int) ($_GET['id_san_pham'] ?? 0);
         $sanPham = $this->modelSanPham->getDetailSanPham($id);
+        $variants = $this->modelSanPham->getVariantsByProductId($id);
         $listAnhSanPham = $this->modelSanPham->getListAnhSanPham($id);
         $listBinhLuan = $this->modelSanPham->getBinhLuanFormSanPham($id);
         $listSanPhamCungDanhMuc = $sanPham

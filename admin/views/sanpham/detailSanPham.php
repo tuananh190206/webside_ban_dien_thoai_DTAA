@@ -97,6 +97,30 @@
                 <?php endif; ?>
             </div>
         </div>
+
+        <div class="mt-8 border-t pt-6">
+            <p class="info-label border-l-4 border-indigo-600 pl-2">Các phiên bản cấu hình (Màu sắc & Dung lượng)</p>
+            <?php if(!empty($listVariants)): ?>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <?php foreach($listVariants as $v): ?>
+                        <div class="p-4 border rounded-xl bg-white shadow-sm flex gap-4 items-center">
+                            <?php if(!empty($v['image'])): ?>
+                                <img src="<?= BASE_URL . $v['image'] ?>" class="w-16 h-16 object-cover rounded-lg border">
+                            <?php else: ?>
+                                <div class="w-16 h-16 bg-gray-100 rounded-lg border flex items-center justify-center text-xs text-gray-400">No Img</div>
+                            <?php endif; ?>
+                            <div>
+                                <p class="font-bold text-gray-800 text-lg"><?= $v['color'] ?> - <?= $v['capacity'] ?></p>
+                                <p class="text-indigo-600 font-bold"><?= number_format($v['price'], 0, ',', '.') ?> đ</p>
+                                <p class="text-sm text-gray-500">Kho: <?= $v['stock'] ?> <span class="mx-2">|</span> KM: <?= !empty($v['discount_price']) ? number_format($v['discount_price'], 0, ',', '.') . ' đ' : 'Không có' ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p class="text-gray-500 italic mt-2">Sản phẩm này không phân chia cấu hình/màu sắc.</p>
+            <?php endif; ?>
+        </div>
       </div>
     </div>
   </div>

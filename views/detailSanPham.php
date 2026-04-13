@@ -2,6 +2,9 @@
 <?php require_once 'layout/menu.php'; ?>
 
 <main>
+    
+
+
     <div class="breadcrumb-area">
         <div class="container">
             <div class="row">
@@ -65,14 +68,35 @@
                                         </div>
                                     </div>
 
-                                    <div class="price-box">
+                                    <div class="product-variant">
+                                            <h3 class="price">
+                                                <span id="variant-price"><?= number_format($variants[0]['discount_price']) ?> đ</span>
+                                            </h3>
+                                                <p>Chọn dung lượng & màu sắc:</p>
+                                                <div class="variant-list" style="display: flex; gap: 10px;">
+                                                    <?php foreach ($variants as $key => $variant): ?>
+                                                        <label class="variant-option">
+                                                            <input type="radio" name="product_variant_id" 
+                                                                value="<?= $variant['id'] ?>" 
+                                                                data-price="<?= number_format($variant['price']) ?> đ"
+                                                                data-image="<?= $variant['image'] ?>"
+                                                                <?= $key == 0 ? 'checked' : '' ?>
+                                                                class="variant-input">
+                                                            <span class="variant-label">
+                                                                <?= $variant['capacity'] ?> - <?= $variant['color'] ?>
+                                                            </span>
+                                                        </label>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                    <!-- <div class="price-box">
                                         <?php if ($sanPham['discount_price']) : ?>
                                             <span class="price-regular"><?= formatPrice($sanPham['discount_price']) . ' VNĐ'; ?></span>
                                             <span class="price-old"><del><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></del></span>
                                         <?php else : ?>
                                             <span class="price-regular"><?= formatPrice($sanPham['price']) . ' VNĐ'; ?></span>
                                         <?php endif; ?>
-                                    </div>
+                                    </div> -->
 
                                     <div class="availability">
                                         <i class="fa <?= $sanPham['quantity'] > 0 ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' ?>"></i>
@@ -101,6 +125,7 @@
                                                 <a href="<?= BASE_URL ?>" class="btn btn-cart2 bg-dark border-dark ml-2">Quay lại</a>
                                             </div>
                                         </div>
+                                        
                                         <?php if ($sanPham['quantity'] <= 0) : ?>
                                             <p class="text-danger mt-2"><i>* Sản phẩm này hiện đã hết hàng, vui lòng quay lại sau.</i></p>
                                         <?php endif; ?>
@@ -196,5 +221,44 @@
         </div>
     </section>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy tất cả các radio button của biến thể
+        const variantInputs = document.querySelectorAll('.variant-input');
+        const priceDisplay = document.getElementById('variant-price');
 
+        variantInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                // Lấy giá từ attribute data-price
+                const newPrice = this.getAttribute('data-price');
+                // Cập nhật lên màn hình
+                priceDisplay.innerText = newPrice + ' đ';
+                
+                console.log("Đã chọn biến thể ID:", this.value);
+            });
+        });
+    });
+</script>
+<style>
+.variant-option {
+    cursor: pointer;
+}
+.variant-input {
+    display: none; /* Ẩn nút tròn radio mặc định */
+}
+.variant-label {
+    display: inline-block;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+/* Khi được chọn sẽ đổi màu */
+.variant-input:checked + .variant-label {
+    border-color: #ff2d20;
+    color: #ff2d20;
+    background-color: #fff5f5;
+    font-weight: bold;
+}
+</style>
 <?php require_once 'layout/footer.php'; ?>

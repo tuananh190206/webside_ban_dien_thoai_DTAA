@@ -103,7 +103,62 @@
           <label>Mô tả sản phẩm</label>
           <textarea name="description" rows="4" placeholder="Nhập mô tả chi tiết..."><?= $sanPham['description'] ?></textarea>
           
-          <button type="submit" class="btn-update">LƯU THÔNG TIN CHÍNH</button>
+          <!-- Phần quản lý biến thể -->
+          <h3 class="font-bold border-b pb-2 mb-4 mt-8 text-indigo-600 uppercase text-sm tracking-wider">Quản lý Phiên bản (Màu sắc & Dung lượng)</h3>
+          <input type="hidden" name="deleted_variants" id="deleted_variants" value="">
+          
+          <div id="variants-container">
+            <?php foreach($listVariants as $v): ?>
+            <div class="variant-item bg-gray-50 border border-gray-200 p-4 rounded-xl mb-4 relative shadow-sm" id="variant-<?= $v['id'] ?>">
+                <input type="hidden" name="variant_id[]" value="<?= $v['id'] ?>">
+                <input type="hidden" name="variant_old_image[]" value="<?= $v['image'] ?>">
+                <button type="button" class="absolute top-3 right-3 text-red-500 font-bold hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors text-sm" onclick="removeVariantUI(this, <?= $v['id'] ?>)">
+                    ✕ Xóa bản này
+                </button>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label>Màu sắc *</label>
+                        <input type="text" name="variant_color[]" value="<?= $v['color'] ?>" required>
+                    </div>
+                    <div>
+                        <label>Dung lượng *</label>
+                        <input type="text" name="variant_capacity[]" value="<?= $v['capacity'] ?>" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label>Giá bán (VNĐ) *</label>
+                        <input type="number" name="variant_price[]" value="<?= $v['price'] ?>" required>
+                    </div>
+                    <div>
+                        <label>Giá khuyến mãi (VNĐ)</label>
+                        <input type="number" name="variant_discount_price[]" value="<?= $v['discount_price'] ?>">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label>Số lượng kho *</label>
+                        <input type="number" name="variant_stock[]" value="<?= $v['stock'] ?>" required>
+                    </div>
+                    <div>
+                        <label>Ảnh đại diện (Riêng cho màu này)</label>
+                        <div class="flex items-center gap-2 mt-1">
+                            <?php if(!empty($v['image'])): ?>
+                                <img src="<?= BASE_URL . $v['image'] ?>" class="w-10 h-10 object-cover border rounded">
+                            <?php endif; ?>
+                            <input type="file" name="variant_image[]" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+          </div>
+
+          <button type="button" onclick="addVariantUI()" class="mt-2 px-4 py-2 border-2 border-indigo-500 text-indigo-600 rounded-lg hover:bg-indigo-50 font-semibold mb-6 flex items-center gap-2 transition-colors">
+              + Thêm phiên bản mới
+          </button>
+
+          <button type="submit" class="btn-update">LƯU CẬP NHẬT (Kèm biến thể)</button>
         </form>
       </div>
 
@@ -162,6 +217,43 @@
             const element = document.getElementById('anh-phu-' + id);
             if(element) element.remove();
         }
+    }
+
+    function removeVariantUI(btn, id) {
+        if(confirm('Chắc chắn xóa phiên bản này? (sẽ xóa thật khi bấm Lưu)')) {
+            if (id !== 'new') {
+                const deletedInput = document.getElementById('deleted_variants');
+                let dIds = deletedInput.value ? deletedInput.value.split(',') : [];
+                dIds.push(id);
+                deletedInput.value = dIds.join(',');
+            }
+            btn.closest('.variant-item').remove();
+        }
+    }
+
+    function addVariantUI() {
+        const container = document.getElementById('variants-container');
+        const itemHtml = `
+        <div class="variant-item bg-gray-50 border border-gray-200 p-4 rounded-xl mb-4 relative shadow-sm">
+            <input type="hidden" name="variant_id[]" value="new">
+            <input type="hidden" name="variant_old_image[]" value="">
+            <button type="button" class="absolute top-3 right-3 text-red-500 font-bold hover:text-red-700 hover:bg-red-50 p-1 rounded transition-colors text-sm" onclick="removeVariantUI(this, 'new')">
+                ✕ Xóa bản này
+            </button>
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <div><label>Màu sắc *</label><input type="text" name="variant_color[]" required></div>
+                <div><label>Dung lượng *</label><input type="text" name="variant_capacity[]" required></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <div><label>Giá bán (VNĐ) *</label><input type="number" name="variant_price[]" required></div>
+                <div><label>Giá khuyến mãi</label><input type="number" name="variant_discount_price[]"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <div><label>Số lượng kho *</label><input type="number" name="variant_stock[]" value="0" required></div>
+                <div><label>Ảnh đại diện (Riêng cho màu này)</label><input type="file" name="variant_image[]" accept="image/*"></div>
+            </div>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', itemHtml);
     }
   </script>
 </body>
