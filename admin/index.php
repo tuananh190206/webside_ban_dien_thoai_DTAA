@@ -66,6 +66,9 @@ match ($act) {
     // ================= TRANG CHỦ =================
     '/'                      => (new AdminBaoCaoThongKeController())->home(),
 
+    // ================= THỐNG KÊ SẢN PHẨM =================
+    'thong-ke-san-pham'     => (new AdminBaoCaoThongKeController())->thongKeSanPham(),
+
 
     // ================= VAI TRÒ =================
     'vai-tro'                => (new AdminVaiTroController())->listVaiTro(),

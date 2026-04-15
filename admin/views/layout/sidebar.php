@@ -95,6 +95,15 @@
       </a>
     </li>
 
+    <!-- THỐNG KÊ & BÁO CÁO -->
+    <li class="sidebar-item">
+      <a href="<?= BASE_URL_ADMIN . '?act=thong-ke-san-pham' ?>"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-indigo-600">
+        <i class="fa-solid fa-chart-bar"></i>
+        Thống kê SP
+      </a>
+    </li>
+
      <!-- SẢN PHẨM -->
     <!-- <li class="text-xs text-gray-300 uppercase px-4 mt-4">Sản phẩm</li> -->
 

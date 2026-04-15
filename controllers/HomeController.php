@@ -27,6 +27,67 @@ class HomeController
         $this->home();
     }
 
+    // ========== TÌM KIẾM SẢN PHẨM ==========
+    public function timKiemSanPham(): void
+    {
+        [, $chiTietGioHang] = $this->layGioHangChoUser();
+        $keyword = trim($_GET['keyword'] ?? '');
+        $danhMucId = isset($_GET['danh_muc']) ? (int) $_GET['danh_muc'] : null;
+
+        if (!empty($keyword)) {
+            $listSanPham = $this->modelSanPham->timKiemSanPham($keyword);
+            $tieuDe = 'Kết quả tìm kiếm: "' . htmlspecialchars($keyword) . '"';
+        } elseif ($danhMucId > 0) {
+            $listSanPham = $this->modelSanPham->timKiemTheoDanhMuc($danhMucId);
+            $allCategories = $this->modelSanPham->getAllCategories();
+            $tenDanhMuc = '';
+            foreach ($allCategories as $cat) {
+                if ((int)$cat['id'] === $danhMucId) {
+                    $tenDanhMuc = $cat['name'];
+                    break;
+                }
+            }
+            $tieuDe = 'Sản phẩm danh mục: ' . htmlspecialchars($tenDanhMuc);
+        } else {
+            $listSanPham = $this->modelSanPham->getAllSanPham();
+            $tieuDe = 'Tất cả sản phẩm';
+        }
+
+        $allCategories = $this->modelSanPham->getAllCategories();
+        $soLuong = count($listSanPham);
+
+        require_once './views/timKiemSanPham.php';
+    }
+
+    // ========== DANH SÁCH SẢN PHẨM ==========
+    public function danhSachSanPham(): void
+    {
+        [, $chiTietGioHang] = $this->layGioHangChoUser();
+        $keyword = trim($_GET['keyword'] ?? '');
+        $danhMucId = isset($_GET['danh_muc']) ? (int) $_GET['danh_muc'] : null;
+
+        if (!empty($keyword)) {
+            $listSanPham = $this->modelSanPham->timKiemSanPham($keyword);
+            $tieuDe = 'Kết quả tìm kiếm: "' . htmlspecialchars($keyword) . '"';
+        } elseif ($danhMucId > 0) {
+            $listSanPham = $this->modelSanPham->timKiemTheoDanhMuc($danhMucId);
+            $allCategories = $this->modelSanPham->getAllCategories();
+            $tenDanhMuc = '';
+            foreach ($allCategories as $cat) {
+                if ((int)$cat['id'] === $danhMucId) {
+                    $tenDanhMuc = $cat['name'];
+                    break;
+                }
+            }
+            $tieuDe = 'Sản phẩm: ' . htmlspecialchars($tenDanhMuc);
+        } else {
+            $listSanPham = $this->modelSanPham->getAllSanPham();
+            $tieuDe = 'Tất cả sản phẩm';
+        }
+
+        require_once './views/timKiemSanPham.php';
+    }
+
     public function gioiThieu()
     {
         [, $chiTietGioHang] = $this->layGioHangChoUser();

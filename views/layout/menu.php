@@ -41,19 +41,18 @@ $headerUserEmail = $_SESSION['user_client']['email'] ?? ($_SESSION['user_admin']
 
                                     </li>
 
-                                    <li><a href="#">Sản phẩm <i class="fa fa-angle-down"></i></a>
+                                    <li><a href="<?= BASE_URL . '?act=san-pham' ?>">Sản phẩm <i class="fa fa-angle-down"></i></a>
                                         <ul class="dropdown">
-                                            <li><a href="blog-left-sidebar.html">blog left sidebar</a></li>
-                                            <li><a href="blog-list-left-sidebar.html">blog list left sidebar</a></li>
-                                            <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
-                                            <li><a href="blog-list-right-sidebar.html">blog list right sidebar</a></li>
-                                            <li><a href="blog-grid-full-width.html">blog grid full width</a></li>
-                                            <li><a href="blog-details.html">blog details</a></li>
-                                            <li><a href="blog-details-left-sidebar.html">blog details left sidebar</a>
-                                            </li>
-                                            <li><a href="blog-details-audio.html">blog details audio</a></li>
-                                            <li><a href="blog-details-video.html">blog details video</a></li>
-                                            <li><a href="blog-details-image.html">blog details image</a></li>
+                                            <?php
+                                            // Lấy danh mục từ model
+                                            require_once './models/SanPham.php';
+                                            $modelDanhMuc = new SanPham();
+                                            $dsDanhMuc = $modelDanhMuc->getAllCategories();
+                                            foreach ($dsDanhMuc as $dm):
+                                            ?>
+                                            <li><a href="<?= BASE_URL ?>?act=san-pham&danh_muc=<?= (int)$dm['id'] ?>"><?= htmlspecialchars($dm['name']) ?></a></li>
+                                            <?php endforeach; ?>
+                                            <li><a href="<?= BASE_URL ?>?act=san-pham"><i class="fa fa-th"></i> Xem tất cả</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="<?= BASE_URL . '?act=gioi-thieu' ?>">Giới thiệu</a></li>
@@ -72,9 +71,10 @@ $headerUserEmail = $_SESSION['user_client']['email'] ?? ($_SESSION['user_admin']
                         class="header-right d-flex align-items-center justify-content-xl-between justify-content-lg-end">
                         <div class="header-search-container">
                             <button class="search-trigger d-xl-none d-lg-block"><i class="pe-7s-search"></i></button>
-                            <form class="header-search-box d-lg-none d-xl-block">
-                                <input type="text" placeholder="Nhập tên sản phẩm" class="header-search-field">
-                                <button class="header-search-btn"><i class="pe-7s-search"></i></button>
+                            <form action="<?= BASE_URL ?>" method="GET" class="header-search-box d-lg-none d-xl-block">
+                                <input type="hidden" name="act" value="tim-kiem">
+                                <input type="text" name="keyword" placeholder="Tìm sản phẩm..." class="header-search-field">
+                                <button type="submit" class="header-search-btn"><i class="pe-7s-search"></i></button>
                             </form>
                         </div>
                         <div class="header-configure-area">

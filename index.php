@@ -22,6 +22,9 @@ match ($act) {
     // Trang chủ
     '/'=>(new HomeController())->home(),
     'trangchu'=>(new HomeController())->trangchu(),
+    // Tìm kiếm sản phẩm
+    'tim-kiem'=>(new HomeController())->timKiemSanPham(),
+    'san-pham'=>(new HomeController())->danhSachSanPham(),
     'chi-tiet-san-pham'=>(new HomeController())->chiTietSanPham(),
     'them-gio-hang'=>(new HomeController())->addGioHang(),
     'cap-nhat-gio-hang'=>(new HomeController())->capNhatGioHang(),
